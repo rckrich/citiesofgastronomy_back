@@ -21,14 +21,9 @@ class Cities extends Model
                             "cities.country",
                             "cities.population",
                             "cities.restaurantFoodStablishments",
-                            "cities.description",
                             "cities.designationyear",
                             "cities.photo",
-                            "cities.logo",
-                            "cities.banner",
                             "cities.completeInfo",
-                            "cities.active",
-                            "continent.id AS continentId",
                             "continent.name AS continentName"
                             )
                     -> join( "continent", "continent.id", '=', "cities.idContinent" )
@@ -85,31 +80,7 @@ class Cities extends Model
             }
         };
 
-        $logo = '';
-        if($request->file("logo")){
-            try{
-                $request->validate ([
-                    'logo' => 'image|max:50000'
-                ]);
-                $logo =  $request->file("logo")->store('public/images/cities');
-                $logo = str_replace('public/', 'storage/', $logo);
-            } catch ( \Exception $e ) {
 
-            }
-        };
-
-        $banner = '';
-        if($request->file("banner")){
-            try{
-                $request->validate ([
-                    'banner' => 'image|max:50000'
-                ]);
-                $banner =  $request->file("logo")->store('public/images/cities');
-                $banner = str_replace('public/', 'storage/', $banner);
-            } catch ( \Exception $e ) {
-
-            }
-        };
 
         $objCity=[];
         try{
@@ -125,11 +96,9 @@ class Cities extends Model
             $objCity->restaurantFoodStablishments = $request->input("restaurantFoodStablishments");
             $objCity->description = $request->input("description");
             $objCity->designationyear = $request->input("designationyear");
-            $objCity->completeInfo = $request->input("completeInfo");
+            $objCity->completeInfo = '0';
             $objCity->active = '1';
             $objCity->photo = $photo;
-            $objCity->logo =  $logo;
-            $objCity->banner =  $banner;
             $objCity->created_at = date("Y-m-d H:i:s");
             $objCity->updated_at = date("Y-m-d H:i:s");
             $objCity -> save();

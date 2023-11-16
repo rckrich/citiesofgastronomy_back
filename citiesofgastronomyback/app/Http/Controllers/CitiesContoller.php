@@ -10,8 +10,10 @@ class CitiesContoller extends Controller
 {
     public function list(){
         $objCities =(New Cities())->list();
+        //Log::info($objCities);
         return response()->json([
-            'datta' => $objCities
+            'cities' => $objCities,
+            'bannerCities' => []
         ]);
     }
 
@@ -42,7 +44,78 @@ class CitiesContoller extends Controller
         ]);
     }
 
+
+
+
+
+
+
+
+
+
+
     public function update(Request $request, string $id)
+    {
+        $image = '';$status = 200;$mensaje="La ciudad se ha guardado correctamente";
+
+        $photo = '';
+            if($request->file("photo")){
+                try{
+                    $request->validate ([
+                        'photo' => 'image|max:50000'
+                    ]);
+                    $photo =  $request->file("photo")->store('public/images/cities');
+                    $photo = str_replace('public/', 'storage/', $photo);
+                } catch ( \Exception $e ) {
+
+                }
+            };
+
+
+            $objCity=[];
+            try{
+                $request->validate ([
+                    'name' => 'required|string'
+                ]);
+
+                $objCity = Cities::find($id);
+                $objCity->idContinent = $request->input("idContinent");
+                $objCity->name = $request->input("name");
+                $objCity->country = $request->input("country");
+                $objCity->population = $request->input("population");
+                $objCity->restaurantFoodStablishments = $request->input("restaurantFoodStablishments");
+                $objCity->designationyear = $request->input("designationyear");
+                if($photo){
+                    $objCity->photo = $photo;
+                };
+                $objCity->updated_at = date("Y-m-d H:i:s");
+                $objCity -> save();
+            } catch ( \Exception $e ) {
+                Log::info($e);
+                $status = 400;$mensaje="Formato de nombre incorrecto";
+            };
+
+        return response()->json([
+            'status' =>  $status,
+            'message' =>  $mensaje,
+            'datta' =>  $objCity
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function updateComplete(Request $request, string $id)
     {
         $image = '';$status = 200;$mensaje="La ciudad se ha guardado correctamente";
 
@@ -100,11 +173,16 @@ class CitiesContoller extends Controller
                 $objCity->description = $request->input("description");
                 $objCity->designationyear = $request->input("designationyear");
                 $objCity->completeInfo = $request->input("completeInfo");
-                $objCity->active = '1';
-                $objCity->photo = $photo;
-                $objCity->logo =  $logo;
-                $objCity->banner =  $banner;
-                $objCity->created_at = date("Y-m-d H:i:s");
+                if($photo){
+                    $objCity->photo = $photo;
+                };
+                if($logo){
+                    $objCity->logo =  $logo;
+
+                };
+                if($banner){
+                    $objCity->banner =  $banner;
+                };
                 $objCity->updated_at = date("Y-m-d H:i:s");
                 $objCity -> save();
             } catch ( \Exception $e ) {
@@ -118,6 +196,20 @@ class CitiesContoller extends Controller
             'datta' =>  $objCity
         ]);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function destroy(string $id)
     {
