@@ -44,6 +44,7 @@ class Cities extends Model
                             "cities.photo",
                             "cities.logo",
                             "cities.banner",
+                            "cities.completeDescription",
                             "cities.completeInfo",
                             "cities.active",
                             "continent.id AS continentId",
