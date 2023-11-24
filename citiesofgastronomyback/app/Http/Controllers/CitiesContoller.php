@@ -6,16 +6,19 @@ use Illuminate\Http\Request;
 use App\Models\Cities;
 use App\Models\Images;
 use App\Models\Links;
+use App\Models\Files;
+use App\Models\Banners;
 use Illuminate\Support\Facades\Log;
 
 class CitiesContoller extends Controller
 {
     public function list(){
         $objCities =(New Cities())->list();
+        $objBanners = (New Banners())->list(1);
         //Log::info($objCities);
         return response()->json([
-            'cities' => $objCities,
-            'bannerCities' => []
+            'bannerCities' => $objBanners,
+            'cities' => $objCities
         ]);
     }
 
@@ -24,11 +27,13 @@ class CitiesContoller extends Controller
         $objCity = (New Cities())->serch($cityId);
         $objgallery = (New Images())->list(1, $cityId);
         $objLinks = (New Links())->list(1, $cityId);
+        $objFiles = (New Files())->list(1, $cityId);
 
         return response()->json([
             'cities' => $objCity,
             'gallery' => $objgallery,
             'links' => $objLinks,
+            'files' => $objFiles,
             'bannerCities' => []
         ]);
     }
@@ -206,35 +211,39 @@ class CitiesContoller extends Controller
             for($i = 1; $i < $cant_gallery+1; $i++){
                 $idg = 'image'.$i;
                 $image = $request->file($idg);
-                Log::info("::la ".$idg);
-                Log::info($image);
                 $idg = 'idImage'.$i;
                 $idImage = $request->input($idg);
                 $idg = 'deleteImage'.$i;
                 $deleteImage = $request->input($idg);
 
-                if($image){
+                if(!$idImage){
+                    if($image){
 
-                    $objGallery =(New Images())->storeIMG($image, $id, 1);
-                    try{
-                        /*
-                        $request->validate ([
-                            $idg => 'image|max:50000'
-                        ]);
-                        $photo =  $request->file($idg)->store('public/images/gallery');
-                        $photo = str_replace('public/', 'storage/', $photo);
+                        try{
+                            $objGallery =(New Images())->storeIMG($image, $id, 1);
+                            /*
+                            $request->validate ([
+                                $idg => 'image|max:50000'
+                            ]);
+                            $photo =  $request->file($idg)->store('public/images/gallery');
+                            $photo = str_replace('public/', 'storage/', $photo);
 
-                        $objCity = new Images;
-                        $objCity->image = $photo;
-                        $objCity->name = $id;
-                        $objCity->active = 1;
-                        $objCity->idSection = 1;
-                        $objCity->created_at = date("Y-m-d H:i:s");
-                        $objCity->updated_at = date("Y-m-d H:i:s");
-                        $objCity -> save();//*/
-                    } catch ( \Exception $e ) {
+                            $objCity = new Images;
+                            $objCity->image = $photo;
+                            $objCity->name = $id;
+                            $objCity->active = 1;
+                            $objCity->idSection = 1;
+                            $objCity->created_at = date("Y-m-d H:i:s");
+                            $objCity->updated_at = date("Y-m-d H:i:s");
+                            $objCity -> save();//*/
+                        } catch ( \Exception $e ) {
 
-                    }
+                        }
+                    };
+                }else{
+                    if($deleteImage){
+
+                    };
                 };
 
             }
@@ -244,22 +253,58 @@ class CitiesContoller extends Controller
             for($i = 1; $i < $cant_links+1; $i++){
                 $idg = 'link'.$i;
                 $link = $request->input($idg);
-                Log::info("::la ".$idg);
-                Log::info($link);
                 $idg = 'idLink'.$i;
                 $idLink = $request->input($idg);
                 $idg = 'deleteLink'.$i;
                 $deleteLink = $request->input($idg);
 
-                if($link){
-                    $objGallery =(New Links())->storeLINK($link, $id, 1);
-                    try{
-                    } catch ( \Exception $e ) {
+                if(!$idLink){
+                    if($link){
+                        try{
+                            $objGallery =(New Links())->storeLINK($link, $id, 1);
+                        } catch ( \Exception $e ) {
 
-                    }
+                        }
+                    };
+                }else{
+                    if($deleteLink){
+
+                    };
                 };
 
             }
+
+
+
+            /////////////////////////////   FILES
+            $cant_files = $request->input("cant_files");
+
+            for($i = 1; $i < $cant_files+1; $i++){
+                $idg = 'file'.$i;
+                $file = $request->file($idg);
+                $idg = 'idFile'.$i;
+                $idFile = $request->input($idg);
+                $idg = 'title'.$i;
+                $title = $request->input($idg);
+                $idg = 'deleteFile'.$i;
+                $deleteFile = $request->input($idg);
+                if(!$idFile){
+                    if($file){
+
+                        $objGallery =(New Files())->storeFILE($file, $id, 1, $title);
+                        try{
+                        } catch ( \Exception $e ) {
+
+                        }
+                    };
+                }else{
+                    if($deleteFile){
+
+                    };
+                };
+
+            }
+            /////////////////////////////////////////////////////////////////
 
 
         return response()->json([
