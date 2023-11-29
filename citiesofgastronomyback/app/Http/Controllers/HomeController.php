@@ -13,11 +13,13 @@ class HomeController extends Controller
 
         $objCities =(New Cities())->list();
 
-        $objAbout = (New Banners())->list(2);
-        if($objAbout){$bannerAbount = $objAbout[0]["banner"];
+        $objAbout = (New Banners())->list(2, 0);
+        Log::info("BAnner controller");
+        Log::info($objAbout);
+        if(   count($objAbout)>0   ){$bannerAbount = $objAbout[0]["banner"];
         }else{$bannerAbount = '';        };
 
-        $objAbout = (New Banners())->list(4);
+        $objAbout = (New Banners())->list(4, 0);
         if($objAbout){$bannerNumberAndStats = $objAbout[0]["banner"];
         }else{$bannerNumberAndStats = '';        };
 

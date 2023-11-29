@@ -14,9 +14,10 @@ class BannersController extends Controller
         $banner = $request->file("banner");
         //$idOwner = $request->input("idOwner");
         $idSection = $request->input("idSection");
+        $idOwner = $request->input("idOwner");
 
         if($request->file("banner")){
-            $objBanner = (New Banners())->storeBanner($banner, $idSection);
+            $objBanner = (New Banners())->storeBanner($banner, $idSection, $idOwner);
             try{
                 $request->validate ([
                     'banner' => 'image|max:50000'

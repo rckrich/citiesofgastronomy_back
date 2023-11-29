@@ -21,7 +21,7 @@ class CitiesContoller extends Controller
         //Log::info($objCity);
 
         //$objCities =(New Cities())->list();
-        $objBanners = (New Banners())->list(1);
+        $objBanners = (New Banners())->list(1, 0);
         return response()->json([
             'cities' => $objCity
         ]);
@@ -37,7 +37,7 @@ class CitiesContoller extends Controller
         //Log::info($objCity);
 
         //$objCities =(New Cities())->list();
-        $objBanners = (New Banners())->list(1);
+        $objBanners = (New Banners())->list(1, 0);
         return response()->json([
             'cities' => $objCity
         ]);
@@ -69,7 +69,7 @@ class CitiesContoller extends Controller
     }
     public function list(){
         $objCities =(New Cities())->list();
-        $objBanners = (New Banners())->list(1);
+        $objBanners = (New Banners())->list(1, 0);
         Log::info($objCities);
         return response()->json([
             'bannerCities' => $objBanners,
@@ -83,17 +83,34 @@ class CitiesContoller extends Controller
         $objgallery = (New Images())->list(1, $cityId);
         $objLinks = (New Links())->list(1, $cityId);
         $objFiles = (New Files())->list(1, $cityId);
+        $objBanners = (New Banners())->list(1, $cityId);
 
         return response()->json([
             'cities' => $objCity,
             'gallery' => $objgallery,
             'links' => $objLinks,
             'files' => $objFiles,
-            'bannerCities' => []
+            'bannerCities' => $objBanners
         ]);
     }
 
 
+    public function delete($id){
+        $status = 400;$mess = 'ok';
+        try{
+            $objCity = Cities::find($id);
+            $objCity->active = 0;
+            $objCity->updated_at = date("Y-m-d H:i:s");
+            $objCity -> save();
+        } catch ( \Exception $e ) {
+            Log::info($e);
+            $status = 400;$mess="Error";
+        };
+        return response()->json([
+            'status' => $status,
+            'message' => $mess
+        ]);
+    }
 
 
 
