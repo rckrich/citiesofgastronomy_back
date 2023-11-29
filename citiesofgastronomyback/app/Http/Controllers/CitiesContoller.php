@@ -8,6 +8,7 @@ use App\Models\Images;
 use App\Models\Links;
 use App\Models\Files;
 use App\Models\Banners;
+use App\Models\continent;
 use Illuminate\Support\Facades\Log;
 
 class CitiesContoller extends Controller
@@ -64,16 +65,19 @@ class CitiesContoller extends Controller
         $objCities =(New Cities())->searchList($request->search);
         //Log::info($objCities);
         return response()->json([
-            'cities' => $objCities
+            'cities' => $objCities,
+            'continents' => $objContinent
         ]);
     }
     public function list(){
         $objCities =(New Cities())->list();
         $objBanners = (New Banners())->list(1, 0);
+        $objContinent = (New continent())->list();
         Log::info($objCities);
         return response()->json([
             'bannerCities' => $objBanners,
-            'cities' => $objCities
+            'cities' => $objCities,
+            'continents' => $objContinent
         ]);
     }
 
@@ -84,13 +88,15 @@ class CitiesContoller extends Controller
         $objLinks = (New Links())->list(1, $cityId);
         $objFiles = (New Files())->list(1, $cityId);
         $objBanners = (New Banners())->list(1, $cityId);
+        $objContinent = (New continent())->list();
 
         return response()->json([
             'cities' => $objCity,
             'gallery' => $objgallery,
             'links' => $objLinks,
             'files' => $objFiles,
-            'bannerCities' => $objBanners
+            'bannerCities' => $objBanners,
+            'continents' => $objContinent
         ]);
     }
 
