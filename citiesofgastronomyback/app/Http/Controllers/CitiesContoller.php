@@ -12,10 +12,65 @@ use Illuminate\Support\Facades\Log;
 
 class CitiesContoller extends Controller
 {
+    public function citiesStore(Request $request){
+        //Log::info("Guarda City");
+        //Log::info($request);
+
+        $objCity = (New Cities())->store($request);
+        //Log::info(":: BACK RESULT");
+        //Log::info($objCity);
+
+        //$objCities =(New Cities())->list();
+        $objBanners = (New Banners())->list(1);
+        return response()->json([
+            'cities' => $objCity
+        ]);
+    }
+
+
+    public function citiesUpdate(Request $request){
+        //Log::info("Guarda City");
+        //Log::info($request);
+
+        $objCity = (New Cities())->citiesUpdate($request, 'base');
+        //Log::info(":: BACK RESULT");
+        //Log::info($objCity);
+
+        //$objCities =(New Cities())->list();
+        $objBanners = (New Banners())->list(1);
+        return response()->json([
+            'cities' => $objCity
+        ]);
+    }
+
+
+    public function citiesUpdateComplete(Request $request){
+        //Log::info("Guarda City");
+        //Log::info($request);
+
+        $objCity = (New Cities())->citiesUpdate($request, 'complete');
+        //Log::info(":: BACK RESULT");
+        //Log::info($objCity);
+
+        return response()->json([
+            'cities' => $objCity
+        ]);
+    }
+
+
+    public function serchList(Request $request){
+        //Log::info("### search :::");
+        //Log::info($request->search);
+        $objCities =(New Cities())->searchList($request->search);
+        //Log::info($objCities);
+        return response()->json([
+            'cities' => $objCities
+        ]);
+    }
     public function list(){
         $objCities =(New Cities())->list();
         $objBanners = (New Banners())->list(1);
-        //Log::info($objCities);
+        Log::info($objCities);
         return response()->json([
             'bannerCities' => $objBanners,
             'cities' => $objCities
@@ -35,26 +90,6 @@ class CitiesContoller extends Controller
             'links' => $objLinks,
             'files' => $objFiles,
             'bannerCities' => []
-        ]);
-    }
-
-    public function store(Request $request)
-    {
-        /*
-        //Verifica si existe el usuario
-        if($request->accessToken){
-            $userdatta = (New user_token())->show($request->accessToken);
-            if(count($userdatta)>0){
-                $user=$userdatta;
-                $id_user = $user[0]["id"];
-            };
-        };
-        //*/
-        $objCity = (New Cities())->store($request);
-        return response()->json([
-            'status' =>  $objCity["status"],
-            'message' =>  $objCity["mensaje"],
-            'datta' =>  $objCity["datta"]
         ]);
     }
 

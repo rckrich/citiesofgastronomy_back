@@ -21,6 +21,10 @@ use App\Http\Controllers\BannersController;
 Route::get('home', [HomeController::class, 'home']);
 
 Route::get('cities', [CitiesContoller::class, 'list']);
+Route::post('cities', [CitiesContoller::class, 'serchList']);
+Route::post('citiesStore', [CitiesContoller::class, 'citiesStore']);
+Route::post('citiesUpdate', [CitiesContoller::class, 'citiesUpdate']);
+Route::post('citiesUpdateComplete', [CitiesContoller::class, 'citiesUpdateComplete']);
 Route::get('cities/find/{id}', [CitiesContoller::class, 'find']);
 Route::post('cities/store/', [CitiesContoller::class, 'store']);
 Route::post('cities/update/{id}', [CitiesContoller::class, 'update']);

@@ -32,9 +32,30 @@ class Cities extends Model
                     -> toArray();
   }
 
+  public function searchList($search)
+  {
+  	return $this    -> select(
+                            "cities.id",
+                            "cities.name",
+                            "cities.country",
+                            "cities.population",
+                            "cities.restaurantFoodStablishments",
+                            "cities.designationyear",
+                            "cities.photo",
+                            "cities.completeInfo",
+                            "continent.name AS continentName"
+                            )
+                    -> join( "continent", "continent.id", '=', "cities.idContinent" )
+                    -> where( "cities.active", '=', '1' )
+                    -> where( "cities.name", 'LIKE', "%{$search}%")
+                    -> get()
+                    -> toArray();
+  }
+
   public function serch( $id, $lActivo = true )
   {
   	return $this    -> select(
+                            "cities.id",
                             "cities.name",
                             "cities.country",
                             "cities.population",
@@ -68,8 +89,10 @@ class Cities extends Model
   public function store(Request $request){
     $image = '';$status = 200;$mensaje="La ciudad se ha guardado correctamente";
 
+    //Log::info("##ingreso a STORE :::");
     $photo = '';
         if($request->file("photo")){
+            //Log::info("##ingreso a is FILE :::");
             try{
                 $request->validate ([
                     'photo' => 'image|max:50000'
@@ -77,7 +100,8 @@ class Cities extends Model
                 $photo =  $request->file("photo")->store('public/images/cities');
                 $photo = str_replace('public/', 'storage/', $photo);
             } catch ( \Exception $e ) {
-
+                //Log::info("-->Error al cargar la imagen ###");
+                Log::info($e);
             }
         };
 
@@ -90,16 +114,16 @@ class Cities extends Model
             ]);
 
             $objCity = new Cities;
-            $objCity->idContinent = $request->input("idContinent");
             $objCity->name = $request->input("name");
             $objCity->country = $request->input("country");
+            $objCity->idContinent = $request->input("idContinent");
             $objCity->population = $request->input("population");
             $objCity->restaurantFoodStablishments = $request->input("restaurantFoodStablishments");
-            $objCity->description = $request->input("description");
+            //$objCity->description = $request->input("description");
             $objCity->designationyear = $request->input("designationyear");
+            $objCity->photo = $photo;
             $objCity->completeInfo = '0';
             $objCity->active = '1';
-            $objCity->photo = $photo;
             $objCity->created_at = date("Y-m-d H:i:s");
             $objCity->updated_at = date("Y-m-d H:i:s");
             $objCity -> save();
@@ -121,6 +145,75 @@ class Cities extends Model
 
 
 
+
+
+
+
+
+
+
+
+
+
+  public function citiesUpdate(Request $request, $tipo){
+    $image = '';$status = 200;$mensaje="La ciudad se ha guardado correctamente";
+
+    //Log::info("##ingreso a STORE :::");
+    $photo = '';
+        if($request->file("photo")){
+            //Log::info("##ingreso a is FILE :::");
+            try{
+                $request->validate ([
+                    'photo' => 'image|max:50000'
+                ]);
+                $photo =  $request->file("photo")->store('public/images/cities');
+                $photo = str_replace('public/', 'storage/', $photo);
+            } catch ( \Exception $e ) {
+                //Log::info("-->Error al cargar la imagen ###");
+                Log::info($e);
+            }
+        };
+
+
+
+        $objCity=[];
+        try{
+            $request->validate ([
+                'name' => 'required|string'
+            ]);
+            $id = $request->input("id");
+            $objCity = Cities::findOrFail($id);
+            $objCity->name = $request->input("name");
+            $objCity->country = $request->input("country");
+            $objCity->idContinent = $request->input("idContinent");
+            $objCity->population = $request->input("population");
+            $objCity->restaurantFoodStablishments = $request->input("restaurantFoodStablishments");
+            $objCity->designationyear = $request->input("designationyear");
+
+            if($tipo == 'complete'){
+                $objCity->description = $request->input("description");
+                $objCity->completeInfo = '0';
+            };
+
+            if($photo){
+                $objCity->photo = $photo;
+            };
+            //$objCity->active = '1';
+            //$objCity->created_at = date("Y-m-d H:i:s");
+            $objCity->updated_at = date("Y-m-d H:i:s");
+            $objCity -> save();
+        //}else{
+        } catch ( \Exception $e ) {
+            Log::info($e);
+            $status = 400;$mensaje="Formato de nombre incorrecto";
+        };
+
+        $arrayDatta["datta"] = $objCity;
+        $arrayDatta["mensaje"] = $mensaje;
+        $arrayDatta["status"] = $status;
+
+        return $arrayDatta;
+  }
 
 
 
