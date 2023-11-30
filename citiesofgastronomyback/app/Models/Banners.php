@@ -29,11 +29,11 @@ class Banners extends Model
     public function list( $seccion, $idOwner )
     {
        // $objBanner = $this;
-        if($idOwner > 0){
+        //if($idOwner > 0){
             $objBanner = $this  -> select("banner" )-> where( "idOwner", '=', $idOwner ) -> where( "idSection", '=', $seccion )-> orderBy('id', 'desc')-> get()-> toArray();
-        }else{
-            $objBanner = $this  -> select("banner" )-> where( "idSection", '=', $seccion )-> orderBy('id', 'desc')-> get()-> toArray();
-        };
+        //}else{
+        //    $objBanner = $this  -> select("banner" )-> where( "idSection", '=', $seccion )-> orderBy('id', 'desc')-> get()-> toArray();
+        //};
 
         return $objBanner;
 
