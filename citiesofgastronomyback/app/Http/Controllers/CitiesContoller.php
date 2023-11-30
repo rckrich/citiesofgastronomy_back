@@ -63,6 +63,7 @@ class CitiesContoller extends Controller
         //Log::info("### search :::");
         //Log::info($request->search);
         $objCities =(New Cities())->searchList($request->search);
+        $objContinent = (New continent())->list();
         //Log::info($objCities);
         return response()->json([
             'cities' => $objCities,
@@ -73,7 +74,7 @@ class CitiesContoller extends Controller
         $objCities =(New Cities())->list();
         $objBanners = (New Banners())->list(1, 0);
         $objContinent = (New continent())->list();
-        Log::info($objCities);
+
         return response()->json([
             'bannerCities' => $objBanners,
             'cities' => $objCities,
