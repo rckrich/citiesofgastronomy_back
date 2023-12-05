@@ -11,10 +11,11 @@ class Links extends Model
     protected $table = "links";
 
 
-    public function storeLINK( $link, $id, $section ){
+    public function storeLINK( $link, $title, $id, $section ){
 
         $objCity = new Links;
         $objCity->image = $link;
+        $objCity->title =  $title;
         $objCity->idOwner = $id;
         $objCity->active = 1;
         $objCity->idSection = $section;
@@ -25,7 +26,7 @@ class Links extends Model
 
     public function list( $seccion, $idOwner )
     {
-        return $this    -> select("image" )
+        return $this    -> select("image", "title", "id" )
                       -> where( "active", '=', '1' )
                       -> where( "idSection", '=', $seccion )
                       -> where( "idOwner", '=', $idOwner )

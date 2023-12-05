@@ -29,7 +29,7 @@ class Images extends Model
 
     public function list( $seccion, $idOwner )
     {
-        return $this    -> select("image" )
+        return $this    -> select("image", "id" )
                       -> where( "active", '=', '1' )
                       -> where( "idSection", '=', $seccion )
                       -> where( "idOwner", '=', $idOwner )

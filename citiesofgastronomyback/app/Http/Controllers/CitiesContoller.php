@@ -18,10 +18,7 @@ class CitiesContoller extends Controller
         //Log::info($request);
 
         $objCity = (New Cities())->store($request);
-        //Log::info(":: BACK RESULT");
-        //Log::info($objCity);
 
-        //$objCities =(New Cities())->list();
         $objBanners = (New Banners())->list(1, 0);
         return response()->json([
             'cities' => $objCity
@@ -34,10 +31,7 @@ class CitiesContoller extends Controller
         //Log::info($request);
 
         $objCity = (New Cities())->citiesUpdate($request, 'base');
-        //Log::info(":: BACK RESULT");
-        //Log::info($objCity);
 
-        //$objCities =(New Cities())->list();
         $objBanners = (New Banners())->list(1, 0);
         return response()->json([
             'cities' => $objCity
@@ -45,40 +39,43 @@ class CitiesContoller extends Controller
     }
 
 
-    public function citiesUpdateComplete(Request $request){
-        //Log::info("Guarda City");
-        //Log::info($request);
-
-        $objCity = (New Cities())->citiesUpdate($request, 'complete');
-        //Log::info(":: BACK RESULT");
-        //Log::info($objCity);
-
-        return response()->json([
-            'cities' => $objCity
-        ]);
-    }
 
 
-    public function serchList(Request $request){
-        //Log::info("### search :::");
-        //Log::info($request->search);
-        $objCities =(New Cities())->searchList($request->search);
-        $objContinent = (New continent())->list();
-        //Log::info($objCities);
-        return response()->json([
-            'cities' => $objCities,
-            'continents' => $objContinent
-        ]);
-    }
-    public function list(){
-        $objCities =(New Cities())->list();
+
+
+    public function list(Request $request){
+        $cantItems = 50;
+        $paginator = 1;
+        $page = $request->page;
+
+
+        if($request->search){
+            $objCities =(New Cities())->searchList($request->search, $page,$cantItems);
+            $citiesTotal =(New Cities())->searchList($request->search, 1, 999999999999999999);
+        }else{
+            $objCities =(New Cities())->list($page, $cantItems);
+            $citiesTotal =(New Cities())->list(1, 999999999999999999);
+        };
+
+        $total = count($citiesTotal);
+        if($total > $cantItems){
+            $division = $total / $cantItems;
+            $paginator = intval($division);
+            if($paginator < $division){
+                $paginator = $paginator +1;
+            };
+        };
+
+
         $objBanners = (New Banners())->list(1, 0);
         $objContinent = (New continent())->list();
 
         return response()->json([
             'bannerCities' => $objBanners,
             'cities' => $objCities,
-            'continents' => $objContinent
+            'continents' => $objContinent,
+            'tot' => $total,
+            'paginator' => $paginator
         ]);
     }
 
@@ -236,6 +233,8 @@ class CitiesContoller extends Controller
                 $request->validate ([
                     'name' => 'required|string'
                 ]);
+                Log::info("description");
+                Log::info($request->input("description"));
 
                 $objCity = Cities::find($id);
                 $objCity->idContinent = $request->input("idContinent");
@@ -259,6 +258,7 @@ class CitiesContoller extends Controller
                 };
                 $objCity->updated_at = date("Y-m-d H:i:s");
                 $objCity -> save();
+                Log::info($objCity);
             } catch ( \Exception $e ) {
                 Log::info($e);
                 $status = 400;$mensaje="Formato de nombre incorrecto";
@@ -274,34 +274,28 @@ class CitiesContoller extends Controller
                 $idImage = $request->input($idg);
                 $idg = 'deleteImage'.$i;
                 $deleteImage = $request->input($idg);
+                //Log::info("ID IMAGE: ".$idImage);
+                //Log::info("DEL IMAGE: ".$deleteImage);
 
                 if(!$idImage){
-                    if($image){
+                    if(!$deleteImage){
+                        if($image){
 
-                        try{
-                            $objGallery =(New Images())->storeIMG($image, $id, 1);
-                            /*
-                            $request->validate ([
-                                $idg => 'image|max:50000'
-                            ]);
-                            $photo =  $request->file($idg)->store('public/images/gallery');
-                            $photo = str_replace('public/', 'storage/', $photo);
+                            try{
+                                $objGallery =(New Images())->storeIMG($image, $id, 1);
+                            } catch ( \Exception $e ) {
 
-                            $objCity = new Images;
-                            $objCity->image = $photo;
-                            $objCity->name = $id;
-                            $objCity->active = 1;
-                            $objCity->idSection = 1;
-                            $objCity->created_at = date("Y-m-d H:i:s");
-                            $objCity->updated_at = date("Y-m-d H:i:s");
-                            $objCity -> save();//*/
-                        } catch ( \Exception $e ) {
-
-                        }
+                            }
+                        };
                     };
                 }else{
                     if($deleteImage){
-
+                        $obsDEL = Images::find($idImage);
+                        $obsDEL->active = 2;
+                        $obsDEL->updated_at = date("Y-m-d H:i:s");
+                        $obsDEL -> save();
+                        //Log::info("IMAGEN Borrada");
+                        //Log::info($obsDEL);
                     };
                 };
 
@@ -312,23 +306,39 @@ class CitiesContoller extends Controller
             for($i = 1; $i < $cant_links+1; $i++){
                 $idg = 'link'.$i;
                 $link = $request->input($idg);
+                $idg = 'titleLink'.$i;
+                $titleLink = $request->input($idg);
                 $idg = 'idLink'.$i;
                 $idLink = $request->input($idg);
                 $idg = 'deleteLink'.$i;
                 $deleteLink = $request->input($idg);
-
+                Log::info("#1");
                 if(!$idLink){
+                    Log::info("#2");
                     if($link){
+                        Log::info("#3");
                         try{
-                            $objGallery =(New Links())->storeLINK($link, $id, 1);
+                            Log::info("#3.a");
+                            $objGallery =(New Links())->storeLINK($link, $titleLink, $id, 1);
+                            Log::info($objGallery);
                         } catch ( \Exception $e ) {
 
+                            Log::info($e);
                         }
                     };
                 }else{
+                    Log::info("#4");
+                    $objLink = Links::find($idLink);
                     if($deleteLink){
-
+                        Log::info("#5");
+                        $objLink->active = 2;
+                    }else{
+                        Log::info("#7");
+                        $objLink->title = $link;
+                        $objLink->link = $titleLink;
                     };
+                    $objLink->updated_at = date("Y-m-d H:i:s");
+                    $objLink -> save();
                 };
 
             }

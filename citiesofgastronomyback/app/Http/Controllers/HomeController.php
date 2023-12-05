@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
     public function home(){
 
-        $objCities =(New Cities())->list();
+        $objCities =(New Cities())->list(1, 20);
 
         $objAbout = (New Banners())->list(2, 0);
         Log::info("BAnner controller");

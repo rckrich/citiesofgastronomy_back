@@ -13,8 +13,10 @@ class Cities extends Model
 
   protected $table = "cities";
 
-  public function list()
+  public function list($page, $cant)
   {
+    $offset = ($page-1) * $cant;
+
   	return $this    -> select(
                             "cities.id",
                             "cities.name",
@@ -28,12 +30,17 @@ class Cities extends Model
                             )
                     -> join( "continent", "continent.id", '=', "cities.idContinent" )
                     -> where( "cities.active", '=', '1' )
+                    -> orderBy("cities.name", 'ASC' )
+                    -> limit($cant)
+                    -> offset($offset)
                     -> get()
                     -> toArray();
   }
 
-  public function searchList($search)
+  public function searchList($search, $page, $cant)
   {
+    $offset = ($page-1) * $cant;
+
   	return $this    -> select(
                             "cities.id",
                             "cities.name",
@@ -48,6 +55,8 @@ class Cities extends Model
                     -> join( "continent", "continent.id", '=', "cities.idContinent" )
                     -> where( "cities.active", '=', '1' )
                     -> where( "cities.name", 'LIKE', "%{$search}%")
+                    -> limit($cant)
+                    -> offset($offset)
                     -> get()
                     -> toArray();
   }
