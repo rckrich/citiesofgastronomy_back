@@ -302,6 +302,7 @@ class CitiesContoller extends Controller
             }
             /////////////////////////////   LINKS
             $cant_links = $request->input("cant_links");
+            Log::info("--->CANT LINKS: ".$cant_links);
 
             for($i = 1; $i < $cant_links+1; $i++){
                 $idg = 'link'.$i;
@@ -318,9 +319,11 @@ class CitiesContoller extends Controller
                     if($link){
                         Log::info("#3");
                         try{
-                            Log::info("#3.a");
-                            $objGallery =(New Links())->storeLINK($link, $titleLink, $id, 1);
-                            Log::info($objGallery);
+                            if(!$deleteLink){
+                                Log::info("#3.a");
+                                $objGallery =(New Links())->storeLINK($link, $titleLink, $id, 1);
+                                Log::info($objGallery);
+                            }else{Log::info("#3.b");};
                         } catch ( \Exception $e ) {
 
                             Log::info($e);
@@ -334,8 +337,8 @@ class CitiesContoller extends Controller
                         $objLink->active = 2;
                     }else{
                         Log::info("#7");
-                        $objLink->title = $link;
-                        $objLink->link = $titleLink;
+                        $objLink->title = $titleLink;
+                        $objLink->image = $link;
                     };
                     $objLink->updated_at = date("Y-m-d H:i:s");
                     $objLink -> save();
