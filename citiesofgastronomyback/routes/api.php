@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CitiesContoller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BannersController;
-
+use App\Http\Controllers\FileController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,6 +32,7 @@ Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete']);
 
 Route::post('banners/store/', [BannersController::class, 'store']);
 
+Route::post('addPDF', [FileController::class, 'store']);
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

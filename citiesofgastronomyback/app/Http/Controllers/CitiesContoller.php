@@ -313,30 +313,20 @@ class CitiesContoller extends Controller
                 $idLink = $request->input($idg);
                 $idg = 'deleteLink'.$i;
                 $deleteLink = $request->input($idg);
-                Log::info("#1");
                 if(!$idLink){
-                    Log::info("#2");
                     if($link){
-                        Log::info("#3");
                         try{
                             if(!$deleteLink){
-                                Log::info("#3.a");
                                 $objGallery =(New Links())->storeLINK($link, $titleLink, $id, 1);
-                                Log::info($objGallery);
                             }else{Log::info("#3.b");};
                         } catch ( \Exception $e ) {
-
-                            Log::info($e);
                         }
                     };
                 }else{
-                    Log::info("#4");
                     $objLink = Links::find($idLink);
                     if($deleteLink){
-                        Log::info("#5");
                         $objLink->active = 2;
                     }else{
-                        Log::info("#7");
                         $objLink->title = $titleLink;
                         $objLink->image = $link;
                     };
@@ -350,8 +340,11 @@ class CitiesContoller extends Controller
 
             /////////////////////////////   FILES
             $cant_files = $request->input("cant_files");
+            Log::info("-->CANT FILES -->".$cant_files);
+
 
             for($i = 1; $i < $cant_files+1; $i++){
+                Log::info("#:1");
                 $idg = 'file'.$i;
                 $file = $request->file($idg);
                 $idg = 'idFile'.$i;
@@ -360,16 +353,24 @@ class CitiesContoller extends Controller
                 $title = $request->input($idg);
                 $idg = 'deleteFile'.$i;
                 $deleteFile = $request->input($idg);
-                if(!$idFile){
-                    if($file){
+                Log::info("-->ID:: ".$idFile);
+                if($idFile){
+                    Log::info("Modifica::");
+                    $objLink = Files::find($idFile);
+                    if($deleteLink){
 
-                        $objGallery =(New Files())->storeFILE($file, $id, 1, $title);
-                        try{
-                        } catch ( \Exception $e ) {
-
-                        }
+                    Log::info("->HAY DEL");
+                        $objLink->active = 2;
+                    }else{
+                        Log::info("->sin DEL");
+                        $objLink->title = $title;
+                        $objLink->active = 1;
                     };
+                    $objLink->updated_at = date("Y-m-d H:i:s");
+                    $objLink -> save();
+                    Log::info($objLink);
                 }else{
+                    Log::info("#:nop");
                     if($deleteFile){
 
                     };
