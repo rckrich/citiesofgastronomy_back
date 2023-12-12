@@ -340,11 +340,11 @@ class CitiesContoller extends Controller
 
             /////////////////////////////   FILES
             $cant_files = $request->input("cant_files");
-            Log::info("-->CANT FILES -->".$cant_files);
+            //Log::info("-->CANT FILES -->".$cant_files);
 
 
             for($i = 1; $i < $cant_files+1; $i++){
-                Log::info("#:1");
+                //Log::info("#:1");
                 $idg = 'file'.$i;
                 $file = $request->file($idg);
                 $idg = 'idFile'.$i;
@@ -353,24 +353,24 @@ class CitiesContoller extends Controller
                 $title = $request->input($idg);
                 $idg = 'deleteFile'.$i;
                 $deleteFile = $request->input($idg);
-                Log::info("-->ID:: ".$idFile);
+                //Log::info("-->ID:: ".$idFile);
                 if($idFile){
-                    Log::info("Modifica::");
+                    //Log::info("Modifica::");
                     $objLink = Files::find($idFile);
-                    if($deleteLink){
+                    if($deleteFile){
 
-                    Log::info("->HAY DEL");
+                    //Log::info("->HAY DEL");
                         $objLink->active = 2;
                     }else{
-                        Log::info("->sin DEL");
+                        //Log::info("------------->HABILITA");
                         $objLink->title = $title;
                         $objLink->active = 1;
                     };
                     $objLink->updated_at = date("Y-m-d H:i:s");
                     $objLink -> save();
-                    Log::info($objLink);
+                    //Log::info($objLink);
                 }else{
-                    Log::info("#:nop");
+                    //Log::info("#:nop");
                     if($deleteFile){
 
                     };
