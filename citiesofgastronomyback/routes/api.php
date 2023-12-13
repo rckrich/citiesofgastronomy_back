@@ -33,6 +33,8 @@ Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete']);
 Route::post('banners/store/', [BannersController::class, 'store']);
 
 Route::post('addPDF', [FileController::class, 'store']);
+
+Route::post('resize', [CitiesContoller::class, 'resise']);
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

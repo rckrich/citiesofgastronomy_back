@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Models\Cities;
+use App\Models\Images;
 use Illuminate\Support\Facades\Log;
 
 class Cities extends Model
@@ -106,8 +107,9 @@ class Cities extends Model
                 $request->validate ([
                     'photo' => 'image|max:50000'
                 ]);
-                $photo =  $request->file("photo")->store('public/images/cities');
-                $photo = str_replace('public/', 'storage/', $photo);
+                //$photo =  $request->file("photo")->store('public/images/cities');
+                //$photo = str_replace('public/', 'storage/', $photo);
+                $photo = (New Images())->storeResize($request->file("photo"), '756', 'cities');
             } catch ( \Exception $e ) {
                 //Log::info("-->Error al cargar la imagen ###");
                 Log::info($e);
@@ -163,20 +165,25 @@ class Cities extends Model
 
 
 
-
   public function citiesUpdate(Request $request, $tipo){
     $image = '';$status = 200;$mensaje="La ciudad se ha guardado correctamente";
 
     //Log::info("##ingreso a STORE :::");
     $photo = '';
         if($request->file("photo")){
-            //Log::info("##ingreso a is FILE :::");
+            Log::info("##ingreso a is FILE :::");
             try{
                 $request->validate ([
                     'photo' => 'image|max:50000'
                 ]);
-                $photo =  $request->file("photo")->store('public/images/cities');
-                $photo = str_replace('public/', 'storage/', $photo);
+                //// GUARDO LA IMAGEN
+                //$photo =  $request->file("photo")->store('public/images/cities');
+                //$photo = str_replace('public/', 'storage/', $photo);
+
+
+                $photo = (New Images())->storeResize($request->file("photo"), '756', 'cities');
+                Log::info($photo);
+
             } catch ( \Exception $e ) {
                 //Log::info("-->Error al cargar la imagen ###");
                 Log::info($e);
