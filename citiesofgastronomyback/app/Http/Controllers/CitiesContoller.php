@@ -9,10 +9,45 @@ use App\Models\Links;
 use App\Models\Files;
 use App\Models\Banners;
 use App\Models\continent;
+use Intervention\Image\Drivers\Imagick\Driver;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
 
 class CitiesContoller extends Controller
 {
+
+
+
+
+    public function resise(Request $request){
+        Log::info($request->file("photo"));
+        Log::info("#0");
+        // create image manager with desired driver
+        $manager = ImageManager::gd();
+        // open an image file
+        //$image = $manager->read('/storage/images/cities/mtCwfKFbUNfFq0kv8Eatqwb8IAJ7fF0ZVEEnw9lY.jpg');
+        $image = $manager->read($request->file("photo"));
+        Log::info("#3");
+        // resize image instance
+        $image->resize(height: 300);
+        Log::info("#4");
+
+        // insert a watermark
+        //$image->place('images/watermark.png');
+
+        // encode edited image
+        $encoded = $image->toJpg();
+        Log::info("#5");
+
+        // save encoded image
+        $encoded->save('storage/images/cities/example.jpg');
+
+        Log::info("#terminoooo");
+    }
+
+
     public function citiesStore(Request $request){
         //Log::info("Guarda City");
         //Log::info($request);
@@ -37,8 +72,6 @@ class CitiesContoller extends Controller
             'cities' => $objCity
         ]);
     }
-
-
 
 
 
