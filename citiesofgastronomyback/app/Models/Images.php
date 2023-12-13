@@ -53,7 +53,7 @@ class Images extends Model
         // resize image instance
         //$image->resize(width: $width);
         $image->resize(width: $width);
-        //$image->resize(height: 456);
+        $image->resize(height: $height);
         Log::info("#4");
 
         // insert a watermark
