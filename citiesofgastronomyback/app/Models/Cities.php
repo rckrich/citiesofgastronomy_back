@@ -109,7 +109,7 @@ class Cities extends Model
                 ]);
                 //$photo =  $request->file("photo")->store('public/images/cities');
                 //$photo = str_replace('public/', 'storage/', $photo);
-                $photo = (New Images())->storeResize($request->file("photo"), '756', 'cities');
+                $photo = (New Images())->storeResize($request->file("photo"), '756', '456', 'cities');
             } catch ( \Exception $e ) {
                 //Log::info("-->Error al cargar la imagen ###");
                 Log::info($e);
@@ -181,7 +181,7 @@ class Cities extends Model
                 //$photo = str_replace('public/', 'storage/', $photo);
 
 
-                $photo = (New Images())->storeResize($request->file("photo"), '756', 'cities');
+                $photo = (New Images())->storeResize($request->file("photo"), '756', '456', 'cities');
                 Log::info($photo);
 
             } catch ( \Exception $e ) {

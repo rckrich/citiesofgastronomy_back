@@ -228,8 +228,10 @@ class CitiesContoller extends Controller
                     $request->validate ([
                         'photo' => 'image|max:50000'
                     ]);
-                    $photo =  $request->file("photo")->store('public/images/cities');
-                    $photo = str_replace('public/', 'storage/', $photo);
+                    //$photo =  $request->file("photo")->store('public/images/cities');
+                    //$photo = str_replace('public/', 'storage/', $photo);
+
+                    $photo = (New Images())->storeResize($request->file("photo"), '756', '456', 'cities');
                 } catch ( \Exception $e ) {
 
                 }
@@ -241,8 +243,9 @@ class CitiesContoller extends Controller
                     $request->validate ([
                         'logo' => 'image|max:50000'
                     ]);
-                    $logo =  $request->file("logo")->store('public/images/cities');
-                    $logo = str_replace('public/', 'storage/', $logo);
+                    //$logo =  $request->file("logo")->store('public/images/cities');
+                    //$logo = str_replace('public/', 'storage/', $logo);
+                    $logo = (New Images())->storeResize($request->file("logo"), '617', '312', 'cities');
                 } catch ( \Exception $e ) {
 
                 }
@@ -254,8 +257,9 @@ class CitiesContoller extends Controller
                     $request->validate ([
                         'banner' => 'image|max:50000'
                     ]);
-                    $banner =  $request->file("logo")->store('public/images/cities');
-                    $banner = str_replace('public/', 'storage/', $banner);
+                    //$banner =  $request->file("logo")->store('public/images/cities');
+                    //$banner = str_replace('public/', 'storage/', $banner);
+                    $banner = (New Images())->storeResize($request->file("banner"), '1920', '480', 'cities');
                 } catch ( \Exception $e ) {
 
                 }

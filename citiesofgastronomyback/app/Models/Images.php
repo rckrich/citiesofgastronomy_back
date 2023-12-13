@@ -17,8 +17,10 @@ class Images extends Model
 
     public function storeIMG( $image, $id, $section ){
 
-        $photo =  $image->store('public/images/gallery');
-        $photo = str_replace('public/', 'storage/', $photo);
+        //$photo =  $image->store('public/images/gallery');
+        //$photo = str_replace('public/', 'storage/', $photo);
+
+        $photo = (New Images())->storeResize($image, '700', '700', 'gallery');
 
         $objCity = new Images;
         $objCity->image = $photo;
@@ -40,7 +42,7 @@ class Images extends Model
                       -> toArray();
     }
 
-    public function storeResize($image, $width, $folder){
+    public function storeResize($image, $width, $height, $folder){
         Log::info("#1");
         // create image manager with desired driver
         $manager = ImageManager::gd();
@@ -51,7 +53,7 @@ class Images extends Model
         // resize image instance
         //$image->resize(width: $width);
         $image->resize(width: $width);
-        //$image->resize(height: 300);
+        //$image->resize(height: 456);
         Log::info("#4");
 
         // insert a watermark
@@ -69,7 +71,7 @@ class Images extends Model
         //$encoded->save('storage/images/cities/'.$nombre);
 
         Log::info("#terminoooo");
-        return 'storage/images/cities/'.$nombre;
+        return 'storage/images/'.$folder.'/'.$nombre;
     }
 
 }
