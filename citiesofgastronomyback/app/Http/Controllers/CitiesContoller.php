@@ -40,14 +40,14 @@ class CitiesContoller extends Controller
         Log::info(  $file->getPathName()  );
         echo '-->imagen:: ';
         echo $file->getPathName();
-        echo ':::__';
+        echo ':::##';
         ///echo file_get_contents($file);
         Log::info("#2_");
         //echo phpinfo();
         // open an image file
         //http://db.walook.com.mx:8033/storage/images/gallery/VeQe17ZIdL0DWZJVyP7vFFXTHzRfUNExThgH2NvT.jpg
-        $image = $manager->read('http://db.walook.com.mx:8033/storage/images/gallery/VeQe17ZIdL0DWZJVyP7vFFXTHzRfUNExThgH2NvT.jpg');
-        //$image = $manager->read($request->file("photo"));
+        //$image = $manager->read('http://db.walook.com.mx:8033/storage/images/gallery/VeQe17ZIdL0DWZJVyP7vFFXTHzRfUNExThgH2NvT.jpg');
+        $image = $manager->read(        $request->file("photo")     );
         Log::info("#3");
         // resize image instance
         $image->resize(height: 300);
