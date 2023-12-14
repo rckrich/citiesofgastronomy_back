@@ -35,8 +35,10 @@ class CitiesContoller extends Controller
 
         Log::info("#1.");
         Log::info(  $file->getPathName()  );
-
-        Log::info("#1.");
+        echo '-->imagen:: ';
+        echo $file->getPathName();
+        Log::info("#2");
+        /*
         // open an image file
         //$image = $manager->read('/storage/images/cities/mtCwfKFbUNfFq0kv8Eatqwb8IAJ7fF0ZVEEnw9lY.jpg');
         $image = $manager->read($file);
@@ -56,6 +58,7 @@ class CitiesContoller extends Controller
         $encoded->save('storage/images/cities/example.jpg');
 
         Log::info("#terminoooo");
+        //*/
     }
 
 
