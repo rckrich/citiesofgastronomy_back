@@ -40,7 +40,7 @@ class CitiesContoller extends Controller
         Log::info(  $file->getPathName()  );
         echo '-->imagen:: ';
         echo $file->getPathName();
-        echo ':::';
+        echo ':::__';
         ///echo file_get_contents($file);
         Log::info("#2_");
         //echo phpinfo();
