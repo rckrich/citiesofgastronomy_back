@@ -19,8 +19,9 @@ class CitiesContoller extends Controller
 {
 
     public function resise(Request $request){
-        Log::info($request->file("photo"));
-        Log::info("#0");
+        $file = $request->file("photo");
+        Log::info($file);
+        Log::info("#0::");
 
         //VERIFICO SI exite el DIRECTORIO y si no --> CREA
         if(!is_dir('storage/images/cities/')){
@@ -32,9 +33,13 @@ class CitiesContoller extends Controller
         // create image manager with desired driver
         $manager = ImageManager::gd();
 
+        Log::info("#1.");
+        Log::info(  $file->getPathName()  );
+
+        Log::info("#1.");
         // open an image file
         //$image = $manager->read('/storage/images/cities/mtCwfKFbUNfFq0kv8Eatqwb8IAJ7fF0ZVEEnw9lY.jpg');
-        $image = $manager->read($request->file("photo"));
+        $image = $manager->read($file);
         Log::info("#3");
         // resize image instance
         $image->resize(height: 300);
