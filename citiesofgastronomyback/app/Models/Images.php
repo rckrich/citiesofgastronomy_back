@@ -63,6 +63,13 @@ class Images extends Model
         $encoded = $image->toJpg();
         Log::info("#5");
 
+        //VERIFICO SI exite el DIRECTORIO y si no --> CREA
+        if(!is_dir('storage/images/'.$folder.'/')){
+            @mkdir('storage/images/'.$folder.'/', 0777);
+        }else{
+            Log::info("Ya existe ese directorio\n");
+        }
+
         $random = Str::random(10);
         $nombre = date("YmdHmi").$random.'.jpg';
         // save encoded image

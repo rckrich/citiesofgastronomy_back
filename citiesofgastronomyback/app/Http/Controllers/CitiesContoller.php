@@ -18,14 +18,20 @@ use Intervention\Image\ImageManager;
 class CitiesContoller extends Controller
 {
 
-
-
-
     public function resise(Request $request){
         Log::info($request->file("photo"));
         Log::info("#0");
+
+        //VERIFICO SI exite el DIRECTORIO y si no --> CREA
+        if(!is_dir('storage/images/cities/')){
+            @mkdir('storage/images/cities/', 0777);
+        }else{
+            Log::info("Ya existe ese directorio\n");
+        }
+
         // create image manager with desired driver
         $manager = ImageManager::gd();
+
         // open an image file
         //$image = $manager->read('/storage/images/cities/mtCwfKFbUNfFq0kv8Eatqwb8IAJ7fF0ZVEEnw9lY.jpg');
         $image = $manager->read($request->file("photo"));
