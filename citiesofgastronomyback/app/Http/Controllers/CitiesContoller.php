@@ -9,11 +9,12 @@ use App\Models\Links;
 use App\Models\Files;
 use App\Models\Banners;
 use App\Models\continent;
-use Intervention\Image\Drivers\Imagick\Driver;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
+
 
 class CitiesContoller extends Controller
 {
@@ -32,6 +33,8 @@ class CitiesContoller extends Controller
 
         // create image manager with desired driver
         $manager = ImageManager::gd();
+        //$manager = ImageManager::imagick();
+        //$manager = new ImageManager(new Driver());
 
         Log::info("#1->");
         Log::info(  $file->getPathName()  );
@@ -39,12 +42,12 @@ class CitiesContoller extends Controller
         echo $file->getPathName();
         echo ':::';
         ///echo file_get_contents($file);
-        Log::info("#2");
+        Log::info("#2_");
         //echo phpinfo();
         // open an image file
         //http://db.walook.com.mx:8033/storage/images/gallery/VeQe17ZIdL0DWZJVyP7vFFXTHzRfUNExThgH2NvT.jpg
-        //0$image = $manager->read('/storage/images/gallery/VeQe17ZIdL0DWZJVyP7vFFXTHzRfUNExThgH2NvT.jpg');
-        $image = $manager->read($request->file("photo"));
+        $image = $manager->read('http://db.walook.com.mx:8033/storage/images/gallery/VeQe17ZIdL0DWZJVyP7vFFXTHzRfUNExThgH2NvT.jpg');
+        //$image = $manager->read($request->file("photo"));
         Log::info("#3");
         // resize image instance
         $image->resize(height: 300);
