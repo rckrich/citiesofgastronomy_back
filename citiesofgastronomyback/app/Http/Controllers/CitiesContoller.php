@@ -38,12 +38,12 @@ class CitiesContoller extends Controller
         echo '-->imagen:: ';
         echo $file->getPathName();
         echo ':::';
-        echo file_get_contents($file);
+        ///echo file_get_contents($file);
         Log::info("#2");
-
+        echo phpinfo();
         // open an image file
         //http://db.walook.com.mx:8033/storage/images/gallery/VeQe17ZIdL0DWZJVyP7vFFXTHzRfUNExThgH2NvT.jpg
-        $image = $manager->read('/storage/images/gallery/VeQe17ZIdL0DWZJVyP7vFFXTHzRfUNExThgH2NvT.jpg');
+        //$image = $manager->read('/storage/images/gallery/VeQe17ZIdL0DWZJVyP7vFFXTHzRfUNExThgH2NvT.jpg');
         /*$image = $manager->read($file);
         Log::info("#3");
         // resize image instance
