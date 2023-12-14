@@ -33,10 +33,12 @@ class CitiesContoller extends Controller
         // create image manager with desired driver
         $manager = ImageManager::gd();
 
-        Log::info("#1.");
+        Log::info("#1->");
         Log::info(  $file->getPathName()  );
         echo '-->imagen:: ';
         echo $file->getPathName();
+        echo ':::';
+        echo file_get_contents($file);
         Log::info("#2");
 
         // open an image file
