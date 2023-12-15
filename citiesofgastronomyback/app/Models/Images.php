@@ -17,10 +17,10 @@ class Images extends Model
 
     public function storeIMG( $image, $id, $section ){
 
-        //$photo =  $image->store('public/images/gallery');
-        //$photo = str_replace('public/', 'storage/', $photo);
+        $photo =  $image->store('public/images/gallery');
+        $photo = str_replace('public/', 'storage/', $photo);
 
-        $photo = (New Images())->storeResize($image, '700', '700', 'gallery');
+        //$photo = (New Images())->storeResize($image, '700', '700', 'gallery');
 
         $objCity = new Images;
         $objCity->image = $photo;

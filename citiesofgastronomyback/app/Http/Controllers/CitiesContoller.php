@@ -97,7 +97,7 @@ class CitiesContoller extends Controller
 
 
     public function list(Request $request){
-        $cantItems = 50;
+        $cantItems = 20;
         $paginator = 1;
         $page = $request->page;
 
@@ -290,7 +290,7 @@ class CitiesContoller extends Controller
                 $request->validate ([
                     'name' => 'required|string'
                 ]);
-                Log::info("description");
+                Log::info("description:: - ::");
                 Log::info($request->input("description"));
 
                 $objCity = Cities::find($id);
