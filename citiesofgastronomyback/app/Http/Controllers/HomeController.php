@@ -14,14 +14,15 @@ class HomeController extends Controller
         $objCities =(New Cities())->list(1, 20);
 
         $objAbout = (New Banners())->list(2, 0);
-        Log::info("BAnner controller");
-        Log::info($objAbout);
+        //Log::info("BAnner controller");
         if(   count($objAbout)>0   ){$bannerAbount = $objAbout[0]["banner"];
         }else{$bannerAbount = '';        };
+        Log::info($bannerAbount);
 
-        $objAbout = (New Banners())->list(4, 0);
-        if($objAbout){$bannerNumberAndStats = $objAbout[0]["banner"];
+        $bannerNumberAndStats = (New Banners())->list(4, 0);
+        if($bannerNumberAndStats){$bannerNumberAndStats = $bannerNumberAndStats[0]["banner"];
         }else{$bannerNumberAndStats = '';        };
+        Log::info($bannerNumberAndStats);
 
         return response()->json([
             'bannerAbout' => $bannerAbount,

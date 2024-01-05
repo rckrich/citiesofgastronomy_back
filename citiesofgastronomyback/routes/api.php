@@ -6,6 +6,7 @@ use App\Http\Controllers\CitiesContoller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BannersController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\MainSiteContentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,10 +32,17 @@ Route::post('cities/updateCompleteInfo/{id}', [CitiesContoller::class, 'updateCo
 Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete']);
 
 Route::post('banners/store/', [BannersController::class, 'store']);
+Route::post('banners/delete/', [BannersController::class, 'delete']);
+Route::post('banners/update/', [BannersController::class, 'update']);
 
 Route::post('addPDF', [FileController::class, 'store']);
 
 Route::post('resize', [CitiesContoller::class, 'resise']);
+
+Route::get('mainSiteContent/home', [MainSiteContentController::class, 'home']);
+Route::post('mainSiteContent/linkStore', [MainSiteContentController::class, 'linkStore']);
+Route::post('mainSiteContent/clustersave', [MainSiteContentController::class, 'clustersave']);
+
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
