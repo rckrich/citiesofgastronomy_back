@@ -24,9 +24,7 @@ class SocialNetwork extends Model
             $idSocial = $type["id"];
             $idReq = $type["codde"].'_link';
             $socialValue = $request->input($idReq);
-            Log::info("------->##info req");
-            Log::info($idReq);
-            Log::info($socialValue);
+
 
             $objLink = $this  -> select("social_network", "id" )
             -> where( "idOwner", '=', $idOwner )
@@ -41,11 +39,13 @@ class SocialNetwork extends Model
                 $objLink->idSection = $idSection;
                 $objLink->created_at = date("Y-m-d H:i:s");
             };
-            if($socialValue != '' && $socialValue != NULL){
+            //if($socialValue != '' && $socialValue != NULL){
                 $objLink->social_network = $socialValue;
                 $objLink->updated_at = date("Y-m-d H:i:s");
                 $objLink -> save();
-            };
+
+            //};
+
             //Instagram_link
         }
 
@@ -59,7 +59,7 @@ class SocialNetwork extends Model
         for($i = 0; $i < count($SocialNetworkType) ; $i++){
             $SocialNetworkType[$i]["value"] = '';
 
-            $objLink = $this  -> select("social_network", "id" )
+            $objLink = $this  -> select("social_network", "id")
             -> where( "idOwner", '=', $idOwner )
             -> where( "idSection", '=', $idSection )
             -> where( "idSocialNetworkType", '=', $SocialNetworkType[$i]["id"] )

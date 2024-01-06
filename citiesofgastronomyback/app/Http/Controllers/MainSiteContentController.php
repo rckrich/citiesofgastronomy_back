@@ -60,7 +60,7 @@ class MainSiteContentController extends Controller
             $infoValue='';
             //Log::info($infoArray[$i]);
             $objInfoCoordinator = (New Info())->list($infoArray[$i]["key"]);
-            if($objInfoCoordinator){ $infoCoordinator = $objInfoCoordinator["description"]; };
+            if($objInfoCoordinator){ $infoValue = $objInfoCoordinator["description"]; };
             $infoArray[$i]["value"] = $infoValue;
         }
 

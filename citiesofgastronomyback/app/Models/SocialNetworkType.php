@@ -12,7 +12,7 @@ class SocialNetworkType extends Model
 
     public function list(  )
     {
-            $obj = $this    -> select("name", "id", "codde" )
+            $obj = $this    -> select("name", "id", "codde", "icon", "active" )
                             -> where( "active", '=', "1" )
                             -> orderBy('id', 'desc')-> get()-> toArray();
 

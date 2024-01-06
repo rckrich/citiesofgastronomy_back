@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cities;
 use App\Models\Banners;
+use App\Models\Info;
+use App\Models\SocialNetwork;
 use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
@@ -22,7 +24,16 @@ class HomeController extends Controller
         $bannerNumberAndStats = (New Banners())->list(4, 0);
         if($bannerNumberAndStats){$bannerNumberAndStats = $bannerNumberAndStats[0]["banner"];
         }else{$bannerNumberAndStats = '';        };
-        Log::info($bannerNumberAndStats);
+
+        $infoArray = (New Info())->type();
+        for($i=0; $i < count($infoArray); $i++){
+            $infoValue='';
+            $objInfoCoordinator = (New Info())->list($infoArray[$i]["key"]);
+            if($objInfoCoordinator){ $infoValue = $objInfoCoordinator["description"]; };
+            $infoArray[$i]["value"] = $infoValue;
+        }
+
+        $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
         return response()->json([
             'bannerAbout' => $bannerAbount,
@@ -32,7 +43,9 @@ class HomeController extends Controller
             'openCalls' => [],
             'coordinator' => '',
             'contactMail' => '',
-            'cities' => $objCities
+            'cities' => $objCities,
+            'SocialNetworkType' => $SocialNetworkType,
+            'info' => $infoArray
         ]);
     }
 }
