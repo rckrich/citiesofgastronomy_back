@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
+use App\Models\Info;
+use App\Models\SocialNetwork;
 use Intervention\Image\Drivers\Imagick\Driver;
 
 
@@ -123,12 +125,24 @@ class CitiesContoller extends Controller
         $objBanners = (New Banners())->list(1, 0);
         $objContinent = (New continent())->list();
 
+        $infoArray = (New Info())->type();
+        for($i=0; $i < count($infoArray); $i++){
+            $infoValue='';
+            $objInfoCoordinator = (New Info())->list($infoArray[$i]["key"]);
+            if($objInfoCoordinator){ $infoValue = $objInfoCoordinator["description"]; };
+            $infoArray[$i]["value"] = $infoValue;
+        }
+
+        $SocialNetworkType = (New SocialNetwork())->list(5, 0);
+
         return response()->json([
             'bannerCities' => $objBanners,
             'cities' => $objCities,
             'continents' => $objContinent,
             'tot' => $total,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'SocialNetworkType' => $SocialNetworkType,
+            'info' => $infoArray
         ]);
     }
 
@@ -141,13 +155,25 @@ class CitiesContoller extends Controller
         $objBanners = (New Banners())->list(1, $cityId);
         $objContinent = (New continent())->list();
 
+        $infoArray = (New Info())->type();
+        for($i=0; $i < count($infoArray); $i++){
+            $infoValue='';
+            $objInfoCoordinator = (New Info())->list($infoArray[$i]["key"]);
+            if($objInfoCoordinator){ $infoValue = $objInfoCoordinator["description"]; };
+            $infoArray[$i]["value"] = $infoValue;
+        }
+
+        $SocialNetworkType = (New SocialNetwork())->list(5, 0);
+
         return response()->json([
             'cities' => $objCity,
             'gallery' => $objgallery,
             'links' => $objLinks,
             'files' => $objFiles,
             'bannerCities' => $objBanners,
-            'continents' => $objContinent
+            'continents' => $objContinent,
+            'SocialNetworkType' => $SocialNetworkType,
+            'info' => $infoArray
         ]);
     }
 
