@@ -97,7 +97,7 @@ class Cities extends Model
 
 
   public function store(Request $request){
-    $image = '';$status = 200;$mensaje="La ciudad se ha guardado correctamente";
+    $image = '';$status = 200;$mensaje="City has been saved successfully";
 
     //Log::info("##ingreso a STORE :::");
     $photo = '';
@@ -141,7 +141,7 @@ class Cities extends Model
         //}else{
         } catch ( \Exception $e ) {
             Log::info($e);
-            $status = 400;$mensaje="Formato de nombre incorrecto";
+            $status = 400;$mensaje="Incorrect name format";
         };
 
         $arrayDatta["datta"] = $objCity;
@@ -166,7 +166,7 @@ class Cities extends Model
 
 
   public function citiesUpdate(Request $request, $tipo){
-    $image = '';$status = 200;$mensaje="La ciudad se ha guardado correctamente";
+    $image = '';$status = 200;$mensaje="City has been saved successfully";
 
     //Log::info("##ingreso a STORE :::");
     $photo = '';
@@ -221,7 +221,7 @@ class Cities extends Model
         //}else{
         } catch ( \Exception $e ) {
             Log::info($e);
-            $status = 400;$mensaje="Formato de nombre incorrecto";
+            $status = 400;$mensaje="Incorrect name format";
         };
 
         $arrayDatta["datta"] = $objCity;

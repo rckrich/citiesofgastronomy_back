@@ -205,7 +205,7 @@ class CitiesContoller extends Controller
 
     public function update(Request $request, string $id)
     {
-        $image = '';$status = 200;$mensaje="La ciudad se ha guardado correctamente";
+        $image = '';$status = 200;$mensaje="City has been saved successfully";
 
         $photo = '';
             if($request->file("photo")){
@@ -241,7 +241,7 @@ class CitiesContoller extends Controller
                 $objCity -> save();
             } catch ( \Exception $e ) {
                 Log::info($e);
-                $status = 400;$mensaje="Formato de nombre incorrecto";
+                $status = 400;$mensaje="Incorrect name format";
             };
 
         return response()->json([
@@ -266,7 +266,7 @@ class CitiesContoller extends Controller
 
     public function updateComplete(Request $request, string $id)
     {
-        $image = '';$status = 200;$mensaje="La ciudad se ha guardado correctamente";
+        $image = '';$status = 200;$mensaje="City has been saved successfully";
 
         $photo = '';
             if($request->file("photo")){
@@ -344,7 +344,7 @@ class CitiesContoller extends Controller
                 Log::info($objCity);
             } catch ( \Exception $e ) {
                 Log::info($e);
-                $status = 400;$mensaje="Formato de nombre incorrecto";
+                $status = 400;$mensaje="Incorrect name format";
             };
 
             /////////////////////////////   GALLERY
