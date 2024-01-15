@@ -42,7 +42,7 @@ class Newletter extends Model
         $offset = ($page-1) * $cant;
 
           return $this
-                        ->select(DB::raw('"id", "email", DATE_FORMAT(created_at, "%d %M %Y") AS SuscribeDate'))
+                        ->select(DB::raw('id, email, DATE_FORMAT(created_at, "%d %M %Y") AS SuscribeDate'))
                         -> orderBy("created_at", 'DESC')
                         -> limit($cant)
                         -> offset($offset)
