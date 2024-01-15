@@ -7,6 +7,7 @@ use App\Models\Timeline;
 use App\Models\Banners;
 use App\Models\Info;
 use App\Models\SocialNetwork;
+use Illuminate\Support\Facades\Log;
 
 class AboutController extends Controller
 {
@@ -85,6 +86,18 @@ class AboutController extends Controller
             'banner' => $objBanners,
             'SocialNetworkType' => $SocialNetworkType,
             'info' => $infoArray
+        ]);
+    }
+
+
+    public function timelineFind($id){
+        Log::info("timeline :: ->");
+        $obj = (New Timeline())->serch($id);
+        Log::info($id);
+        Log::info($obj);
+
+        return response()->json([
+            'timeline' => $obj
         ]);
     }
 }

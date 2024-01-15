@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use DB;
 
 class Timeline extends Model
 {
@@ -14,7 +16,10 @@ class Timeline extends Model
     {
       $offset = ($page-1) * $cant;
 
-        return $this    -> select("id","tittle","link", "startDate", "endDate")
+        return $this    -> select(DB::raw('id,tittle,link, startDate, endDate,
+                            DATE_FORMAT(startDate, "%d.%b.%Y") AS startDateFormat,
+                            DATE_FORMAT(endDate, "%d.%b.%Y") AS endDateFormat
+                            '))
                       -> where( "active", '=', '1' )
                       -> orderBy("tittle", 'ASC' )
                       -> limit($cant)

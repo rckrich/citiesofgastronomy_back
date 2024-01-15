@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cities;
 use App\Models\Banners;
 use App\Models\Info;
+use App\Models\Newletter;
 use App\Models\SocialNetwork;
 use Illuminate\Support\Facades\Log;
 
@@ -48,4 +49,48 @@ class HomeController extends Controller
             'info' => $infoArray
         ]);
     }
+
+
+
+
+    public function newsletter(Request $request){
+
+        $obj = (New Newletter())->store($request);
+
+        return response()->json([
+            'datta' => $obj["datta"],
+            'mensaje' => $obj["mensaje"],
+            'status' => $obj["status"]
+        ]);
+    }
+
+
+    public function newsletterList(Request $request){
+        $cantItems = 20;
+        $paginator = 1;
+        $page = $request->page;
+        Log::info("#LLEgo a newsletter --->");
+
+        $obj =(New Newletter())->list($page, $cantItems);
+        $objTOT =(New Newletter())->list(1, 999999999999999999);
+
+        $total = count($objTOT);
+        if($total > $cantItems){
+            $division = $total / $cantItems;
+            $paginator = intval($division);
+            if($paginator < $division){
+                $paginator = $paginator +1;
+            };
+        };
+
+        return response()->json([
+            'total' => $total,
+            'paginator' => $paginator,
+            'maillist' => $obj,
+            'page' => $page
+        ]);
+    }
+
+
+
 }

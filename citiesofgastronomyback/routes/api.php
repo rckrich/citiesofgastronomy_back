@@ -37,6 +37,8 @@ Route::post('cities/update/{id}', [CitiesContoller::class, 'update']);
 Route::post('cities/updateCompleteInfo/{id}', [CitiesContoller::class, 'updateComplete']);
 Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete']);
 
+Route::post('newsletter', [HomeController::class, 'newsletter']);
+Route::get('newsletterAdmin', [HomeController::class, 'newsletterList']);
 
 Route::get('about', [AboutController::class, 'list']);
 Route::get('initiatives', [InitiativesController::class, 'index']);
@@ -59,6 +61,7 @@ Route::post('mainSiteContent/linkStore', [MainSiteContentController::class, 'lin
 Route::post('mainSiteContent/clustersave', [MainSiteContentController::class, 'clustersave']);
 
 Route::post('about/timeline/list', [AboutController::class, 'listTimeline']);
+Route::get('about/timeline/find/{id}', [AboutController::class, 'timelineFind']);
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
