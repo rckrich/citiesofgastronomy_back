@@ -99,7 +99,12 @@ class CitiesContoller extends Controller
 
 
     public function list(Request $request){
-        $cantItems = 20;
+        if(!$request->cantItems){
+            $cantItems = 20;
+        }else{
+            $cantItems = $request->cantItems;
+        };
+        Log::info("##Cant cities ::".$cantItems);
         $paginator = 1;
         $page = $request->page;
 
