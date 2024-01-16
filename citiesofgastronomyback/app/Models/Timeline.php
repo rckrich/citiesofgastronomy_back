@@ -21,7 +21,7 @@ class Timeline extends Model
                             DATE_FORMAT(endDate, "%d.%b.%Y") AS endDateFormat
                             '))
                       -> where( "active", '=', '1' )
-                      -> orderBy("tittle", 'ASC' )
+                      -> orderBy("startDate", 'ASC' )
                       -> limit($cant)
                       -> offset($offset)
                       -> get()
