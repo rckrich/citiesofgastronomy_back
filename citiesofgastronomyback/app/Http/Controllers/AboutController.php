@@ -91,13 +91,56 @@ class AboutController extends Controller
 
 
     public function timelineFind($id){
-        Log::info("timeline :: ->");
+        //Log::info("timeline :: ->");
         $obj = (New Timeline())->serch($id);
-        Log::info($id);
-        Log::info($obj);
+        //Log::info($id);
+       // Log::info($obj);
 
         return response()->json([
             'timeline' => $obj
         ]);
     }
+
+
+
+
+
+  public function timelineSave(Request $request){
+    $status = 200;$mensaje="Timeline has been saved successfully";
+
+    Log::info("##ingreso a timelineSave :::");
+
+
+        $obj=[];
+        try{
+            $id = $request->input("id");
+            if($id){
+                $obj = Timeline::findOrFail($id);
+            }else{
+                $obj = new Timeline;
+                $obj->active = 1;
+                $obj->created_at = date("Y-m-d H:i:s");
+            };
+            $obj->tittle = $request->input("title");
+            $obj->link = $request->input("link");
+            $obj->startDate = $request->input("startDate");
+            $obj->endDate = $request->input("endDate");
+            $obj->updated_at = date("Y-m-d H:i:s");
+            $obj -> save();
+        } catch ( \Exception $e ) {
+            Log::info($e);
+            $status = 400;$mensaje="Error";
+        };
+
+
+        return response()->json([
+            'status' => $status,
+            'message' => $mensaje,
+            'timeline' => $obj
+        ]);
+  }
+
+
+
+
 }
