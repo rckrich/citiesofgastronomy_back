@@ -62,6 +62,8 @@ Route::post('mainSiteContent/clustersave', [MainSiteContentController::class, 'c
 
 Route::post('about/timeline/list', [AboutController::class, 'listTimeline']);
 Route::get('about/timeline/find/{id}', [AboutController::class, 'timelineFind']);
+Route::post('about/timeline/save/', [AboutController::class, 'timelineSave']);
+
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
