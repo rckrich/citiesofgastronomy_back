@@ -6,20 +6,36 @@ use Illuminate\Http\Request;
 use App\Models\Timeline;
 use App\Models\Banners;
 use App\Models\Info;
+use App\Models\FAQ;
 use App\Models\SocialNetwork;
 use Illuminate\Support\Facades\Log;
 
 class AboutController extends Controller
 {
     public function list(Request $request){
+
+        ///////LISTADO DEL ADMINISTRADOR
+
+        Log::info("#list1");
         $cantItems = 20;
         $paginator = 1;
         $total= 0;
         $page = $request->page;
+        $pageFaq = $request->pageFaq;
 
-        $objTimeline =(New Timeline())->list($page, $cantItems);
-        $TotalTimeline =(New Timeline())->searchList($request->search, 1, 999999999999999999);
+        $objTimeline =(New Timeline())->list($request->search, $page, $cantItems);
+        $TotalTimeline =(New Timeline())->list($request->search, 1, 999999999999999999);
         $total = count($TotalTimeline);
+
+        //$total = count($objTOT);
+        if($total > $cantItems){
+            $division = $total / $cantItems;
+            $paginator = intval($division);
+            if($paginator < $division){
+                $paginator = $paginator +1;
+            };
+        };
+
 
         $objBanners = (New Banners())->list(6, 0);
 
@@ -33,8 +49,13 @@ class AboutController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
+        $objFAQ = (New FAQ())->list($request->searchFaq, $pageFaq, $cantItems);
+        $TodosFAQ =(New FAQ())->list($request->searchFaq, 1, 999999999999999999);
+        $cantTotalFAQ = count($TodosFAQ);
+
         return response()->json([
             'timeline' => $objTimeline,
+            'faq' => $objFAQ,
             'tot' => $total,
             'paginator' => $paginator,
             'banner' => $objBanners,
@@ -44,17 +65,18 @@ class AboutController extends Controller
     }
 
     public function listTimeline(Request $request){
-        $cantItems = 20;
+        $cantItems = 5;
         $paginator = 1;
         $page = $request->page;
+        if(!$page){$page=1;};
 
 
         if($request->search){
             $objTimeline =(New Timeline())->searchList($request->search, $page,$cantItems);
             $TotalTimeline =(New Timeline())->searchList($request->search, 1, 999999999999999999);
         }else{
-            $objTimeline =(New Timeline())->list($page, $cantItems);
-            $TotalTimeline =(New Timeline())->list(1, 999999999999999999);
+            $objTimeline =(New Timeline())->list($request->search, $page, $cantItems);
+            $TotalTimeline =(New Timeline())->list($request->search, 1, 999999999999999999);
         };
 
         $total = count($TotalTimeline);
@@ -139,6 +161,9 @@ class AboutController extends Controller
             'timeline' => $obj
         ]);
   }
+
+
+
 
 
 

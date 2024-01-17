@@ -12,34 +12,46 @@ class Timeline extends Model
     use HasFactory;
     protected $table = "timeline";
 
-    public function list($page, $cant)
+    public function list($search, $page, $cant)
     {
-      $offset = ($page-1) * $cant;
+        $result = [];
+        $offset = ($page-1) * $cant;
+        try{
+            if($search){
+                $result =  $this    -> select(DB::raw('id,tittle,link, startDate, endDate,
+                                            DATE_FORMAT(startDate, "%d.%b.%Y") AS startDateFormat,
+                                            DATE_FORMAT(endDate, "%d.%b.%Y") AS endDateFormat
+                                    '))
+                            -> where( "active", '=', '1' )
+                            -> whereLike( "faq",  $search )
+                            -> orderBy("startDate", 'ASC' )
+                            -> limit($cant)
+                            -> offset($offset)
+                            -> get()-> toArray();
+            }else{
+                $result =  $this    -> select(DB::raw('id,tittle,link, startDate, endDate,
+                                            DATE_FORMAT(startDate, "%d.%b.%Y") AS startDateFormat,
+                                            DATE_FORMAT(endDate, "%d.%b.%Y") AS endDateFormat
+                                    '))
+                            -> where( "active", '=', '1' )
+                            -> orderBy("startDate", 'ASC' )
+                            -> limit($cant)
+                            -> offset($offset)
+                            -> get()-> toArray();
+            };
 
-        return $this    -> select(DB::raw('id,tittle,link, startDate, endDate,
-                            DATE_FORMAT(startDate, "%d.%b.%Y") AS startDateFormat,
-                            DATE_FORMAT(endDate, "%d.%b.%Y") AS endDateFormat
-                            '))
-                      -> where( "active", '=', '1' )
-                      -> orderBy("startDate", 'ASC' )
-                      -> limit($cant)
-                      -> offset($offset)
-                      -> get()
-                      -> toArray();
+        } catch ( \Exception $e ) {
+            $result = [];
+        };
+
+        return $result;
     }
 
     public function searchList($search, $page, $cant)
     {
-        $offset = ($page-1) * $cant;
-
-        return $this    -> select("id","tittle","link", "startDate", "endDate")
-                        -> where( "active", '=', '1' )
-                        -> where( "tittle", 'LIKE', "%{$search}%")
-                        -> limit($cant)
-                        -> offset($offset)
-                        -> get()
-                        -> toArray();
+        return $this->list($search, $page, $cant);
     }
+
     public function serch( $id, $lActivo = true )
     {
         return $this    -> select("id","tittle","link", "startDate", "endDate")

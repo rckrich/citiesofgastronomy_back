@@ -60,10 +60,12 @@ Route::get('mainSiteContent/home', [MainSiteContentController::class, 'home']);
 Route::post('mainSiteContent/linkStore', [MainSiteContentController::class, 'linkStore']);
 Route::post('mainSiteContent/clustersave', [MainSiteContentController::class, 'clustersave']);
 
-Route::post('about/timeline/list', [AboutController::class, 'listTimeline']);
+Route::post('about/timeline/list', [AboutController::class, 'list']);
 Route::get('about/timeline/find/{id}', [AboutController::class, 'timelineFind']);
 Route::post('about/timeline/save/', [AboutController::class, 'timelineSave']);
-
+Route::post('about/faq/list/', [AboutController::class, 'listfaq']);
+Route::get('about/faq/find/{id}', [AboutController::class, 'faqFind']);
+Route::post('about/faq/save/', [AboutController::class, 'faqSave']);
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

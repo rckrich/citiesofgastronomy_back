@@ -66,10 +66,10 @@ class HomeController extends Controller
 
 
     public function newsletterList(Request $request){
-        $cantItems = 20;
+        $cantItems = 50;
         $paginator = 1;
         $page = $request->page;
-        Log::info("#LLEgo a newsletter --->");
+
 
         $obj =(New Newletter())->list($page, $cantItems);
         $objTOT =(New Newletter())->list(1, 999999999999999999);
