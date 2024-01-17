@@ -168,7 +168,7 @@ class Cities extends Model
   public function citiesUpdate(Request $request, $tipo){
     $image = '';$status = 200;$mensaje="City has been saved successfully";
 
-    //Log::info("##ingreso a STORE :::");
+    Log::info("##ingreso a STORE :::");
     $photo = '';
         if($request->file("photo")){
             Log::info("##ingreso a is FILE :::");
@@ -205,6 +205,9 @@ class Cities extends Model
             $objCity->population = $request->input("population");
             $objCity->restaurantFoodStablishments = $request->input("restaurantFoodStablishments");
             $objCity->designationyear = $request->input("designationyear");
+
+            Log::info("TIPO de UPDATE:: ".$tipo);
+            Log::info($request->input("description"));
 
             if($tipo == 'complete'){
                 $objCity->description = $request->input("description");

@@ -166,6 +166,53 @@ class AboutController extends Controller
 
 
 
+  public function faqFind($id){
+        //Log::info("timeline :: ->");
+        $obj = (New FAQ())->serch($id);
+        //Log::info($id);
+    // Log::info($obj);
+
+        return response()->json([
+            'faq' => $obj
+        ]);
+    }
+
+
+
+
+    public function faqSave(Request $request){
+      $status = 200;$mensaje="FAQ has been saved successfully";
+
+      Log::info("##ingreso a faqSave :::");
+
+
+          $obj=[];
+          try{
+              $id = $request->input("id");
+              if($id){
+                  $obj = FAQ::findOrFail($id);
+              }else{
+                  $obj = new FAQ;
+                  //$obj->active = 1;
+                  $obj->created_at = date("Y-m-d H:i:s");
+              };
+              $obj->faq = $request->input("faq");
+              $obj->answer = $request->input("answer");
+              $obj->updated_at = date("Y-m-d H:i:s");
+              $obj -> save();
+          } catch ( \Exception $e ) {
+              Log::info($e);
+              $status = 400;$mensaje="Error";
+          };
+
+
+          return response()->json([
+              'status' => $status,
+              'message' => $mensaje,
+              'faq' => $obj
+          ]);
+    }
+
 
 
 }
