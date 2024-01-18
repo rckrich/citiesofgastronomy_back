@@ -22,6 +22,7 @@ class AboutController extends Controller
         $total= 0;
         $page = $request->page;
         $pageFaq = $request->pageFaq;
+        $paginatorFAQ = 1;
 
         $objTimeline =(New Timeline())->list($request->search, $page, $cantItems);
         $TotalTimeline =(New Timeline())->list($request->search, 1, 999999999999999999);
@@ -49,16 +50,35 @@ class AboutController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
+        ////////////////////////////
         $objFAQ = (New FAQ())->list($request->searchFaq, $pageFaq, $cantItems);
         $TodosFAQ =(New FAQ())->list($request->searchFaq, 1, 999999999999999999);
         $cantTotalFAQ = count($TodosFAQ);
 
+        if($cantTotalFAQ > $cantItems){
+            $division = $cantTotalFAQ / $cantItems;
+            $paginatorFAQ = intval($division);
+            if($paginatorFAQ < $division){
+                $paginatorFAQ = $paginatorFAQ +1;
+            };
+        };
+        //////////////////////////
+
+        $objAbout = (New Banners())->list(2, 0);
+        //Log::info("BAnner controller");
+        if(   count($objAbout)>0   ){$bannerAbount = $objAbout[0]["banner"];
+        }else{$bannerAbount = '';        };
+
         return response()->json([
             'timeline' => $objTimeline,
             'faq' => $objFAQ,
+            'pageFaq' => $pageFaq,
+            'totFAQ' => $cantTotalFAQ,
+            'paginatorFAQ' => $paginatorFAQ,
             'tot' => $total,
             'paginator' => $paginator,
             'banner' => $objBanners,
+            'bannerAbout' => $bannerAbount,
             'SocialNetworkType' => $SocialNetworkType,
             'info' => $infoArray
         ]);
