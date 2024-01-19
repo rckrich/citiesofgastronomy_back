@@ -66,6 +66,7 @@ Route::post('about/timeline/save/', [AboutController::class, 'timelineSave']);
 Route::post('about/faq/list/', [AboutController::class, 'listfaq']);
 Route::get('about/faq/find/{id}', [AboutController::class, 'faqFind']);
 Route::post('about/faq/save/', [AboutController::class, 'faqSave']);
+Route::post('about/delete/', [AboutController::class, 'aboutDel']);
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

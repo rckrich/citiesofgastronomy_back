@@ -36,20 +36,6 @@ class AboutController extends Controller
                 $paginator = $paginator +1;
             };
         };
-
-
-        $objBanners = (New Banners())->list(6, 0);
-
-        $infoArray = (New Info())->type();
-        for($i=0; $i < count($infoArray); $i++){
-            $infoValue='';
-            $objInfoCoordinator = (New Info())->list($infoArray[$i]["key"]);
-            if($objInfoCoordinator){ $infoValue = $objInfoCoordinator["description"]; };
-            $infoArray[$i]["value"] = $infoValue;
-        }
-
-        $SocialNetworkType = (New SocialNetwork())->list(5, 0);
-
         ////////////////////////////
         $objFAQ = (New FAQ())->list($request->searchFaq, $pageFaq, $cantItems);
         $TodosFAQ =(New FAQ())->list($request->searchFaq, 1, 999999999999999999);
@@ -63,6 +49,20 @@ class AboutController extends Controller
             };
         };
         //////////////////////////
+
+
+
+        $objBanners = (New Banners())->list(6, 0);
+
+        $infoArray = (New Info())->type();
+        for($i=0; $i < count($infoArray); $i++){
+            $infoValue='';
+            $objInfoCoordinator = (New Info())->list($infoArray[$i]["key"]);
+            if($objInfoCoordinator){ $infoValue = $objInfoCoordinator["description"]; };
+            $infoArray[$i]["value"] = $infoValue;
+        }
+
+        $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
         $objAbout = (New Banners())->list(2, 0);
         //Log::info("BAnner controller");
@@ -234,5 +234,38 @@ class AboutController extends Controller
     }
 
 
+
+
+
+
+    public function aboutDel(Request $request){
+        $status = 200;$mensaje="Item has been saved successfully";
+
+        Log::info("##ingreso a delete BOUT :::");
+        $type = $request->input("type");
+
+        $obj=[];
+        try{
+                $id = $request->input("id");
+                if($type == 'faq'){
+                    $obj = FAQ::findOrFail($id);
+                    $obj -> delete();
+                }else{
+                    $obj = Timeline::findOrFail($id);
+                    $obj->active = 0;
+                    $obj->updated_at = date("Y-m-d H:i:s");
+                    $obj -> save();
+                };
+        } catch ( \Exception $e ) {
+                Log::info($e);
+                $status = 400;$mensaje="Error";
+        };
+
+
+            return response()->json([
+                'status' => $status,
+                'message' => $mensaje
+            ]);
+      }
 
 }
