@@ -19,7 +19,7 @@ class FAQ extends Model
 
             if($search){
                 $result =  $this -> select( "id","faq","answer" )
-                -> whereLike( "faq",  $search )
+                -> where( "faq",  "LIKE", "%$search%" )
                 -> orderBy("id", 'DESC' )
                 -> limit($cant)
                 -> offset($offset)

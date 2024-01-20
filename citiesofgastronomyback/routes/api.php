@@ -39,6 +39,7 @@ Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete']);
 
 Route::post('newsletter', [HomeController::class, 'newsletter']);
 Route::get('newsletterAdmin', [HomeController::class, 'newsletterList']);
+Route::post('newsletter/Download', [HomeController::class, 'newsletterDownload']);
 
 Route::get('about', [AboutController::class, 'list']);
 Route::get('initiatives', [InitiativesController::class, 'index']);

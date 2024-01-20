@@ -16,6 +16,7 @@ class Timeline extends Model
     {
         $result = [];
         $offset = ($page-1) * $cant;
+
         try{
             if($search){
                 $result =  $this    -> select(DB::raw('id,tittle,link, startDate, endDate,
@@ -23,11 +24,13 @@ class Timeline extends Model
                                             DATE_FORMAT(endDate, "%d.%b.%Y") AS endDateFormat
                                     '))
                             -> where( "active", '=', '1' )
-                            -> whereLike( "faq",  $search )
+                            -> where( "tittle",  "LIKE", "%$search%" )
                             -> orderBy("startDate", 'ASC' )
                             -> limit($cant)
                             -> offset($offset)
                             -> get()-> toArray();
+
+
             }else{
                 $result =  $this    -> select(DB::raw('id,tittle,link, startDate, endDate,
                                             DATE_FORMAT(startDate, "%d.%b.%Y") AS startDateFormat,
@@ -41,6 +44,7 @@ class Timeline extends Model
             };
 
         } catch ( \Exception $e ) {
+            Log::info($e);
             $result = [];
         };
 

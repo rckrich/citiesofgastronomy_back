@@ -17,7 +17,7 @@ class AboutController extends Controller
         ///////LISTADO DEL ADMINISTRADOR
 
         Log::info("#list1");
-        $cantItems = 20;
+        $cantItems = 10;
         $paginator = 1;
         $total= 0;
         $page = $request->page;
