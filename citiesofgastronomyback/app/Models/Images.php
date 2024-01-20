@@ -64,8 +64,8 @@ class Images extends Model
         Log::info("#5");
 
         //VERIFICO SI exite el DIRECTORIO y si no --> CREA
-        if(!is_dir('storage/images/'.$folder.'/')){
-            @mkdir('storage/images/'.$folder.'/', 0777);
+        if(!is_dir(storage_path('app/public/images/'.$folder.'/'))){
+            @mkdir(storage_path('app/public/images/'.$folder.'/'), 0777);
         }else{
             Log::info("Ya existe ese directorio\n");
         }
