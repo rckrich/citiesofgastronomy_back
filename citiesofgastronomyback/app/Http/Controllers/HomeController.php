@@ -92,9 +92,9 @@ class HomeController extends Controller
     }
 
 
-    public function newsletterDownload(Request $request){
+    public function newsletterDownloadVerify(Request $request){
 
-        $obj =(New Newletter())->download($request->data_startdate, $request->data_enddate);
+        $obj =(New Newletter())->datesearch($request->data_startdate, $request->data_enddate);
 
         return response()->json([
             'newsletter' => $obj
