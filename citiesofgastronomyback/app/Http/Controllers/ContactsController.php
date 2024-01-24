@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Banners;
 use App\Models\Info;
 use App\Models\SocialNetwork;
+use App\Models\Contacts;
+use App\Models\Cities;
+use Illuminate\Support\Facades\Log;
 
 class ContactsController extends Controller
 {
-    //
-
 
     public function index(Request $request)
     {
@@ -20,7 +22,6 @@ class ContactsController extends Controller
         $objContacts = [];
         $total=0;
 
-        //$objContacts =(New Timeline())->searchList($request->search, $page,$cantItems);
 
         $objBanners = (New Banners())->list(11, 0);
 
@@ -34,6 +35,19 @@ class ContactsController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
+        //TODAS LAS CIUDADES
+        /*$objContacts = Cities::with(['contacts' => function ( $query) {
+                $query->where('active', '1');
+            }])->get();
+            //*/
+
+        //SOLO LAS CIUDADES QUE AL MENOS TENGAN UN CONTACTO
+            $objContacts = Cities::withWhereHas('contacts', function ($query) {
+                $query->where('active', '1');
+            })->get();
+
+
+
         return response()->json([
             'contacts' => $objContacts,
             'tot' => $total,
@@ -41,7 +55,7 @@ class ContactsController extends Controller
             'banner' => $objBanners,
             'SocialNetworkType' => $SocialNetworkType,
             'info' => $infoArray
-        ]);
+        ]);//*/
     }
 
 
