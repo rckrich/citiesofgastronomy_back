@@ -32,7 +32,7 @@ Route::post('cities', [CitiesContoller::class, 'list']);
 Route::post('citiesStore', [CitiesContoller::class, 'citiesStore']);
 Route::post('citiesUpdate', [CitiesContoller::class, 'citiesUpdate']);
 Route::get('cities/find/{id}', [CitiesContoller::class, 'find']);
-Route::post('cities/store/', [CitiesContoller::class, 'store']);
+Route::post('cities/store', [CitiesContoller::class, 'store']);
 Route::post('cities/update/{id}', [CitiesContoller::class, 'update']);
 Route::post('cities/updateCompleteInfo/{id}', [CitiesContoller::class, 'updateComplete']);
 Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete']);
@@ -40,6 +40,7 @@ Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete']);
 Route::post('newsletter', [HomeController::class, 'newsletter']);
 Route::get('newsletterAdmin', [HomeController::class, 'newsletterList']);
 Route::post('newsletter/DownloadVerify', [HomeController::class, 'newsletterDownloadVerify']);
+Route::get('newsletter/Download', [HomeController::class, 'newsletterDownload']);
 
 Route::get('about', [AboutController::class, 'list']);
 Route::get('initiatives', [InitiativesController::class, 'index']);
@@ -49,9 +50,9 @@ Route::get('contacts', [ContactsController::class, 'index']);
 Route::get('tastierLife', [TastierLifeController::class, 'index']);
 //testier life -->falta
 
-Route::post('banners/store/', [BannersController::class, 'store']);
-Route::post('banners/delete/', [BannersController::class, 'delete']);
-Route::post('banners/update/', [BannersController::class, 'update']);
+Route::post('banners/store', [BannersController::class, 'store']);
+Route::post('banners/delete', [BannersController::class, 'delete']);
+Route::post('banners/update', [BannersController::class, 'update']);
 
 Route::post('addPDF', [FileController::class, 'store']);
 
@@ -63,11 +64,11 @@ Route::post('mainSiteContent/clustersave', [MainSiteContentController::class, 'c
 
 Route::post('about/timeline/list', [AboutController::class, 'list']);
 Route::get('about/timeline/find/{id}', [AboutController::class, 'timelineFind']);
-Route::post('about/timeline/save/', [AboutController::class, 'timelineSave']);
-Route::post('about/faq/list/', [AboutController::class, 'listfaq']);
+Route::post('about/timeline/save', [AboutController::class, 'timelineSave']);
+Route::post('about/faq/list', [AboutController::class, 'listfaq']);
 Route::get('about/faq/find/{id}', [AboutController::class, 'faqFind']);
-Route::post('about/faq/save/', [AboutController::class, 'faqSave']);
-Route::post('about/delete/', [AboutController::class, 'aboutDel']);
+Route::post('about/faq/save', [AboutController::class, 'faqSave']);
+Route::post('about/delete', [AboutController::class, 'aboutDel']);
 /*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

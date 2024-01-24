@@ -8,6 +8,8 @@ use App\Models\Banners;
 use App\Models\Info;
 use App\Models\Newletter;
 use App\Models\SocialNetwork;
+use App\Exports\NewsletterExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
@@ -95,11 +97,25 @@ class HomeController extends Controller
     public function newsletterDownloadVerify(Request $request){
 
         $obj =(New Newletter())->datesearch($request->data_startdate, $request->data_enddate);
+        //Log::info($obj);
 
         return response()->json([
             'newsletter' => $obj
         ]);
     }
 
+
+
+    public function newsletterDownload(Request $request){
+
+        Log::info("LLego a DOWNLOAD :: ->");
+        $table = 'Newsletter' . date('YmdHim');
+        $items =(New Newletter())->datesearch($request->data_startdate, $request->data_enddate);
+        $name = 'Newsletter'.$request->data_startdate.'_'.$request->data_enddate.'.csv';
+
+        return Excel::download(new NewsletterExport($request->data_startdate, $request->data_enddate), $name, \Maatwebsite\Excel\Excel::CSV);
+        return Excel::download(new InvoicesExport, 'invoices.csv', \Maatwebsite\Excel\Excel::CSV);
+
+    }
 
 }

@@ -53,16 +53,14 @@ class Newletter extends Model
       public function datesearch($ini, $fin)
       {
         $fechaInicio = $ini.' 00:00:00';
-        $fechaFin = $fin.'23:59:59';
+        $fechaFin = $fin.' 23:59:59';
 
           return $this
                         ->select(DB::raw('email, DATE_FORMAT(created_at, "%d %M %Y") AS SuscribeDate'))
                         -> where("created_at", '>=', $fechaInicio)
                         -> where("created_at", '<=', $fechaFin)
                         -> orderBy("created_at", 'DESC')
-                        -> limit($cant)
-                        -> offset($offset)
                         -> get()
-                        -> toArray();
+                        ;
       }
 }
