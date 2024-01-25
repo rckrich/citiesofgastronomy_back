@@ -11,6 +11,10 @@ class Contacts extends Model
     use HasFactory;
     protected $table = "contacts";
 
+    function socialNetwork()
+    {
+        return $this->hasMany(SocialNetwork::class, 'idOwner', 'id');
+    }
 
     public function list($search, $page, $cant)
     {

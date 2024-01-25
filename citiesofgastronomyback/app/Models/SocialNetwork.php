@@ -14,6 +14,11 @@ class SocialNetwork extends Model
     protected $table = "social_network";
 
 
+    function socialNetworkType()
+    {
+        return $this->hasMany(SocialNetworkType::class, 'id', 'idSocialNetworkType');
+    }
+
     public function storeLink(Request $request){
         $idSection = $request->input("idSection");
         $idOwner = $request->input("idOwner");

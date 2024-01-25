@@ -18,15 +18,6 @@ class Cities extends Model
   //function contacts($search, $page, $cant)
   function contacts()
     {
-        /*
-        $offset = ($page-1) * $cant;
-        return $this->hasMany(Contacts::class)
-                    //->where('photos.type', '=', 'Cars')
-                    -> orderBy("created_at", 'DESC')
-                    -> where("active", '1')
-                    -> limit($cant)
-                    -> offset($offset);
-                    //*/
         return $this->hasMany(Contacts::class, 'idCity', 'id');
     }
 

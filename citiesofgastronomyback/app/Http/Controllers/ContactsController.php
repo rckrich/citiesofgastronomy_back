@@ -44,8 +44,12 @@ class ContactsController extends Controller
         //SOLO LAS CIUDADES QUE AL MENOS TENGAN UN CONTACTO
             $objContacts = Cities::withWhereHas('contacts', function ($query) {
                 $query->where('active', '1');
-            })->get();
-
+            })
+            ->with(['contacts.socialNetwork' => function ( $query) {
+                $query->where('idSection', '11');
+            }])
+            ->with('contacts.socialNetwork.socialNetworkType')
+            ->get();
 
 
         return response()->json([
