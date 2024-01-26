@@ -46,7 +46,12 @@ Route::get('about', [AboutController::class, 'list']);
 Route::get('initiatives', [InitiativesController::class, 'index']);
 Route::get('tours', [ToursController::class, 'index']);
 Route::get('calendar', [CalendarController::class, 'index']);
+
+Route::get('generalDatta', [ContactsController::class, 'generalDatta']);
+
 Route::get('contacts', [ContactsController::class, 'index']);
+Route::post('adminContacts', [ContactsController::class, 'list']);
+
 Route::get('tastierLife', [TastierLifeController::class, 'index']);
 //testier life -->falta
 

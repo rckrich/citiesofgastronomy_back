@@ -10,6 +10,8 @@ use App\Models\SocialNetwork;
 use App\Models\Contacts;
 use App\Models\Cities;
 use Illuminate\Support\Facades\Log;
+use App\Models\continent;
+use App\Models\SocialNetworkType;
 
 class ContactsController extends Controller
 {
@@ -60,6 +62,81 @@ class ContactsController extends Controller
             'SocialNetworkType' => $SocialNetworkType,
             'info' => $infoArray
         ]);//*/
+    }
+
+
+
+
+
+    public function list(Request $request)
+    {
+        if(!$request->cantItems){
+            $cantItems = 20;
+        }else{
+            $cantItems = $request->cantItems;
+        };
+        Log::info("##Cant Contacts ::".$cantItems);
+
+        $page = $request->page;
+        $search = $request->search;
+        if(!$page){ $page=1; };
+
+        $offset = ($page-1) * $cantItems;
+
+        $objContacts = Contacts::with(['socialNetwork' => function ( $query ) use ($cantItems) {
+            $query  -> where('idSection', '11')
+                    -> limit($cantItems)
+                    -> offset($offset);
+        }])
+        ->with('socialNetwork.socialNetworkType')
+        ->get();
+
+        $totalcontact = (New Contacts())->list($search, $page, 99999999);
+        //$total = (New Contacts())->where('active', '1');
+        $paginator = 1;
+        $total = count($totalcontact);
+        if($total > $cantItems){
+            $division = $total / $cantItems;
+            $paginator = intval($division);
+            if($paginator < $division){
+                $paginator = $paginator + 1;
+            };
+        };
+
+        return response()->json([
+            'tot' => $total,
+            'paginator' => $paginator,
+            'contact' => $objContacts
+        ]);
+    }
+
+
+
+    public function contactSave(Request $request){
+
+
+        $obj = (New Contacts())->saveContact($request);
+
+        return response()->json([
+            'contact' => $obj
+        ]);
+    }
+
+
+
+
+    public function generalDatta(){
+
+
+        $objContinent = (New continent())->list();
+        $objsocial = (New SocialNetworkType())->list();
+        $objCities =(New Cities())->searchList('', 1, 999999999999999999);
+
+        return response()->json([
+            'continents' => $objContinent,
+            'cities' => $objCities,
+            'social' => $objsocial
+        ]);
     }
 
 

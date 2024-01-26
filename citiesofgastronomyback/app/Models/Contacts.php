@@ -55,4 +55,32 @@ class Contacts extends Model
 
             return $arrayDatta;
       }
+
+
+
+
+      public function saveContact(Request $request){
+        $status = 200;$mensaje="Contact has been saved successfully";
+
+            $objItem=[];
+            try{
+                $objItem = new Contacts;
+                $objItem->email = $request->input("newslettermail");
+                $objItem->created_at = date("Y-m-d H:i:s");
+                $objItem->updated_at = date("Y-m-d H:i:s");
+                $objItem -> save();
+
+            } catch ( \Exception $e ) {
+                Log::info($e);
+                $status = 400;$mensaje="Error";
+            };
+
+            $arrayDatta["datta"] = $objItem;
+            $arrayDatta["mensaje"] = $mensaje;
+            $arrayDatta["status"] = $status;
+
+            return $arrayDatta;
+      }
+
+
 }
