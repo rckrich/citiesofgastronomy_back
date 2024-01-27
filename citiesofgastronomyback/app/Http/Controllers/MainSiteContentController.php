@@ -85,7 +85,8 @@ class MainSiteContentController extends Controller
         Log::info("--------->### SAVE LINKS");
         //if($request->file("banner")){
             try{
-                $objLink = (New SocialNetwork())->storeLink( $request   );
+                $idOwner = $request->input("idOwner");
+                $objLink = (New SocialNetwork())->storeLink( $request ,  $idOwner );
             } catch ( \Exception $e ) {
                 Log::info("### ERROR store Link");
                 Log::info($e);

@@ -51,6 +51,8 @@ Route::get('generalDatta', [ContactsController::class, 'generalDatta']);
 
 Route::get('contacts', [ContactsController::class, 'index']);
 Route::post('adminContacts', [ContactsController::class, 'list']);
+Route::post('contact/save', [ContactsController::class, 'contactSave']);
+Route::post('contact/find', [ContactsController::class, 'contactFind']);
 
 Route::get('tastierLife', [TastierLifeController::class, 'index']);
 //testier life -->falta

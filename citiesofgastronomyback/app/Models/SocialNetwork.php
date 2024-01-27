@@ -19,10 +19,10 @@ class SocialNetwork extends Model
         return $this->hasMany(SocialNetworkType::class, 'id', 'idSocialNetworkType');
     }
 
-    public function storeLink(Request $request){
+    public function storeLink(Request $request, $idOwner){
         $idSection = $request->input("idSection");
-        $idOwner = $request->input("idOwner");
 
+        Log::info(":: LLEGO A STORE SOCIAL MEDIA");
 
         $SocialNetworkType = (New SocialNetworkType())->list();
         foreach($SocialNetworkType as $type){
@@ -30,6 +30,7 @@ class SocialNetwork extends Model
             $idReq = $type["codde"].'_link';
             $socialValue = $request->input($idReq);
 
+            Log::info($idSocial);
 
             $objLink = $this  -> select("social_network", "id" )
             -> where( "idOwner", '=', $idOwner )
@@ -37,18 +38,19 @@ class SocialNetwork extends Model
             -> where( "idSocialNetworkType", '=', $idSocial )
             -> orderBy('id', 'desc')-> first();
             //Log::info("##id : ".$objLink->id);
-            if(!$objLink){
-                $objLink = new SocialNetwork;
-                $objLink->idOwner = $idOwner;
-                $objLink->idSocialNetworkType = $idSocial;
-                $objLink->idSection = $idSection;
-                $objLink->created_at = date("Y-m-d H:i:s");
+            if($socialValue!=''){
+                    if(!$objLink){
+                        $objLink = new SocialNetwork;
+                        $objLink->idOwner = $idOwner;
+                        $objLink->idSocialNetworkType = $idSocial;
+                        $objLink->idSection = $idSection;
+                        $objLink->created_at = date("Y-m-d H:i:s");
+                    };
+                    //if($socialValue != '' && $socialValue != NULL){
+                        $objLink->social_network = $socialValue;
+                        $objLink->updated_at = date("Y-m-d H:i:s");
+                        $objLink -> save();
             };
-            //if($socialValue != '' && $socialValue != NULL){
-                $objLink->social_network = $socialValue;
-                $objLink->updated_at = date("Y-m-d H:i:s");
-                $objLink -> save();
-
             //};
 
             //Instagram_link

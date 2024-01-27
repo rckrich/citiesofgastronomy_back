@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SocialNetwork;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class Contacts extends Model
 {
@@ -33,14 +35,26 @@ class Contacts extends Model
 
 
 
-    public function store(Request $request){
+
+
+      public function contactSave(Request $request){
         $status = 200;$mensaje="Contact has been saved successfully";
 
             $objItem=[];
+
             try{
-                $objItem = new Contacts;
-                $objItem->email = $request->input("newslettermail");
-                $objItem->created_at = date("Y-m-d H:i:s");
+                if(  !$request->input("id")  ){
+                    Log::info("::CREA contacto");
+                    $objItem = new Contacts;
+                    $objItem->created_at = date("Y-m-d H:i:s");
+                    $objItem->active = '1';
+                }else{
+                    Log::info("::MODIFICA contacto");
+                    $objItem = Contacts::findOrFail( $request->input("id")  );
+                };
+                $objItem->name = $request->input("name");
+                $objItem->idCity = $request->input("idCity");
+                $objItem->position = $request->input("position");
                 $objItem->updated_at = date("Y-m-d H:i:s");
                 $objItem -> save();
 
@@ -49,37 +63,8 @@ class Contacts extends Model
                 $status = 400;$mensaje="Error";
             };
 
-            $arrayDatta["datta"] = $objItem;
-            $arrayDatta["mensaje"] = $mensaje;
-            $arrayDatta["status"] = $status;
 
-            return $arrayDatta;
-      }
-
-
-
-
-      public function saveContact(Request $request){
-        $status = 200;$mensaje="Contact has been saved successfully";
-
-            $objItem=[];
-            try{
-                $objItem = new Contacts;
-                $objItem->email = $request->input("newslettermail");
-                $objItem->created_at = date("Y-m-d H:i:s");
-                $objItem->updated_at = date("Y-m-d H:i:s");
-                $objItem -> save();
-
-            } catch ( \Exception $e ) {
-                Log::info($e);
-                $status = 400;$mensaje="Error";
-            };
-
-            $arrayDatta["datta"] = $objItem;
-            $arrayDatta["mensaje"] = $mensaje;
-            $arrayDatta["status"] = $status;
-
-            return $arrayDatta;
+            return $objItem;
       }
 
 

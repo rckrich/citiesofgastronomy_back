@@ -75,7 +75,7 @@ class ContactsController extends Controller
         }else{
             $cantItems = $request->cantItems;
         };
-        Log::info("##Cant Contacts ::".$cantItems);
+        //Log::info("##Cant Contacts ::".$cantItems);
 
         $page = $request->page;
         $search = $request->search;
@@ -89,6 +89,7 @@ class ContactsController extends Controller
                     -> offset($offset);
         }])
         ->with('socialNetwork.socialNetworkType')
+        ->orderBy("name", "ASC")
         ->get();
 
         $totalcontact = (New Contacts())->list($search, $page, 99999999);
@@ -114,11 +115,43 @@ class ContactsController extends Controller
 
     public function contactSave(Request $request){
 
+        Log::info("::llego a contacto");
+        $obj = (New Contacts())->contactSave($request);
+        Log::info($obj);
 
-        $obj = (New Contacts())->saveContact($request);
+        $idOwner = $obj->id;
+        Log::info($idOwner);
+
+        $objLink = (New SocialNetwork()) -> storeLink( $request , $idOwner  );
 
         return response()->json([
             'contact' => $obj
+        ]);
+    }
+
+
+
+
+
+    public function contactFind(Request $request){
+        $id = $request->input("id");
+        if($id){
+                $obj = Contacts::findOrFail($id);
+                $objsocialContact = (New SocialNetwork())->list(11, $id);;
+        }else{
+                $obj = [];
+                $objsocialContact = [];
+        };
+        $objContinent = (New continent())->list();
+        $objsocial = (New SocialNetworkType())->list();
+        $objCities =(New Cities())->searchList('', 1, 999999999999999999);
+
+        return response()->json([
+            'contact' => $obj,
+            'contactSocialNetwork' => $objsocialContact,
+            'continents' => $objContinent,
+            'cities' => $objCities,
+            'social' => $objsocial
         ]);
     }
 
