@@ -26,6 +26,7 @@ class Contacts extends Model
                       ->select("id", "idCity", "name", "position")
                       -> orderBy("created_at", 'DESC')
                       -> where("active", '1')
+                      -> where( "name", 'LIKE', "%{$search}%")
                       -> limit($cant)
                       -> offset($offset)
                       -> get()

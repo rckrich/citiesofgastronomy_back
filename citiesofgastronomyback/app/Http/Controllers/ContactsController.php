@@ -70,6 +70,7 @@ class ContactsController extends Controller
 
     public function list(Request $request)
     {
+        Log::info("#ADMIN Contact List");
         if(!$request->cantItems){
             $cantItems = 20;
         }else{
@@ -81,16 +82,21 @@ class ContactsController extends Controller
         $search = $request->search;
         if(!$page){ $page=1; };
 
+        Log::info("#PAGE: ".$page);
+        Log::info("#SEARCH: ".$search);
+
         $offset = ($page-1) * $cantItems;
 
         $objContacts = Contacts::with(['socialNetwork' => function ( $query ) use ($cantItems) {
-            $query  -> where('idSection', '11')
-                    -> limit($cantItems)
-                    -> offset($offset);
+            $query  -> where('idSection', '11');
         }])
-        ->with('socialNetwork.socialNetworkType')
-        ->orderBy("name", "ASC")
-        ->get();
+        -> with('socialNetwork.socialNetworkType')
+        -> where('active', '1')
+        -> where( "name", 'LIKE', "%{$search}%")
+        -> limit($cantItems)
+        -> offset($offset)
+        -> orderBy("name", "ASC")
+        -> get();
 
         $totalcontact = (New Contacts())->list($search, $page, 99999999);
         //$total = (New Contacts())->where('active', '1');
@@ -156,6 +162,25 @@ class ContactsController extends Controller
     }
 
 
+
+
+    public function delete($id){
+        Log::info("CONTACT Delete ::");
+        $status = 400;$mess = 'ok';
+        try{
+            $objCity = Contacts::find($id);
+            $objCity->active = 0;
+            $objCity->updated_at = date("Y-m-d H:i:s");
+            $objCity -> save();
+        } catch ( \Exception $e ) {
+            Log::info($e);
+            $status = 400;$mess="Error";
+        };
+        return response()->json([
+            'status' => $status,
+            'message' => $mess
+        ]);
+    }
 
 
     public function generalDatta(){
