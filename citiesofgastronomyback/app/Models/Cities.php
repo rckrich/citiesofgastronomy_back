@@ -65,6 +65,7 @@ class Cities extends Model
                     -> where( "cities.name", 'LIKE', "%{$search}%")
                     -> limit($cant)
                     -> offset($offset)
+                    -> orderBy('cities.name', 'ASC')
                     -> get()
                     -> toArray();
   }
