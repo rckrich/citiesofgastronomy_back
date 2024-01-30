@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Banners;
 use App\Models\Info;
 use App\Models\SocialNetwork;
+use App\Models\TypeOfActivity;
 
 class InitiativesController extends Controller
 {
@@ -43,6 +44,9 @@ class InitiativesController extends Controller
             'info' => $infoArray
         ]);
     }
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -90,5 +94,16 @@ class InitiativesController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function typeOfActivity_store(Request $request)
+    {
+        //TypeOfActivity
+        Log::info("::llego a contacto");
+        $obj = (New TypeOfActivity())->save($request);
+
+        return response()->json([
+            'TypeOfActivity' => $obj
+        ]);
     }
 }
