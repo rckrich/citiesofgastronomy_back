@@ -72,7 +72,7 @@ class ContactsController extends Controller
     {
         Log::info("#ADMIN Contact List");
         if(!$request->cantItems){
-            $cantItems = 5;
+            $cantItems = 20;
         }else{
             $cantItems = $request->cantItems;
         };
