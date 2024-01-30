@@ -7,6 +7,7 @@ use App\Models\Banners;
 use App\Models\Info;
 use App\Models\SocialNetwork;
 use App\Models\TypeOfActivity;
+use Illuminate\Support\Facades\Log;
 
 class InitiativesController extends Controller
 {
@@ -99,8 +100,8 @@ class InitiativesController extends Controller
     public function typeOfActivity_store(Request $request)
     {
         //TypeOfActivity
-        Log::info("::llego a contacto");
-        $obj = (New TypeOfActivity())->save($request);
+        Log::info("::llego a typeOfActivity");
+        $obj = (New TypeOfActivity())->saveType($request);
 
         return response()->json([
             'TypeOfActivity' => $obj
