@@ -72,7 +72,7 @@ class ContactsController extends Controller
     {
         Log::info("#ADMIN Contact List");
         if(!$request->cantItems){
-            $cantItems = 20;
+            $cantItems = 5;
         }else{
             $cantItems = $request->cantItems;
         };
@@ -98,7 +98,7 @@ class ContactsController extends Controller
         -> orderBy("name", "ASC")
         -> get();
 
-        $totalcontact = (New Contacts())->list($search, $page, 99999999);
+        $totalcontact = (New Contacts())->list($search, 1, 99999999);
         //$total = (New Contacts())->where('active', '1');
         $paginator = 1;
         $total = count($totalcontact);
