@@ -7,6 +7,7 @@ use App\Models\Banners;
 use App\Models\Info;
 use App\Models\SocialNetwork;
 use App\Models\TypeOfActivity;
+use App\Models\Topics;
 use Illuminate\Support\Facades\Log;
 
 class InitiativesController extends Controller
@@ -38,6 +39,7 @@ class InitiativesController extends Controller
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
         $objType = (New TypeOfActivity())->list();
+        $objTopic = (New Topics())->list();
 
         return response()->json([
             'initiatives' => $objInitiatives,
@@ -46,7 +48,8 @@ class InitiativesController extends Controller
             'banner' => $objBanners,
             'SocialNetworkType' => $SocialNetworkType,
             'info' => $infoArray,
-            'typeOfActivity' => $objType
+            'typeOfActivity' => $objType,
+            'Topics' => $objTopic
         ]);
     }
 
@@ -109,6 +112,17 @@ class InitiativesController extends Controller
 
         return response()->json([
             'TypeOfActivity' => $obj
+        ]);
+    }
+
+    public function topic_store(Request $request)
+    {
+        //TypeOfActivity
+        Log::info("::llego a topic_store");
+        $obj = (New Topics())->saveTopic($request);
+
+        return response()->json([
+            'Topics' => $obj
         ]);
     }
 }
