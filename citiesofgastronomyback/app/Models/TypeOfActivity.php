@@ -14,7 +14,7 @@ class TypeOfActivity extends Model
 
     public function list()
     {
-        return $this    -> select("name")
+        return $this    -> select("id", "name")
                         -> orderBy("name", 'ASC' )
                         -> get()
                         -> toArray();

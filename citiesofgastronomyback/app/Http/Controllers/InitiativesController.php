@@ -16,6 +16,7 @@ class InitiativesController extends Controller
      */
     public function index(Request $request)
     {
+        Log::info("#ini controller");
         $cantItems = 20;
         $paginator = 1;
         $page = $request->page;
@@ -36,13 +37,16 @@ class InitiativesController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
+        $objType = (New TypeOfActivity())->list();
+
         return response()->json([
             'initiatives' => $objInitiatives,
             'tot' => $total,
             'paginator' => $paginator,
             'banner' => $objBanners,
             'SocialNetworkType' => $SocialNetworkType,
-            'info' => $infoArray
+            'info' => $infoArray,
+            'typeOfActivity' => $objType
         ]);
     }
 

@@ -43,7 +43,6 @@ Route::post('newsletter/DownloadVerify', [HomeController::class, 'newsletterDown
 Route::get('newsletter/Download', [HomeController::class, 'newsletterDownload']);
 
 Route::get('about', [AboutController::class, 'list']);
-Route::get('initiatives', [InitiativesController::class, 'index']);
 Route::get('tours', [ToursController::class, 'index']);
 Route::get('calendar', [CalendarController::class, 'index']);
 
@@ -79,6 +78,8 @@ Route::post('about/faq/save', [AboutController::class, 'faqSave']);
 Route::post('about/delete', [AboutController::class, 'aboutDel']);
 
 
+Route::get('initiatives', [InitiativesController::class, 'index']);
+Route::post('initiatives', [InitiativesController::class, 'index']);
 Route::post('typeOfActivity/store', [InitiativesController::class, 'typeOfActivity_store']);
 
 /*
