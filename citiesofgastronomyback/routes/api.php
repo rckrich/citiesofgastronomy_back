@@ -82,6 +82,7 @@ Route::get('initiatives', [InitiativesController::class, 'index']);
 Route::post('initiatives', [InitiativesController::class, 'index']);
 Route::post('typeOfActivity/store', [InitiativesController::class, 'typeOfActivity_store']);
 Route::post('topic/store', [InitiativesController::class, 'topic_store']);
+Route::post('sdg/store', [InitiativesController::class, 'sdg_store']);
 
 /*
 

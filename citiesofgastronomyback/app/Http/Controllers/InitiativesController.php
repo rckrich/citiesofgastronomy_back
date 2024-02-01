@@ -8,6 +8,7 @@ use App\Models\Info;
 use App\Models\SocialNetwork;
 use App\Models\TypeOfActivity;
 use App\Models\Topics;
+use App\Models\SDG;
 use Illuminate\Support\Facades\Log;
 
 class InitiativesController extends Controller
@@ -40,6 +41,7 @@ class InitiativesController extends Controller
 
         $objType = (New TypeOfActivity())->list();
         $objTopic = (New Topics())->list();
+        $objsdg = (New sdg())->list();
 
         return response()->json([
             'initiatives' => $objInitiatives,
@@ -49,7 +51,8 @@ class InitiativesController extends Controller
             'SocialNetworkType' => $SocialNetworkType,
             'info' => $infoArray,
             'typeOfActivity' => $objType,
-            'Topics' => $objTopic
+            'Topics' => $objTopic,
+            'sdg' => $objsdg
         ]);
     }
 
@@ -123,6 +126,17 @@ class InitiativesController extends Controller
 
         return response()->json([
             'Topics' => $obj
+        ]);
+    }
+
+    public function sdg_store(Request $request)
+    {
+        //TypeOfActivity
+        Log::info("::llego a SDG_store");
+        $obj = (New SDG())->saveSDG($request);
+
+        return response()->json([
+            'SDG' => $obj
         ]);
     }
 }
