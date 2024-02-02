@@ -22,6 +22,14 @@ class TypeOfActivity extends Model
 
 
 
+    public function findName($name)
+    {
+        return $this    -> select("id", "name")
+                        -> where('name', 'LIKE', "%{$name}%")
+                        -> orderBy("name", 'ASC' )
+                        -> get()
+                        -> toArray();
+    }
 
   public function saveType(Request $request){
     $status = 200;$mensaje="Filter has been saved successfully";

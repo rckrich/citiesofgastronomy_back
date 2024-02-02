@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
-class Topics extends Model
+class ConnectionsToOther extends Model
 {
     use HasFactory;
-    protected $table = "topics";
+    protected $table = "connections_to_other";
 
     public function list()
     {
@@ -19,6 +19,7 @@ class Topics extends Model
                         -> get()
                         -> toArray();
     }
+
 
     public function findName($name)
     {
@@ -29,8 +30,7 @@ class Topics extends Model
                         -> toArray();
     }
 
-
-  public function saveTopic(Request $request){
+  public function saveConnection(Request $request){
     $status = 200;$mensaje="Filter has been saved successfully";
     Log::info("###-->");
         Log::info($request->input("id"));
@@ -43,11 +43,11 @@ class Topics extends Model
             ]);
 
             if(  !$request->input("id")  ){
-            $obj = new Topics;
-            $obj->created_at = date("Y-m-d H:i:s");
+                $obj = new ConnectionsToOther;
+                $obj->created_at = date("Y-m-d H:i:s");
             }else{
-                Log::info("::MODIFICA contacto");
-                $obj = Topics::findOrFail( $request->input("id")  );
+                Log::info("::MODIFICA ");
+                $obj = ConnectionsToOther::findOrFail( $request->input("id")  );
             };
             $obj->name = $request->input("name");
             $obj->updated_at = date("Y-m-d H:i:s");

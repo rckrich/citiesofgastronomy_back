@@ -80,9 +80,12 @@ Route::post('about/delete', [AboutController::class, 'aboutDel']);
 
 Route::get('initiatives', [InitiativesController::class, 'index']);
 Route::post('initiatives', [InitiativesController::class, 'index']);
+Route::get('initiatives/create', [InitiativesController::class, 'create']);
+Route::get('initiatives/{id}', [InitiativesController::class, 'edit']);
 Route::post('typeOfActivity/store', [InitiativesController::class, 'typeOfActivity_store']);
 Route::post('topic/store', [InitiativesController::class, 'topic_store']);
 Route::post('sdg/store', [InitiativesController::class, 'sdg_store']);
+Route::post('connectionsToOther/store', [InitiativesController::class, 'connectionsToOther_store']);
 
 /*
 

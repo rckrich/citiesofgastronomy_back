@@ -20,7 +20,14 @@ class SDG extends Model
                         -> toArray();
     }
 
-
+    public function findName($name)
+    {
+        return $this    -> select("id", "name")
+                        -> where('name', 'LIKE', "%{$name}%")
+                        -> orderBy("name", 'ASC' )
+                        -> get()
+                        -> toArray();
+    }
 
 
   public function saveSDG(Request $request){
