@@ -10,8 +10,12 @@ use App\Models\SocialNetwork;
 use App\Models\TypeOfActivity;
 use App\Models\Topics;
 use App\Models\SDG;
+use App\Models\Filter;
 use App\Models\ConnectionsToOther;
 use App\Models\Initiatives;
+use App\Models\Images;
+use App\Models\Files;
+use App\Models\continent;
 use Illuminate\Support\Facades\Log;
 
 class InitiativesController extends Controller
@@ -75,12 +79,15 @@ class InitiativesController extends Controller
         $objsdg = (New sdg())->list();
         $objConnectionsToOther = (New ConnectionsToOther())->list();
 
+        $objContinent = (New continent())->list();
+
         return response()->json([
             'citiesFilter' => $objCities,
             'typeOfActivityFilter' => $objType,
             'TopicsFilter' => $objTopic,
             'sdgFilter' => $objsdg,
-            'ConnectionsToOtherFilter' => $objConnectionsToOther
+            'ConnectionsToOtherFilter' => $objConnectionsToOther,
+            'Continent' => $objContinent
         ]);
     }
 
@@ -89,8 +96,331 @@ class InitiativesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $status = 200;$mensaje="Initiative has been saved successfully";
+        $id = $request->input("id");
+
+        $photo = '';
+            if($request->file("photo")){
+                try{
+                    $request->validate ([
+                        'photo' => 'image|max:50000'
+                    ]);
+                    //$photo =  $request->file("photo")->store('public/images/Initiatives');
+                    //$photo = str_replace('public/', 'storage/', $photo);
+
+                    $photo = (New Images())->storeResize($request->file("photo"), '756', '456', 'cities');
+                } catch ( \Exception $e ) {
+
+                }
+            };
+
+            $obj=[];
+            try{
+                $request->validate ([
+                    'name' => 'required|string'
+                ]);
+
+                if($id){
+                    $obj = Initiatives::find($id);
+                }else{
+                    $obj = New Initiatives;
+                }
+                $obj->continent = $request->input("idContinent");
+                $obj->name = $request->input("name");
+                $obj->startDate = $request->input("startDate");
+                $obj->endDate = $request->input("endDate");
+                $obj->description = $request->input("description");
+                $obj->active = 1;
+                if($photo){
+                    $obj->photo = $photo;
+                };
+                $obj->created_at = date("Y-m-d H:i:s");
+                $obj->updated_at = date("Y-m-d H:i:s");
+                $obj -> save();
+                //Log::info($obj);
+                $id = $obj->id;
+            } catch ( \Exception $e ) {
+                Log::info($e);
+                $status = 400;$mensaje="Incorrect name format";
+            };
+
+            if($id != ''){
+                //////////////////////////////////////////////////// FILTRO TYPE OF ACTIVITY
+                $objType = (New TypeOfActivity())->list();
+
+                foreach($objType AS $item){
+                    $objFilter = (New Filter()) -> select('id')
+                            ->where('type', 'TypeOfActivity')
+                            ->where('idOwner', $id)
+                            ->where('filter', $item["id"])
+                            ->first();
+
+                    $filterName = 'typeOfActivityFilter'.$item["id"];
+                    $value = $request->input($filterName);
+                    //Log::info($filterName.': '.$value);
+                    /////
+                    if($value && !$objFilter){// create filter
+                        //Log::info("-> CREATE");
+                        $obj = New Filter;
+                        $obj->type = 'TypeOfActivity';
+                        $obj->idOwner = $id;
+                        $obj->filter = $item["id"];
+                        $obj->save();
+                    }elseif(!$value && $objFilter){//delete filter
+                        //Log::info("-> DELETE");
+                        //Log::info($objFilter);
+                        $objFilterdel = Filter::find($objFilter["id"]);
+                        $objFilterdel->delete();
+                    };
+                }
+
+                ////////////////////////////////////////////////////
+
+                $objTopics = (New Topics())->list();
+
+                foreach($objTopics AS $item){
+                    $objFilter = (New Filter()) -> select('id')
+                            ->where('type', 'Topics')
+                            ->where('idOwner', $id)
+                            ->where('filter', $item["id"])
+                            ->first();
+
+                    $filterName = 'topicsFilter'.$item["id"];
+                    $value = $request->input($filterName);
+                    //Log::info($filterName.': '.$value);
+                    /////
+                    if($value && !$objFilter){// create filter
+                        //Log::info("-> CREATE");
+                        $obj = New Filter;
+                        $obj->type = 'Topics';
+                        $obj->idOwner = $id;
+                        $obj->filter = $item["id"];
+                        $obj->save();
+                    }elseif(!$value && $objFilter){//delete filter
+                        //Log::info("-> DELETE");
+                        //Log::info($objFilter);
+                        $objFilterdel = Filter::find($objFilter["id"]);
+                        $objFilterdel->delete();
+                    };
+                }
+                ////////////////////////////////////////////////////
+                $objsdgs = (New sdg())->list();
+
+                foreach($objsdgs AS $item){
+                    $objFilter = (New Filter()) -> select('id')
+                            ->where('type', 'SDG')
+                            ->where('idOwner', $id)
+                            ->where('filter', $item["id"])
+                            ->first();
+
+                    $filterName = 'sdgFilter'.$item["id"];
+                    $value = $request->input($filterName);
+                    //Log::info($filterName.': '.$value);
+                    /////
+                    if($value && !$objFilter){// create filter
+                        //Log::info("-> CREATE");
+                        $obj = New Filter;
+                        $obj->type = 'SDG';
+                        $obj->idOwner = $id;
+                        $obj->filter = $item["id"];
+                        $obj->save();
+                    }elseif(!$value && $objFilter){//delete filter
+                        //Log::info("-> DELETE");
+                        //Log::info($objFilter);
+                        $objFilterdel = Filter::find($objFilter["id"]);
+                        $objFilterdel->delete();
+                    };
+                }
+                ////////////////////////////////////////////////////
+                $objConnectionsToOther = (New ConnectionsToOther())->list();
+
+                foreach($objConnectionsToOther AS $item){
+                    $objFilter = (New Filter()) -> select('id')
+                            ->where('type', 'ConnectionsToOther')
+                            ->where('idOwner', $id)
+                            ->where('filter', $item["id"])
+                            ->first();
+
+                    $filterName = 'connectionsToOtherFilter'.$item["id"];
+                    $value = $request->input($filterName);
+                   // Log::info($filterName.': '.$value);
+                    /////
+                    if($value && !$objFilter){// create filter
+                        //Log::info("-> CREATE");
+                        $obj = New Filter;
+                        $obj->type = 'ConnectionsToOther';
+                        $obj->idOwner = $id;
+                        $obj->filter = $item["id"];
+                        $obj->save();
+                    }elseif(!$value && $objFilter){//delete filter
+                        //Log::info("-> DELETE");
+                        //Log::info($objFilter);
+                        $objFilterdel = Filter::find($objFilter["id"]);
+                        $objFilterdel->delete();
+                    };
+                }
+
+                /////////////////////////////   GALLERY
+            $cant_gallery = $request->input("cant_gallery");
+
+            for($i = 1; $i < $cant_gallery+1; $i++){
+                $idg = 'image'.$i;
+                $image = $request->file($idg);
+                $idg = 'idImage'.$i;
+                $idImage = $request->input($idg);
+                $idg = 'deleteImage'.$i;
+                $deleteImage = $request->input($idg);
+
+                if(!$idImage){
+                    if(!$deleteImage){
+                        if($image){
+
+                            try{
+                                $objGallery =(New Images())->storeIMG($image, $id, 7);
+                            } catch ( \Exception $e ) {
+
+                            }
+                        };
+                    };
+                }else{
+                    if($deleteImage){
+                        $obsDEL = Images::find($idImage);
+                        $obsDEL->active = 2;
+                        $obsDEL->updated_at = date("Y-m-d H:i:s");
+                        $obsDEL -> save();
+                        //Log::info("IMAGEN Borrada");
+                        //Log::info($obsDEL);
+                    };
+                };
+
+            }
+                ////////////////////////////////////////////////////
+
+            /////////////////////////////   LINKS
+            $cant_links = $request->input("cant_links");
+            Log::info("--->CANT LINKS: ".$cant_links);
+
+            for($i = 1; $i < $cant_links+1; $i++){
+                $idg = 'link'.$i;
+                $link = $request->input($idg);
+                $idg = 'titleLink'.$i;
+                $titleLink = $request->input($idg);
+                $idg = 'idLink'.$i;
+                $idLink = $request->input($idg);
+                $idg = 'deleteLink'.$i;
+                $deleteLink = $request->input($idg);
+                if(!$idLink){
+                    if($link){
+                        try{
+                            if(!$deleteLink){
+                                $objGallery =(New Links())->storeLINK($link, $titleLink, $id, 7);
+                            }else{Log::info("#3.b");};
+                        } catch ( \Exception $e ) {
+                        }
+                    };
+                }else{
+                    $objLink = Links::find($idLink);
+                    if($deleteLink){
+                        $objLink->active = 2;
+                    }else{
+                        $objLink->title = $titleLink;
+                        $objLink->image = $link;
+                    };
+                    $objLink->updated_at = date("Y-m-d H:i:s");
+                    $objLink -> save();
+                };
+
+            }
+            //////////////////////////////////////////////////////////
+
+
+            /////////////////////////////   FILES
+            $cant_files = $request->input("cant_files");
+            Log::info("-->CANT FILES -->".$cant_files);
+
+
+            for($i = 1; $i < $cant_files+1; $i++){
+                Log::info("#:1");
+                $idg = 'file'.$i;
+                $file = $request->file($idg);
+                $idg = 'idFile'.$i;
+                $idFile = $request->input($idg);
+                $idg = 'title'.$i;
+                $title = $request->input($idg);
+                $idg = 'deleteFile'.$i;
+                $deleteFile = $request->input($idg);
+                Log::info("-->ID:: ".$idFile);
+                if($idFile){
+                    Log::info("Modifica::");
+                    $objFiles = Files::find($idFile);
+                    if($deleteFile){
+
+                    //Log::info("->HAY DEL");
+                        $objFiles->active = 2;
+                    }else{
+                        Log::info("------------->HABILITA");
+                        $objFiles->title = $title;
+                        $objFiles->active = 1;
+                    };
+                    $objFiles->updated_at = date("Y-m-d H:i:s");
+                    $objFiles -> save();
+                    //Log::info($objFiles);
+                }else{
+                    //Log::info("#:nop");
+                    if($deleteFile){
+
+                    }else{
+                        if($file){
+                            $objFILE = (New Files())->storeFILE($file, $id, 7, $title, 1);
+                        };
+                    };
+                };
+
+            }
+            //////////////////////////////////////////////////////////
+                $objCities =(New Cities())->searchList('', 1, 999999999999999999);
+
+                foreach($objCities AS $item){
+                    $objFilter = (New Filter()) -> select('id')
+                            ->where('type', 'Cities')
+                            ->where('idOwner', $id)
+                            ->where('filter', $item["id"])
+                            ->first();
+
+                    $filterName = 'citiesFilter'.$item["id"];
+                    $value = $request->input($filterName);
+                    //Log::info($filterName.': '.$value);
+                    /////
+                    if($value && !$objFilter){// create filter
+                        //Log::info("-> CREATE");
+                        $obj = New Filter;
+                        $obj->type = 'Cities';
+                        $obj->idOwner = $id;
+                        $obj->filter = $item["id"];
+                        $obj->save();
+                    }elseif(!$value && $objFilter){//delete filter
+                        //Log::info("-> DELETE");
+                        //Log::info($objFilter);
+                        $objFilterdel = Filter::find($objFilter["id"]);
+                        $objFilterdel->delete();
+                    };
+                }
+                //////////////////////////////////////////////////////////
+            };
+
+            return response()->json([
+                'status' =>  $status,
+                'message' =>  $mensaje,
+                'datta' =>  $obj
+            ]);
     }
+
+
+
+
+
+
+
 
     /**
      * Display the specified resource.
@@ -121,6 +451,17 @@ class InitiativesController extends Controller
         ]);
     }
 
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Update the specified resource in storage.
      */
@@ -129,6 +470,14 @@ class InitiativesController extends Controller
         //
     }
 
+
+
+
+
+
+
+
+
     /**
      * Remove the specified resource from storage.
      */
@@ -136,6 +485,15 @@ class InitiativesController extends Controller
     {
         //
     }
+
+
+
+
+
+
+
+
+
 
     public function typeOfActivity_store(Request $request)
     {
