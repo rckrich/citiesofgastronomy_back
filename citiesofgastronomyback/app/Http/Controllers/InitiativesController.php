@@ -611,7 +611,9 @@ class InitiativesController extends Controller
                 $status = 400; $message = 'This filter is already being used in an initiative';
         }else{
             $objFilter = Topics::find($idFilter);
-            $objFilter->delete();
+            if($objFilter != NULL){
+                $objFilter->delete();
+            };
         };
 
         return response()->json([
