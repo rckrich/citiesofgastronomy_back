@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Filter;
 
 class Initiatives extends Model
 {
@@ -21,6 +22,18 @@ class Initiatives extends Model
 
 
 
+
+    public function findInitiative($idFilter, $filterType)
+    {
+        return $this    -> select("initiatives.id", "initiatives.name")
+                        -> join( "filter", "filter.idOwner", '=', "initiatives.id" )
+                        -> where('filter.idOwnerSection', '=', '7')
+                        -> where('filter.type', '=', $filterType)
+                        -> where('filter.filter', '=', $idFilter)
+                        -> orderBy("name", 'ASC' )
+                        -> get()
+                        -> toArray();
+    }
 
   public function saveConnection(Request $request){
     $status = 200;$mensaje="Filter has been saved successfully";

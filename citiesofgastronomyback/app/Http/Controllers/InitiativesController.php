@@ -14,6 +14,7 @@ use App\Models\Filter;
 use App\Models\ConnectionsToOther;
 use App\Models\Initiatives;
 use App\Models\Images;
+use App\Models\Links;
 use App\Models\Files;
 use App\Models\continent;
 use Illuminate\Support\Facades\Log;
@@ -96,7 +97,7 @@ class InitiativesController extends Controller
      */
     public function store(Request $request)
     {
-        $status = 200;$mensaje="Initiative has been saved successfully";
+        $status = 200;$mensaje="The initiative was successfully created";
         $id = $request->input("id");
 
         $photo = '';
@@ -108,7 +109,7 @@ class InitiativesController extends Controller
                     //$photo =  $request->file("photo")->store('public/images/Initiatives');
                     //$photo = str_replace('public/', 'storage/', $photo);
 
-                    $photo = (New Images())->storeResize($request->file("photo"), '756', '456', 'cities');
+                    $photo = (New Images())->storeResize($request->file("photo"), '1158', '845', 'initiatives');
                 } catch ( \Exception $e ) {
 
                 }
@@ -153,6 +154,7 @@ class InitiativesController extends Controller
                             ->where('type', 'TypeOfActivity')
                             ->where('idOwner', $id)
                             ->where('filter', $item["id"])
+                            ->where('idOwnerSection', '7')
                             ->first();
 
                     $filterName = 'typeOfActivityFilter'.$item["id"];
@@ -163,6 +165,7 @@ class InitiativesController extends Controller
                         //Log::info("-> CREATE");
                         $obj = New Filter;
                         $obj->type = 'TypeOfActivity';
+                        $obj->idOwnerSection = '7';
                         $obj->idOwner = $id;
                         $obj->filter = $item["id"];
                         $obj->save();
@@ -182,6 +185,7 @@ class InitiativesController extends Controller
                     $objFilter = (New Filter()) -> select('id')
                             ->where('type', 'Topics')
                             ->where('idOwner', $id)
+                            ->where('idOwnerSection', '7')
                             ->where('filter', $item["id"])
                             ->first();
 
@@ -193,6 +197,7 @@ class InitiativesController extends Controller
                         //Log::info("-> CREATE");
                         $obj = New Filter;
                         $obj->type = 'Topics';
+                        $obj->idOwnerSection = '7';
                         $obj->idOwner = $id;
                         $obj->filter = $item["id"];
                         $obj->save();
@@ -210,6 +215,7 @@ class InitiativesController extends Controller
                     $objFilter = (New Filter()) -> select('id')
                             ->where('type', 'SDG')
                             ->where('idOwner', $id)
+                            ->where('idOwnerSection', '7')
                             ->where('filter', $item["id"])
                             ->first();
 
@@ -221,6 +227,7 @@ class InitiativesController extends Controller
                         //Log::info("-> CREATE");
                         $obj = New Filter;
                         $obj->type = 'SDG';
+                        $obj->idOwnerSection = '7';
                         $obj->idOwner = $id;
                         $obj->filter = $item["id"];
                         $obj->save();
@@ -238,6 +245,7 @@ class InitiativesController extends Controller
                     $objFilter = (New Filter()) -> select('id')
                             ->where('type', 'ConnectionsToOther')
                             ->where('idOwner', $id)
+                            ->where('idOwnerSection', '7')
                             ->where('filter', $item["id"])
                             ->first();
 
@@ -249,6 +257,7 @@ class InitiativesController extends Controller
                         //Log::info("-> CREATE");
                         $obj = New Filter;
                         $obj->type = 'ConnectionsToOther';
+                        $obj->idOwnerSection = '7';
                         $obj->idOwner = $id;
                         $obj->filter = $item["id"];
                         $obj->save();
@@ -262,10 +271,13 @@ class InitiativesController extends Controller
 
                 /////////////////////////////   GALLERY
             $cant_gallery = $request->input("cant_gallery");
+            Log::info("------------ GALLERY ->");
+            Log::info($cant_gallery);
 
             for($i = 1; $i < $cant_gallery+1; $i++){
                 $idg = 'image'.$i;
                 $image = $request->file($idg);
+                Log::info($image);
                 $idg = 'idImage'.$i;
                 $idImage = $request->input($idg);
                 $idg = 'deleteImage'.$i;
@@ -362,6 +374,7 @@ class InitiativesController extends Controller
                         $objFiles->title = $title;
                         $objFiles->active = 1;
                     };
+                    $objFiles->idOwner = $id;
                     $objFiles->updated_at = date("Y-m-d H:i:s");
                     $objFiles -> save();
                     //Log::info($objFiles);
@@ -384,6 +397,7 @@ class InitiativesController extends Controller
                     $objFilter = (New Filter()) -> select('id')
                             ->where('type', 'Cities')
                             ->where('idOwner', $id)
+                            ->where('idOwnerSection', '7')
                             ->where('filter', $item["id"])
                             ->first();
 
@@ -395,6 +409,7 @@ class InitiativesController extends Controller
                         //Log::info("-> CREATE");
                         $obj = New Filter;
                         $obj->type = 'Cities';
+                        $obj->idOwnerSection = '7';
                         $obj->idOwner = $id;
                         $obj->filter = $item["id"];
                         $obj->save();
@@ -500,7 +515,9 @@ class InitiativesController extends Controller
         $status = 200; $message = 'The record has been saved successfully';
         $name = $request->input("name");
         $coincidencia = '';
-        $obj = (New TypeOfActivity())->findName($name);
+
+        $id = $request->input("id");
+        $obj = (New TypeOfActivity())->findName($name, $id);
         Log::info($name);
         if( count($obj) > 0){
             $cant1 = strlen($name);
@@ -523,13 +540,39 @@ class InitiativesController extends Controller
         ]);
     }
 
+    public function typeOfActivity_delete($id){
+        $status = 200; $message = 'The record has been delete successfully';
+        $tieneIniciativas = '';$objFilter = [];
+
+        $idFilter = $id;
+        $obj = (New Initiatives())->findInitiative($idFilter, 'TypeOfActivity');
+
+        if( count($obj) > 0){
+                $status = 400; $message = 'This filter is already being used in an initiative';
+        }else{
+            $objFilter = TypeOfActivity::find($idFilter);
+            $objFilter->delete();
+        };
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ]);
+    }
+
+
+
+
+
+
     public function topic_store(Request $request)
     {
         $status = 200; $message = 'The record has been saved successfully';
 
         $coincidencia = '';
         $name = $request->input("name");
-        $obj = (New Topics())->findName($name);
+        $id = $request->input("id");
+        $obj = (New Topics())->findName($name, $id);
         Log::info($name);
         if( count($obj) > 0){
             $cant1 = strlen($name);
@@ -554,13 +597,38 @@ class InitiativesController extends Controller
         ]);
     }
 
+
+
+
+    public function topic_delete($id){
+        $status = 200; $message = 'The record has been delete successfully';
+        $tieneIniciativas = '';$objFilter = [];
+
+        $idFilter = $id;
+        $obj = (New Initiatives())->findInitiative($idFilter, 'Topics');
+
+        if( count($obj) > 0){
+                $status = 400; $message = 'This filter is already being used in an initiative';
+        }else{
+            $objFilter = Topics::find($idFilter);
+            $objFilter->delete();
+        };
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ]);
+    }
+
     public function sdg_store(Request $request)
     {
         $status = 200; $message = 'The record has been saved successfully';
 
         $coincidencia = '';
         $name = $request->input("name");
-        $obj = (New SDG())->findName($name);
+
+        $id = $request->input("id");
+        $obj = (New SDG())->findName($name, $id);
         Log::info($name);
         if( count($obj) > 0){
             $cant1 = strlen($name);
@@ -590,7 +658,8 @@ class InitiativesController extends Controller
 
         $coincidencia = '';
         $name = $request->input("name");
-        $obj = (New ConnectionsToOther())->findName($name);
+        $id = $request->input("id");
+        $obj = (New ConnectionsToOther())->findName($name, $id);
         Log::info($name);
         if( count($obj) > 0){
             $cant1 = strlen($name);

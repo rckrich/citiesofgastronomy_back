@@ -21,9 +21,10 @@ class ConnectionsToOther extends Model
     }
 
 
-    public function findName($name)
+    public function findName($name, $id)
     {
         return $this    -> select("id", "name")
+                        -> where('id', '!=', $id)
                         -> where('name', 'LIKE', "%{$name}%")
                         -> orderBy("name", 'ASC' )
                         -> get()
