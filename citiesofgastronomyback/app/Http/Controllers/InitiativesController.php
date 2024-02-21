@@ -47,10 +47,10 @@ class InitiativesController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
-        $objType = (New TypeOfActivity())->list();
-        $objTopic = (New Topics())->list();
-        $objsdg = (New sdg())->list();
-        $objConnectionsToOther = (New ConnectionsToOther())->list();
+        $objType = (New TypeOfActivity())->list($request->searchTypeOfActivity);
+        $objTopic = (New Topics())->list($request->searchTopics);
+        $objsdg = (New sdg())->list($request->searchSDG);
+        $objConnectionsToOther = (New ConnectionsToOther())->list($request->searchConnectionsToOther);
 
         return response()->json([
             'initiatives' => $objInitiatives,
@@ -548,10 +548,12 @@ class InitiativesController extends Controller
         $obj = (New Initiatives())->findInitiative($idFilter, 'TypeOfActivity');
 
         if( count($obj) > 0){
-                $status = 400; $message = 'This filter is already being used in an initiative';
+                $status = 400; $message = 'This filter cannot be deleted because it is being used by an initiative. Please reassign the filter and try again';
         }else{
             $objFilter = TypeOfActivity::find($idFilter);
-            $objFilter->delete();
+            if($objFilter != NULL){
+                $objFilter->delete();
+            };
         };
 
         return response()->json([
@@ -608,7 +610,7 @@ class InitiativesController extends Controller
         $obj = (New Initiatives())->findInitiative($idFilter, 'Topics');
 
         if( count($obj) > 0){
-                $status = 400; $message = 'This filter is already being used in an initiative';
+                $status = 400; $message = 'This filter cannot be deleted because it is being used by an initiative. Please reassign the filter and try again';
         }else{
             $objFilter = Topics::find($idFilter);
             if($objFilter != NULL){
@@ -654,6 +656,32 @@ class InitiativesController extends Controller
         ]);
     }
 
+
+
+
+    public function sdg_delete($id){
+        $status = 200; $message = 'The record has been delete successfully';
+        $tieneIniciativas = '';$objFilter = [];
+
+        $idFilter = $id;
+        $obj = (New Initiatives())->findInitiative($idFilter, 'SDG');
+
+        if( count($obj) > 0){
+                $status = 400; $message = 'This filter cannot be deleted because it is being used by an initiative. Please reassign the filter and try again';
+        }else{
+            $objFilter = SDG::find($idFilter);
+            if($objFilter != NULL){
+                $objFilter->delete();
+            };
+        };
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ]);
+    }
+
+
     public function connectionsToOther_store(Request $request)
     {
         $status = 200; $message = 'The record has been saved successfully';
@@ -684,4 +712,34 @@ class InitiativesController extends Controller
             'message' => $message
         ]);
     }
+
+
+
+
+
+
+    public function connectionsToOther_delete($id){
+        $status = 200; $message = 'The record has been delete successfully';
+        $tieneIniciativas = '';$objFilter = [];
+
+        $idFilter = $id;
+        $obj = (New Initiatives())->findInitiative($idFilter, 'ConnectionsToOther');
+
+        if( count($obj) > 0){
+                $status = 400; $message = 'This filter cannot be deleted because it is being used by an initiative. Please reassign the filter and try again';
+        }else{
+            $objFilter = ConnectionsToOther::find($idFilter);
+            if($objFilter != NULL){
+                $objFilter->delete();
+            };
+        };
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ]);
+    }
+
+
+
 }

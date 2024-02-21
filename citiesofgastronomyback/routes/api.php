@@ -88,7 +88,9 @@ Route::post('typeOfActivity/delete/{id}', [InitiativesController::class, 'typeOf
 Route::post('topic/store', [InitiativesController::class, 'topic_store']);
 Route::post('topic/delete/{id}', [InitiativesController::class, 'topic_delete']);
 Route::post('sdg/store', [InitiativesController::class, 'sdg_store']);
+Route::post('sdg/delete/{id}', [InitiativesController::class, 'sdg_delete']);
 Route::post('connectionsToOther/store', [InitiativesController::class, 'connectionsToOther_store']);
+Route::post('connectionsToOther/delete/{id}', [InitiativesController::class, 'connectionsToOther_delete']);
 
 /*
 
