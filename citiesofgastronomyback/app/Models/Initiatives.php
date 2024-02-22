@@ -18,7 +18,9 @@ class Initiatives extends Model
         $offset = ($page - 1) * $cantItems;
 
 
-        $initiative =  $this    -> select("initiatives.id", "initiatives.name", "initiatives.continent", "initiatives.startDate", "initiatives.startTime", "initiatives.description")
+        $initiative =  $this    -> select(  "initiatives.id", "initiatives.name", "initiatives.continent",
+                                            "initiatives.startDate", "initiatives.endDate",
+                                            "initiatives.description", "initiatives.photo")
                         -> where('initiatives.active', '1')
 
                         -> join( "filter", "filter.idOwner", '=', "initiatives.id" )
