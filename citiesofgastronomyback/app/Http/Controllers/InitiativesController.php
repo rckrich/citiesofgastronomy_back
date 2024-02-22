@@ -30,10 +30,26 @@ class InitiativesController extends Controller
         $cantItems = 20;
         $paginator = 1;
         $page = $request->page;
+        $filterType = $request->filterType;
+        $filterTopic = $request->filterTopic;
+        $filterSDG = $request->filterSDG;
+        $filterConnections = $request->filterConnections;
         $objInitiatives = [];
         $total = 0;
 
-        $objInitiatives =(New Initiatives())->list($request->search, $page,$cantItems);
+        $objInitiatives =(New Initiatives())->list($request->search, $page, $cantItems, 'name', $filterType, $filterTopic, $filterSDG, $filterConnections);
+        $objTotalInitiatives =(New Initiatives())->list($request->search, $page, 9999999999, 'name', $filterType, $filterTopic, $filterSDG, $filterConnections);
+
+        $total = count($objTotalInitiatives);
+        if($total > $cantItems){
+            $division = $total / $cantItems;
+            $paginator = intval($division);
+            if($paginator < $division){
+                $paginator = $paginator +1;
+            };
+        };
+
+
 
         $objBanners = (New Banners())->list(7, 0);
 

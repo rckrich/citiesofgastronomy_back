@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Filter;
 
 class Initiatives extends Model
@@ -11,15 +13,62 @@ class Initiatives extends Model
     use HasFactory;
     protected $table = "initiatives";
 
-    public function list($search, $page,$cantItems)
+    public function list($search, $page,$cantItems, $order, $filterType, $filterTopic, $filterSDG, $filterConnections)
     {
-        return $this    -> select("id", "name", "continent", "startDate", "startTime", "description")
-                        -> where('active', '1')
-                        -> orderBy("name", 'ASC' )
-                        -> get()
-                        -> toArray();
+        $offset = ($page - 1) * $cantItems;
+
+
+        $initiative =  $this    -> select("initiatives.id", "initiatives.name", "initiatives.continent", "initiatives.startDate", "initiatives.startTime", "initiatives.description")
+                        -> where('initiatives.active', '1')
+
+                        -> join( "filter", "filter.idOwner", '=', "initiatives.id" )
+                        -> where('filter.idOwnerSection', '=', '7')
+
+                        ;
+        //////SDG
+        $initiative -> with('sdgFilter');
+        $initiative -> with('sdgFilter.sdgDatta');
+
+        //////TYPE
+        $initiative -> with('typeFilter');
+        $initiative -> with('typeFilter.typeDatta');
+
+        if($filterType>0){
+            $initiative -> whereHas('typeSearch', function (Builder $query ) use ($filterType) {
+                $query->where('filter', $filterType);
+            });
+        };
+
+        /////////////////
+        $initiative ->distinct() -> limit($cantItems) -> offset($offset);
+
+        if($order == '' || $order == 'name'){
+            $result = $initiative -> orderBy("initiatives.name", 'ASC' ) -> get();
+        }elseif($order == 'id' ){
+            $result = $initiative -> orderBy("initiatives.id", 'DESC' ) -> get();
+        };
+
+        if($result){
+            $result -> toArray();
+        }else{
+            $result = [];
+        };
+
+        return $result;
     }
 
+
+
+
+    public function sdgFilter(){
+        return $this->hasMany(Filter::class, 'idOwner', 'id')->where('type', 'SDG')->where('idOwnerSection', '7');
+    }
+    public function typeFilter(){
+        return $this->hasMany(Filter::class, 'idOwner', 'id')->where('type', 'TypeOfActivity')->where('idOwnerSection', '7');
+    }
+    public function typeSearch(){
+        return $this->hasOne(Filter::class, 'idOwner', 'id')->where('type', 'TypeOfActivity')->where('idOwnerSection', '7');
+    }
 
 
 

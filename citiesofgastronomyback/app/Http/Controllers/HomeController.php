@@ -9,6 +9,7 @@ use App\Models\Info;
 use App\Models\Newletter;
 use App\Models\SocialNetwork;
 use App\Exports\NewsletterExport;
+use App\Models\Initiatives;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 
@@ -38,12 +39,16 @@ class HomeController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
+        $recentInitiatives = (New Initiatives())->list('', '1', '4', 'id', '', '', '', '');
+        $news = (New Initiatives())->list('', '1', '4', 'id', '8', '', '', '');
+        $openCalls = (New Initiatives())->list('', '1', '4', 'id', '7', '', '', '');
+
         return response()->json([
             'bannerAbout' => $bannerAbount,
             'bannerNumberAndStats' => $bannerNumberAndStats,
-            'recentInitiatives' => [],
-            'news' => [],
-            'openCalls' => [],
+            'recentInitiatives' => $recentInitiatives,
+            'news' => $news,
+            'openCalls' => $openCalls,
             'coordinator' => '',
             'contactMail' => '',
             'cities' => $objCities,
