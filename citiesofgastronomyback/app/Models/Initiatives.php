@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Filter;
+use App\Models\Images;
+use App\Models\Links;
+use App\Models\Files;
 
 class Initiatives extends Model
 {
@@ -22,14 +25,27 @@ class Initiatives extends Model
                                             "initiatives.startDate", "initiatives.endDate",
                                             "initiatives.description", "initiatives.photo")
                         -> where('initiatives.active', '1')
+                        -> where( "initiatives.name", 'LIKE', "%{$search}%")
 
                         -> join( "filter", "filter.idOwner", '=', "initiatives.id" )
                         -> where('filter.idOwnerSection', '=', '7')
 
                         ;
+        //////CITIES
+        //$initiative -> with('citiesFilter');
+        //$initiative -> with('citiesFilter.sdgDatta');
+
         //////SDG
         $initiative -> with('sdgFilter');
         $initiative -> with('sdgFilter.sdgDatta');
+
+        //////CONNECTIONS
+        //$initiative -> with('topicsFilter');
+        //$initiative -> with('topicsFilter.sdgDatta');
+
+        //////CONNECTIONS
+        //$initiative -> with('conectionsFilter');
+        //$initiative -> with('conectionsFilter.sdgDatta');
 
         //////TYPE
         $initiative -> with('typeFilter');
@@ -67,6 +83,24 @@ class Initiatives extends Model
     }
     public function typeFilter(){
         return $this->hasMany(Filter::class, 'idOwner', 'id')->where('type', 'TypeOfActivity')->where('idOwnerSection', '7');
+    }
+    public function topicsFilter(){
+        return $this->hasMany(Filter::class, 'idOwner', 'id')->where('type', 'Topics')->where('idOwnerSection', '7');
+    }
+    public function conectionsFilter(){
+        return $this->hasMany(Filter::class, 'idOwner', 'id')->where('type', 'ConnectionsToOther')->where('idOwnerSection', '7');
+    }
+    public function citiesFilter(){
+        return $this->hasMany(Filter::class, 'idOwner', 'id')->where('type', 'Cities')->where('idOwnerSection', '7');
+    }
+    public function images(){
+        return $this->hasMany(Images::class, 'idOwner', 'id')->where('active', '1')->where('idSection', '7');
+    }
+    public function links(){
+        return $this->hasMany(Links::class, 'idOwner', 'id')->where('active', '1')->where('idSection', '7');
+    }
+    public function pdf(){
+        return $this->hasMany(Files::class, 'idOwner', 'id')->where('active', '1')->where('idSection', '7');
     }
     public function typeSearch(){
         return $this->hasOne(Filter::class, 'idOwner', 'id')->where('type', 'TypeOfActivity')->where('idOwnerSection', '7');

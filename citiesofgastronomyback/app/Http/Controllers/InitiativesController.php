@@ -466,6 +466,31 @@ class InitiativesController extends Controller
      */
     public function edit(string $id)
     {
+        Log::info(":: EDIT INICIATIVE");
+        if($id){
+                $objIniciative = Initiatives::where('id', $id)
+                -> with('sdgFilter')
+                -> with('sdgFilter.sdgDatta')
+                -> with('typeFilter')
+                -> with('typeFilter.typeDatta')
+                -> with('topicsFilter')
+                -> with('conectionsFilter')
+                -> with('citiesFilter')
+                -> with('images')
+                -> with('links')
+                -> with('pdf')
+                -> first()
+                ;
+                Log::info($objIniciative);
+
+                $objgallery = (New Images())->list(7, $id);
+                $objLinks = (New Links())->list(7, $id);
+                $objFiles = (New Files())->list(7, $id);
+                //$objsocialContact = (New SocialNetwork())->list(11, $id);;
+        }else{
+                $obj = [];
+                $objIniciative = [];
+        };
 
         $objCities =(New Cities())->searchList('', 1, 999999999999999999);
         $objType = (New TypeOfActivity())->list();
@@ -473,12 +498,16 @@ class InitiativesController extends Controller
         $objsdg = (New sdg())->list();
         $objConnectionsToOther = (New ConnectionsToOther())->list();
 
+        $objContinent = (New continent())->list();
+
         return response()->json([
+            'iniciative' => $objIniciative,
             'citiesFilter' => $objCities,
             'typeOfActivityFilter' => $objType,
             'TopicsFilter' => $objTopic,
             'sdgFilter' => $objsdg,
-            'ConnectionsToOtherFilter' => $objConnectionsToOther
+            'ConnectionsToOtherFilter' => $objConnectionsToOther,
+            'Continent' => $objContinent
         ]);
     }
 

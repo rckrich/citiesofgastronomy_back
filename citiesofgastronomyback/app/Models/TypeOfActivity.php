@@ -12,7 +12,7 @@ class TypeOfActivity extends Model
     use HasFactory;
     protected $table = "type_of_activity";
 
-    public function list($search)
+    public function list($search = '')
     {
         return $this    -> select("id", "name")
                         -> where('name', 'LIKE', "%{$search}%")

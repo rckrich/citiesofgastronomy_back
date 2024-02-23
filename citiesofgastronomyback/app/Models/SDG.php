@@ -13,7 +13,7 @@ class SDG extends Model
     use HasFactory;
     protected $table = "SDG";
 
-    public function list($search)
+    public function list($search='')
     {
         return $this    -> select("id", "name", "number")
                         -> where('name', 'LIKE', "%{$search}%")
