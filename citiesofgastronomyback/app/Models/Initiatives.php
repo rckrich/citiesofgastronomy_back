@@ -93,6 +93,8 @@ class Initiatives extends Model
     public function citiesFilter(){
         return $this->hasMany(Filter::class, 'idOwner', 'id')->where('type', 'Cities')->where('idOwnerSection', '7');
     }
+
+
     public function images(){
         return $this->hasMany(Images::class, 'idOwner', 'id')->where('active', '1')->where('idSection', '7');
     }

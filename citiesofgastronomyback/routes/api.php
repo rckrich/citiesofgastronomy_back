@@ -83,6 +83,7 @@ Route::post('initiatives', [InitiativesController::class, 'index']);
 Route::get('initiatives/create', [InitiativesController::class, 'create']);
 Route::post('initiatives/store', [InitiativesController::class, 'store']);
 Route::get('initiatives/find/{id}', [InitiativesController::class, 'edit']);
+Route::get('initiatives/delete/{id}', [InitiativesController::class, 'destroy']);
 Route::post('typeOfActivity/store', [InitiativesController::class, 'typeOfActivity_store']);
 Route::post('typeOfActivity/delete/{id}', [InitiativesController::class, 'typeOfActivity_delete']);
 Route::post('topic/store', [InitiativesController::class, 'topic_store']);

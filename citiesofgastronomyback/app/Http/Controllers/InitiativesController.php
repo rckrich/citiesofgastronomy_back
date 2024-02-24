@@ -468,14 +468,29 @@ class InitiativesController extends Controller
     {
         Log::info(":: EDIT INICIATIVE");
         if($id){
-                $objIniciative = Initiatives::where('id', $id)
+                $objIniciative = Initiatives::select(
+                    "initiatives.id",
+                    "initiatives.continent",
+                    "initiatives.name",
+                    "initiatives.startDate",
+                    "initiatives.endDate",
+                    "initiatives.photo",
+                    "initiatives.description",
+                    "continent.name AS continentName")
+                -> where('initiatives.id', $id)
+                -> join( "continent", "continent.id", '=', "initiatives.continent" )
                 -> with('sdgFilter')
                 -> with('sdgFilter.sdgDatta')
                 -> with('typeFilter')
                 -> with('typeFilter.typeDatta')
+
                 -> with('topicsFilter')
+                -> with('topicsFilter.topicsDatta')
                 -> with('conectionsFilter')
+                -> with('conectionsFilter.connectionsDatta')
                 -> with('citiesFilter')
+                -> with('citiesFilter.citiesDatta')
+
                 -> with('images')
                 -> with('links')
                 -> with('pdf')
@@ -543,7 +558,31 @@ class InitiativesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $status = 200; $message = 'The Initiative was successfully deleted';
+        $tieneIniciativas = '';$objFilter = [];
+
+        $idFilter = $id;
+        $obj = (New Initiatives())->findInitiative($idFilter, 'ConnectionsToOther');
+
+        Log::info( "::ID : " );
+        Log::info($id );
+
+        if( !$id ){
+                $status = 400; $message = 'This record cannot be deleted.';
+        }else{
+            $objFilter = Filter::where('idOwnerSection', '7')->where('idOwner', $id)->delete ();
+            $objImage = Images::where('idSection', '7')->where('idOwner', $id)->delete ();
+            $objLinks = Links::where('idSection', '7')->where('idOwner', $id)->delete ();
+            $objFiles = Files::where('idSection', '7')->where('idOwner', $id)->delete ();
+
+            $obj = Initiatives::find($id);
+            if($obj != NULL){$obj->delete(); };
+        };
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ]);
     }
 
 
