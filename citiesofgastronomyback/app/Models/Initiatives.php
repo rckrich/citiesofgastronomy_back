@@ -61,7 +61,8 @@ class Initiatives extends Model
         $initiative ->distinct() -> limit($cantItems) -> offset($offset);
 
         if($order == '' || $order == 'name'){
-            $result = $initiative -> orderBy("initiatives.name", 'ASC' ) -> get();
+            $result = $initiative -> orderBy("initiatives.startDate", 'DESC' ) -> get();
+            //$result = $initiative -> orderBy("initiatives.name", 'ASC' ) -> get();
         }elseif($order == 'id' ){
             $result = $initiative -> orderBy("initiatives.id", 'DESC' ) -> get();
         };
