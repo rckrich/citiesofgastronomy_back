@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use App\Models\Info;
 use App\Models\SocialNetwork;
+use App\Models\Initiatives;
 use Intervention\Image\Drivers\Imagick\Driver;
 
 
@@ -184,12 +185,20 @@ class CitiesContoller extends Controller
 
 
     public function delete($id){
-        $status = 400;$mess = 'ok';
+        $status = 200;$mess = 'ok';
         try{
+
+            $obj = (New Initiatives())->findInitiative($id, 'Cities');
+
             $objCity = Cities::find($id);
             $objCity->active = 0;
             $objCity->updated_at = date("Y-m-d H:i:s");
-            $objCity -> save();
+            if($obj == NULL){
+                $objCity -> save();
+            }else{
+                $status = 400;
+                $mess="This city cannot be deleted because it is being used by another element (such as an initiative, tour, chef, etc.). Please reassign the city and try again";
+            };
         } catch ( \Exception $e ) {
             Log::info($e);
             $status = 400;$mess="Error";

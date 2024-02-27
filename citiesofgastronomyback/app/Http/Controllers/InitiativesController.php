@@ -38,7 +38,7 @@ class InitiativesController extends Controller
         $total = 0;
 
         $objInitiatives =(New Initiatives())->list($request->search, $page, $cantItems, 'name', $filterType, $filterTopic, $filterSDG, $filterConnections);
-        $objTotalInitiatives =(New Initiatives())->list($request->search, $page, 9999999999, 'name', $filterType, $filterTopic, $filterSDG, $filterConnections);
+        $objTotalInitiatives =(New Initiatives())->list($request->search, 1, 9999999999, 'name', $filterType, $filterTopic, $filterSDG, $filterConnections);
 
         $total = count($objTotalInitiatives);
         if($total > $cantItems){
@@ -48,7 +48,7 @@ class InitiativesController extends Controller
                 $paginator = $paginator +1;
             };
         };
-
+        Log::info("Page:".$page.'  - Paginator: '.$paginator.' - TOTAL: '.$total);
 
 
         $objBanners = (New Banners())->list(7, 0);
@@ -68,6 +68,9 @@ class InitiativesController extends Controller
         $objsdg = (New sdg())->list($request->searchSDG);
         $objConnectionsToOther = (New ConnectionsToOther())->list($request->searchConnectionsToOther);
 
+        $objCities =(New Cities())->searchList('', 1, 999999999999999999);
+
+
         return response()->json([
             'initiatives' => $objInitiatives,
             'tot' => $total,
@@ -78,6 +81,7 @@ class InitiativesController extends Controller
             'typeOfActivity' => $objType,
             'Topics' => $objTopic,
             'sdg' => $objsdg,
+            'citiesFilter' => $objCities,
             'ConnectionsToOther' => $objConnectionsToOther
         ]);
     }
@@ -113,8 +117,12 @@ class InitiativesController extends Controller
      */
     public function store(Request $request)
     {
-        $status = 200;$mensaje="The initiative was successfully created";
+        $status = 200;
         $id = $request->input("id");
+        $mensaje="The initiative was successfully created";
+        if($id){
+            $mensaje="The initiative was successfully edited";
+        };
 
         $photo = '';
             if($request->file("photo")){
@@ -306,7 +314,7 @@ class InitiativesController extends Controller
                             try{
                                 $objGallery =(New Images())->storeIMG($image, $id, 7);
                             } catch ( \Exception $e ) {
-
+                                Log::info($e);
                             }
                         };
                     };
@@ -364,11 +372,11 @@ class InitiativesController extends Controller
 
             /////////////////////////////   FILES
             $cant_files = $request->input("cant_files");
-            Log::info("-->CANT FILES -->".$cant_files);
+            //Log::info("-->CANT FILES -->".$cant_files);
 
 
             for($i = 1; $i < $cant_files+1; $i++){
-                Log::info("#:1");
+                //Log::info("#:1");
                 $idg = 'file'.$i;
                 $file = $request->file($idg);
                 $idg = 'idFile'.$i;
@@ -377,7 +385,7 @@ class InitiativesController extends Controller
                 $title = $request->input($idg);
                 $idg = 'deleteFile'.$i;
                 $deleteFile = $request->input($idg);
-                Log::info("-->ID:: ".$idFile);
+                //Log::info("-->ID:: ".$idFile);
                 if($idFile){
                     Log::info("Modifica::");
                     $objFiles = Files::find($idFile);
@@ -386,7 +394,7 @@ class InitiativesController extends Controller
                     //Log::info("->HAY DEL");
                         $objFiles->active = 2;
                     }else{
-                        Log::info("------------->HABILITA");
+                        //Log::info("------------->HABILITA");
                         $objFiles->title = $title;
                         $objFiles->active = 1;
                     };
@@ -466,7 +474,6 @@ class InitiativesController extends Controller
      */
     public function edit(string $id)
     {
-        Log::info(":: EDIT INICIATIVE");
         if($id){
                 $objIniciative = Initiatives::select(
                     "initiatives.id",
@@ -496,7 +503,7 @@ class InitiativesController extends Controller
                 -> with('pdf')
                 -> first()
                 ;
-                Log::info($objIniciative);
+                //Log::info($objIniciative);
 
                 $objgallery = (New Images())->list(7, $id);
                 $objLinks = (New Links())->list(7, $id);
