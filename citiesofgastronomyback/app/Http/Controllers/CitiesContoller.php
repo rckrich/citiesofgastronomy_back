@@ -185,7 +185,7 @@ class CitiesContoller extends Controller
 
 
     public function delete($id){
-        $status = 200;$mess = 'ok';
+        $status = 200;$mess = 'The City was successfully deleted';
         try{
 
             $obj = (New Initiatives())->findInitiative($id, 'Cities');

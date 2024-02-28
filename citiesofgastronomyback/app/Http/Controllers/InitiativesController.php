@@ -26,19 +26,29 @@ class InitiativesController extends Controller
      */
     public function index(Request $request)
     {
-        Log::info("#ini controller");
+        $cantItems = 9999999999999;
+        return $this->listIniciatives($request, $cantItems);
+    }
+    public function indexAdmin(Request $request)
+    {
         $cantItems = 20;
+        return $this->listIniciatives($request, $cantItems);
+    }
+    public function listIniciatives(Request $request, $cantItems){
+        Log::info("#ini controller");
+        //$cantItems = 20;
         $paginator = 1;
         $page = $request->page;
         $filterType = $request->filterType;
         $filterTopic = $request->filterTopic;
         $filterSDG = $request->filterSDG;
         $filterConnections = $request->filterConnections;
+        $filterCities = $request->filterCities;
         $objInitiatives = [];
         $total = 0;
 
-        $objInitiatives =(New Initiatives())->list($request->search, $page, $cantItems, 'name', $filterType, $filterTopic, $filterSDG, $filterConnections);
-        $objTotalInitiatives =(New Initiatives())->list($request->search, 1, 9999999999, 'name', $filterType, $filterTopic, $filterSDG, $filterConnections);
+        $objInitiatives =(New Initiatives())->list($request->search, $page, $cantItems, 'name', $filterType, $filterTopic, $filterSDG, $filterConnections, $filterCities);
+        $objTotalInitiatives =(New Initiatives())->list($request->search, 1, 9999999999, 'name', $filterType, $filterTopic, $filterSDG, $filterConnections, $filterCities);
 
         $total = count($objTotalInitiatives);
         if($total > $cantItems){
@@ -166,7 +176,7 @@ class InitiativesController extends Controller
                 $id = $obj->id;
             } catch ( \Exception $e ) {
                 Log::info($e);
-                $status = 400;$mensaje="Incorrect name format";
+                $status = 400;$mensaje="The initiative couldn’t be edited, please try again";
             };
 
             if($id != ''){

@@ -16,7 +16,7 @@ class Initiatives extends Model
     use HasFactory;
     protected $table = "initiatives";
 
-    public function list($search, $page,$cantItems, $order, $filterType, $filterTopic, $filterSDG, $filterConnections)
+    public function list($search, $page,$cantItems, $order, $filterType, $filterTopic, $filterSDG, $filterConnections, $filterCities = '')
     {
         $offset = ($page - 1) * $cantItems;
 
@@ -39,13 +39,31 @@ class Initiatives extends Model
         $initiative -> with('sdgFilter');
         $initiative -> with('sdgFilter.sdgDatta');
 
-        //////CONNECTIONS
+        if($filterSDG>0){
+            $initiative -> whereHas('typeSDG', function (Builder $query ) use ($filterSDG) {
+                $query->where('filter', $filterSDG);
+            });
+        };
+
+        //////TOPICS
         //$initiative -> with('topicsFilter');
-        //$initiative -> with('topicsFilter.sdgDatta');
+        //$initiative -> with('topicsFilter.topicsDatta');
+
+        if($filterTopic>0){
+            $initiative -> whereHas('typeTopics', function (Builder $query ) use ($filterTopic) {
+                $query->where('filter', $filterTopic);
+            });
+        };
 
         //////CONNECTIONS
         //$initiative -> with('conectionsFilter');
-        //$initiative -> with('conectionsFilter.sdgDatta');
+        //$initiative -> with('conectionsFilter.connectionsDatta');
+
+        if($filterConnections>0){
+            $initiative -> whereHas('typeConnections', function (Builder $query ) use ($filterConnections) {
+                $query->where('filter', $filterConnections);
+            });
+        };
 
         //////TYPE
         $initiative -> with('typeFilter');
@@ -57,11 +75,20 @@ class Initiatives extends Model
             });
         };
 
+        //////CITIES
+        //$initiative -> with('citiesFilter');
+        //$initiative -> with('citiesFilter.citiesDatta');
+
+        if($filterCities>0){
+            $initiative -> whereHas('filterCities', function (Builder $query ) use ($filterCities) {
+                $query->where('filter', $filterCities);
+            });
+        };
         /////////////////
         $initiative ->distinct() -> limit($cantItems) -> offset($offset);
 
         if($order == '' || $order == 'name'){
-            $result = $initiative -> orderBy("initiatives.startDate", 'DESC' ) -> get();
+            $result = $initiative -> orderBy("initiatives.startDate", 'ASC' ) -> get();
             //$result = $initiative -> orderBy("initiatives.name", 'ASC' ) -> get();
         }elseif($order == 'id' ){
             $result = $initiative -> orderBy("initiatives.id", 'DESC' ) -> get();
@@ -107,6 +134,18 @@ class Initiatives extends Model
     }
     public function typeSearch(){
         return $this->hasOne(Filter::class, 'idOwner', 'id')->where('type', 'TypeOfActivity')->where('idOwnerSection', '7');
+    }
+    public function typeSDG(){
+        return $this->hasOne(Filter::class, 'idOwner', 'id')->where('type', 'SDG')->where('idOwnerSection', '7');
+    }
+    public function typeTopics(){
+        return $this->hasOne(Filter::class, 'idOwner', 'id')->where('type', 'Topics')->where('idOwnerSection', '7');
+    }
+    public function typeConnections(){
+        return $this->hasOne(Filter::class, 'idOwner', 'id')->where('type', 'ConnectionsToOther')->where('idOwnerSection', '7');
+    }
+    public function filterCities(){
+        return $this->hasOne(Filter::class, 'idOwner', 'id')->where('type', 'Cities')->where('idOwnerSection', '7');
     }
 
 
