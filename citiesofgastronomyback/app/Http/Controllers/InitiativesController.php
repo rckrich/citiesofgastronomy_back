@@ -98,7 +98,17 @@ class InitiativesController extends Controller
 
 
 
+    public function calendar(Request $request)
+    {
+        $type = (New Initiatives()) -> select(  "id", "name", "startDate", "endDate")
+                        -> where('active', '1')
+                        -> where( "endDate", '>=', date("Y-m-d"))
+                        -> orderBy('startDate', 'ASC')
+                        -> get() -> toArray()
 
+                        ;
+        return response()->json(['calendar' => $type]);
+    }
     /**
      * Show the form for creating a new resource.
      */

@@ -13,6 +13,7 @@ use App\Http\Controllers\ToursController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\TastierLifeController;
+use App\Http\Controllers\Controller;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -79,6 +80,7 @@ Route::post('about/delete', [AboutController::class, 'aboutDel']);
 
 
 Route::get('initiatives', [InitiativesController::class, 'index']);
+Route::get('calendar', [InitiativesController::class, 'calendar']);
 Route::post('initiatives', [InitiativesController::class, 'index']);
 Route::get('initiativesAdmin', [InitiativesController::class, 'indexAdmin']);
 Route::post('initiativesAdmin', [InitiativesController::class, 'indexAdmin']);
@@ -95,6 +97,7 @@ Route::post('sdg/delete/{id}', [InitiativesController::class, 'sdg_delete']);
 Route::post('connectionsToOther/store', [InitiativesController::class, 'connectionsToOther_store']);
 Route::post('connectionsToOther/delete/{id}', [InitiativesController::class, 'connectionsToOther_delete']);
 
+Route::post('generalSearch', [Controller::class, 'generalSearch']);
 /*
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
