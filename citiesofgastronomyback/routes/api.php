@@ -46,6 +46,7 @@ Route::get('newsletter/Download', [HomeController::class, 'newsletterDownload'])
 Route::get('about', [AboutController::class, 'list']);
 Route::get('tours', [ToursController::class, 'index']);
 Route::get('calendar', [CalendarController::class, 'index']);
+//Route::get('calendar', [InitiativesController::class, 'calendar']);
 
 Route::get('generalDatta', [ContactsController::class, 'generalDatta']);
 
@@ -80,7 +81,6 @@ Route::post('about/delete', [AboutController::class, 'aboutDel']);
 
 
 Route::get('initiatives', [InitiativesController::class, 'index']);
-Route::get('calendar', [InitiativesController::class, 'calendar']);
 Route::post('initiatives', [InitiativesController::class, 'index']);
 Route::get('initiativesAdmin', [InitiativesController::class, 'indexAdmin']);
 Route::post('initiativesAdmin', [InitiativesController::class, 'indexAdmin']);
