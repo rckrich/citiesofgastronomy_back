@@ -19,12 +19,12 @@ class SocialNetwork extends Model
         return $this->hasMany(SocialNetworkType::class, 'id', 'idSocialNetworkType');
     }
 
-    public function storeLink(Request $request, $idOwner){
+    public function storeLink(Request $request, $idOwner, $type = 1){
         $idSection = $request->input("idSection");
 
         Log::info(":: LLEGO A STORE SOCIAL MEDIA");
 
-        $SocialNetworkType = (New SocialNetworkType())->list();
+        $SocialNetworkType = (New SocialNetworkType())->list($type);
         foreach($SocialNetworkType as $type){
             $idSocial = $type["id"];
             $idReq = $type["codde"].'_link';

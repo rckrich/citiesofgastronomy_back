@@ -14,6 +14,8 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\TastierLifeController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\ChefController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -55,8 +57,6 @@ Route::post('adminContacts', [ContactsController::class, 'list']);
 Route::post('contact/save', [ContactsController::class, 'contactSave']);
 Route::post('contact/find', [ContactsController::class, 'contactFind']);
 Route::post('contact/delete/{id}', [ContactsController::class, 'delete']);
-
-Route::get('tastierLife', [TastierLifeController::class, 'index']);
 //testier life -->falta
 
 Route::post('banners/store', [BannersController::class, 'store']);
@@ -96,6 +96,12 @@ Route::post('sdg/store', [InitiativesController::class, 'sdg_store']);
 Route::post('sdg/delete/{id}', [InitiativesController::class, 'sdg_delete']);
 Route::post('connectionsToOther/store', [InitiativesController::class, 'connectionsToOther_store']);
 Route::post('connectionsToOther/delete/{id}', [InitiativesController::class, 'connectionsToOther_delete']);
+
+
+
+Route::get('tastierLife', [TastierLifeController::class, 'index']);
+Route::get('chef/create', [ChefController::class, 'create']);
+Route::post('chef/store', [ChefController::class, 'store']);
 
 Route::post('generalSearch', [Controller::class, 'generalSearch']);
 /*
