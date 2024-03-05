@@ -100,6 +100,7 @@ Route::post('connectionsToOther/delete/{id}', [InitiativesController::class, 'co
 
 
 Route::get('tastierLife', [TastierLifeController::class, 'index']);
+Route::get('chef/findChef/{id}', [ChefController::class, 'findChef']);
 Route::get('chef/create', [ChefController::class, 'create']);
 Route::post('chef/store', [ChefController::class, 'store']);
 

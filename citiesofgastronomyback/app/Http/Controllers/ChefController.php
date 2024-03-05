@@ -10,15 +10,23 @@ use Illuminate\Support\Facades\Log;
 
 class ChefController extends Controller
 {
-    //
+
+
+    public function findChef($id){
+
+        $obj = [];
+        try{
+                $obj = Chef::findOrFail($id);
+        }catch(\Exception $e){};
+        $social = (New SocialNetworkType())->list(2);
+
+        return response()->json([
+            'chef' => $obj,
+            'SocialNetworkType' => $social
+        ]);
+    }
+
     public function create(){
-        /*
-        $social = (New SocialNetworkType()) -> select("name", "id", "codde", "icon", "active" )
-        -> whereIn( "active", ['1', '2'] )
-        -> orderBy('id', 'desc')
-        -> get()
-        -> toArray();
-        //*/
 
         $social = (New SocialNetworkType())->list(2);
 
