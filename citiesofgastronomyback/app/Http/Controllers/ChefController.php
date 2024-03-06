@@ -17,7 +17,7 @@ class ChefController extends Controller
 
         $obj = [];
         try{
-                $obj = Chef::findOrFail($id)
+                $obj = Chef::where('id', $id)
                 ->with('socialNetwork')
                 ->with('socialNetwork.socialNetworkType')
                 ->first();
