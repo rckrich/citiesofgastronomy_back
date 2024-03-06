@@ -37,19 +37,12 @@ class ContactsController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
-        //TODAS LAS CIUDADES
-        /*$objContacts = Cities::with(['contacts' => function ( $query) {
-                $query->where('active', '1');
-            }])->get();
-            //*/
 
         //SOLO LAS CIUDADES QUE AL MENOS TENGAN UN CONTACTO
             $objContacts = Cities::withWhereHas('contacts', function ($query) {
                 $query->where('active', '1');
             })
-            ->with(['contacts.socialNetwork' => function ( $query) {
-                $query->where('idSection', '11');
-            }])
+            ->with('contacts.socialNetwork')
             ->with('contacts.socialNetwork.socialNetworkType')
             ->get();
 

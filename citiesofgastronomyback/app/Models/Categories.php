@@ -5,32 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\SocialNetwork;
-
-class Chef extends Model
+class Categories extends Model
 {
     use HasFactory;
-    protected $table = "chef";
 
-    function socialNetwork()
-    {
-        return $this->hasMany(SocialNetwork::class, 'idOwner', 'id')->where('idSection', '12' );
-    }
+    protected $table  = "categories";
 
-    public function list($search, $page, $cant)
+    public function list($search)
     {
-      $offset = ($page-1) * $cant;
 
         return $this
                       ->select("id", "name")
                       -> orderBy("name", 'DESC')
                       -> where( "name", 'LIKE', "%{$search}%")
-                      -> limit($cant)
-                      -> offset($offset)
                       -> get()
                       -> toArray();
     }
-
-
-
 }

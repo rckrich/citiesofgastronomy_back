@@ -15,8 +15,9 @@ class Contacts extends Model
 
     function socialNetwork()
     {
-        return $this->hasMany(SocialNetwork::class, 'idOwner', 'id');
+        return $this->hasMany(SocialNetwork::class, 'idOwner', 'id')->where('idSection', '11' );
     }
+
 
     public function list($search, $page, $cant)
     {

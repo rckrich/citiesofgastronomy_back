@@ -7,6 +7,9 @@ use App\Models\Banners;
 use App\Models\Info;
 use App\Models\Chef;
 use App\Models\SocialNetwork;
+use App\Models\Recipes;
+use App\Models\Categories;
+use Illuminate\Support\Facades\Log;
 
 class TastierLifeController extends Controller
 {
@@ -21,7 +24,12 @@ class TastierLifeController extends Controller
         $objTastierLife = [];
         $total = 0;
 
-        //$objTastierLife =(New Timeline())->searchList($request->search, $page,$cantItems);
+
+        /////////////////////////RECIPES
+        /////////////////////////END RECIPES
+
+
+
 
         $objBanners = (New Banners())->list(8, 0);
 
@@ -35,14 +43,17 @@ class TastierLifeController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
+
+
+
         /////////////////////////CHEF
-        $page = $request->page;
-        $search = $request->search;
-        if(!$page){ $page=1; };
+        $pageChef = $request->pageChef;
+        $searchChef = $request->searchChef;
+        if(!$pageChef){ $pageChef=1; };
 
-        $chef = (New Chef())->list($search, $page, $cantItems);
+        $chef = (New Chef())->list($searchChef, $pageChef, 20);
 
-        $totalChef = (New Chef())->list($search, 1, 99999999);
+        $totalChef = (New Chef())->list($searchChef, 1, 99999999);
 
         $paginatorCHEF = 1;
         $totalCH = count($totalChef);
@@ -55,6 +66,13 @@ class TastierLifeController extends Controller
         };
         ///////////////////////// FIN CHEF
 
+        /////////////////////////CATEGORIES
+        $searchCAT = $request->searchCAT;
+
+        $categories = (New Categories())->list($searchCAT);
+
+        ///////////////////////// FIN CATEGORIES
+
         return response()->json([
             'tastierLife' => $objTastierLife,
             'tot' => $total,
@@ -62,6 +80,7 @@ class TastierLifeController extends Controller
             'totCHEF' => $totalCH,
             'paginatorCHEF' => $paginatorCHEF,
             'chef' => $chef,
+            'categories' => $categories,
             'banner' => $objBanners,
             'SocialNetworkType' => $SocialNetworkType,
             'info' => $infoArray

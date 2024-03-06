@@ -19,6 +19,11 @@ class SocialNetwork extends Model
         return $this->hasMany(SocialNetworkType::class, 'id', 'idSocialNetworkType');
     }
 
+    function socialNetworkTypeContacts()
+    {
+        return $this->hasMany(SocialNetworkType::class, 'id', 'idSocialNetworkType')->where('active', '1');
+    }
+
     public function storeLink(Request $request, $idOwner, $type = 1){
         $idSection = $request->input("idSection");
 
