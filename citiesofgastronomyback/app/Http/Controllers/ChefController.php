@@ -20,7 +20,7 @@ class ChefController extends Controller
                 $obj = Chef::findOrFail($id)
                 ->with('socialNetwork')
                 ->with('socialNetwork.socialNetworkType')
-                ->get();
+                ->first();
         }catch(\Exception $e){};
         $social = (New SocialNetworkType())->list(2);
 
