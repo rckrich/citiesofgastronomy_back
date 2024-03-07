@@ -21,11 +21,14 @@ class TastierLifeController extends Controller
         $cantItems = 20;
         $paginator = 1;
         $page = $request->page;
-        $objTastierLife = [];
+        if($page == ''){$page = 1;};
+        $search = $request->search;
+        $objRecipes = [];
         $total = 0;
 
 
         /////////////////////////RECIPES
+        $objRecipes= ( New Recipes() )->list($search, $page, $cantItems);
         /////////////////////////END RECIPES
 
 
@@ -74,7 +77,7 @@ class TastierLifeController extends Controller
         ///////////////////////// FIN CATEGORIES
 
         return response()->json([
-            'tastierLife' => $objTastierLife,
+            'recipes' => $objRecipes,
             'tot' => $total,
             'paginator' => $paginator,
             'totCHEF' => $totalCH,

@@ -16,6 +16,7 @@ use App\Http\Controllers\TastierLifeController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ChefController;
+use App\Http\Controllers\CategoriesController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -105,6 +106,9 @@ Route::get('chef/findChef/{id}', [ChefController::class, 'findChef']);
 Route::get('chef/create', [ChefController::class, 'create']);
 Route::post('chef/store', [ChefController::class, 'store']);
 Route::post('chef/delete/{id}', [ChefController::class, 'delete']);
+Route::post('categories/store', [CategoriesController::class, 'store']);
+Route::post('categories/delete/{id}', [CategoriesController::class, 'delete']);
+Route::get('categories/find/{id}', [CategoriesController::class, 'findCategory']);
 
 Route::post('generalSearch', [Controller::class, 'generalSearch']);
 /*
