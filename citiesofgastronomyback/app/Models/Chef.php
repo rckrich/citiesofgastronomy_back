@@ -23,7 +23,7 @@ class Chef extends Model
 
         return $this
                       ->select("id", "name")
-                      -> orderBy("name", 'DESC')
+                      -> orderBy("name", 'ASC')
                       -> where( "name", 'LIKE', "%{$search}%")
                       -> limit($cant)
                       -> offset($offset)
