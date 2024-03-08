@@ -17,13 +17,13 @@ class Recipes extends Model
     {
         $offset = ($page-1) * $cant;
 
-        $obj = $this  -> select("recipes.id", "recipes.name", "recipes.photo", "recipes.idChef", "recipes.idCategory",
+        $obj = $this  -> select("recipes.id", "recipes.name", "recipes.photo", "recipes.idChef", "recipes.idCategory", "recipes.idCity",
                                 "chef.name AS chefName", "categories.name AS categoryName", "cities.name AS cityName")
                       -> join( "chef", "chef.id", '=', "recipes.idChef" )
                       -> join( "categories", "categories.id", '=', "recipes.idCategory" )
                       -> join( "cities", "cities.id", '=', "recipes.idCity" )
                       -> where( "recipes.name", 'LIKE', "%{$search}%")
-                      -> orderBy("recipes.name", 'DESC')
+                      -> orderBy("recipes.id", 'DESC')
                       -> limit($cant)
                       -> offset($offset)
                       -> get()

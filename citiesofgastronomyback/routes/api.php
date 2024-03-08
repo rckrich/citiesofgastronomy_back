@@ -102,6 +102,9 @@ Route::post('connectionsToOther/delete/{id}', [InitiativesController::class, 'co
 
 Route::get('tastierLife', [TastierLifeController::class, 'index']);
 Route::post('tastierLife', [TastierLifeController::class, 'index']);
+Route::get('recipe/create', [TastierLifeController::class, 'create']);
+Route::post('recipe/store', [TastierLifeController::class, 'store']);
+Route::get('recipe/findRecipe/{id}', [TastierLifeController::class, 'findRecipe']);
 Route::get('chef/findChef/{id}', [ChefController::class, 'findChef']);
 Route::get('chef/create', [ChefController::class, 'create']);
 Route::post('chef/store', [ChefController::class, 'store']);
