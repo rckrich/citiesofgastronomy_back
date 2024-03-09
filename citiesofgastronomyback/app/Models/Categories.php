@@ -16,9 +16,18 @@ class Categories extends Model
 
         return $this
                       ->select("id", "name")
-                      -> orderBy("name", 'DESC')
+                      -> orderBy("name", 'ASC')
                       -> where( "name", 'LIKE', "%{$search}%")
                       -> get()
                       -> toArray();
+    }
+    public function findName($name, $id)
+    {
+        return $this    -> select("id", "name")
+                        -> where('id', '!=', $id)
+                        -> where('name', 'LIKE', "%{$name}%")
+                        -> orderBy("name", 'ASC' )
+                        -> get()
+                        -> toArray();
     }
 }

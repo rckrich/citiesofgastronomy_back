@@ -41,7 +41,7 @@ class ChefController extends Controller
     }
 
     public function store(Request $request){
-        $messaje = 'The chef was successfully created';
+        $message = 'The chef was successfully created';
 
         if(  !$request->input("id")  ){
             Log::info("::CREA Chef");
@@ -60,7 +60,7 @@ class ChefController extends Controller
 
         return response()->json([
             'chef' => $objItem,
-            'messaje' => $messaje
+            'message' => $message
         ]);
     }
 

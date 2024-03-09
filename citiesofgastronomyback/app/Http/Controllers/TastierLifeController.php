@@ -141,30 +141,100 @@ class TastierLifeController extends Controller
         ]);
     }
 
-    public function store(Request $request){
-        /*
-        $messaje = 'The chef was successfully created';
+    public function storeRecipe(Request $request){
+
+        $message = 'The Recipe was successfully created';
+
+        $photo = '';
+            if($request->file("photo")){
+                try{
+                    $request->validate ([
+                        'photo' => 'image|max:50000'
+                    ]);
+                    //$photo =  $request->file("photo")->store('public/images/Initiatives');
+                    //$photo = str_replace('public/', 'storage/', $photo);
+
+                    $photo = (New Images())->storeResize($request->file("photo"), '1158', '845', 'recipes');
+                } catch ( \Exception $e ) {
+
+                }
+            };
+            Log::info($photo );
 
         if(  !$request->input("id")  ){
-            Log::info("::CREA Chef");
-            $objItem = new Chef;
+            Log::info("::CREA receta");
+            $objItem = new Recipes;
             $objItem->created_at = date("Y-m-d H:i:s");
-            //$objItem->active = '1';
+            $objItem->active = '1';
         }else{
-            Log::info("::MODIFICA Chef");
-            $objItem = Chef::findOrFail( $request->input("id")  );
+            Log::info("::MODIFICA Crecetaef");
+            $objItem = Recipes::findOrFail( $request->input("id")  );
+            $message = 'The Recipe was successfully edited';
         };
+        $objItem->idChef = $request->input("idChef");
+        $objItem->idCity = $request->input("idCity");
+        $objItem->idCategory = $request->input("idCategory");
         $objItem->name = $request->input("name");
+        if($photo != ''){
+            Log::info("#si existe la foto");
+            $objItem->photo = $photo;
+        };
+        $objItem->description = $request->input("description");
+        $objItem->difficulty = $request->input("difficulty");
+        $objItem->prepTime = $request->input("prepTime");
+        $objItem->totalTime = $request->input("totalTime");
+        $objItem->servings = $request->input("servings");
+        $objItem->ingredients = $request->input("ingredients");
+        $objItem->preparations = $request->input("preparations");
+
         $objItem->updated_at = date("Y-m-d H:i:s");
         $objItem -> save();
 
-        $objLink = (New SocialNetwork()) -> storeLink( $request , $objItem->id, 2  );
+
+        /////////////////////////////   GALLERY
+        $cant_gallery = $request->input("cant_gallery");
+        Log::info("------------ GALLERY ->");
+        Log::info($cant_gallery);
+
+        for($i = 1; $i < $cant_gallery+1; $i++){
+            $idg = 'image'.$i;
+            $image = $request->file($idg);
+            Log::info($image);
+            $idg = 'idImage'.$i;
+            $idImage = $request->input($idg);
+            $idg = 'deleteImage'.$i;
+            $deleteImage = $request->input($idg);
+
+            if(!$idImage){
+                if(!$deleteImage){
+                    if($image){
+
+                        try{
+                            $objGallery =(New Images())->storeIMG($image, $id, 8);
+                        } catch ( \Exception $e ) {
+                            Log::info($e);
+                        }
+                    };
+                };
+            }else{
+                if($deleteImage){
+                    $obsDEL = Images::find($idImage);
+                    $obsDEL->active = 2;
+                    $obsDEL->updated_at = date("Y-m-d H:i:s");
+                    $obsDEL -> save();
+                    //Log::info("IMAGEN Borrada");
+                    //Log::info($obsDEL);
+                };
+            };
+
+        }
+        ////////////////////////////////////////////////////
 
         return response()->json([
-            'chef' => $objItem,
-            'messaje' => $messaje
+            'recipe' => $objItem,
+            'message' => $message
         ]);
-        //*/
+
     }
 
 

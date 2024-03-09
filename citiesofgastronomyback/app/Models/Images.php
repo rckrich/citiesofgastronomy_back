@@ -43,31 +43,31 @@ class Images extends Model
     }
 
     public function storeResize($image, $width, $height, $folder){
-        Log::info("#1");
+        //Log::info("#1");
         // create image manager with desired driver
         $manager = ImageManager::gd();
-        Log::info("#2");
+        //Log::info("#2");
         // open an image file
         $image = $manager->read($image);
-        Log::info("#3");
+        //Log::info("#3");
         // resize image instance
         //$image->resize(width: $width);
         $image->resize(width: $width);
         $image->resize(height: $height);
-        Log::info("#4");
+        //Log::info("#4");
 
         // insert a watermark
         //$image->place('images/watermark.png');
 
         // encode edited image
         $encoded = $image->toJpg();
-        Log::info("#5");
+        //Log::info("#5");
 
         //VERIFICO SI exite el DIRECTORIO y si no --> CREA
         if(!is_dir(storage_path('app/public/images/'.$folder.'/'))){
             @mkdir(storage_path('app/public/images/'.$folder.'/'), 0777);
         }else{
-            Log::info("Ya existe ese directorio\n");
+            //Log::info("Ya existe ese directorio\n");
         }
 
         $random = Str::random(10);
@@ -77,7 +77,7 @@ class Images extends Model
         $encoded->save('storage/images/'.$folder.'/'.$nombre);
         //$encoded->save('storage/images/cities/'.$nombre);
 
-        Log::info("#terminoooo");
+        //Log::info("#terminoooo");
         return 'storage/images/'.$folder.'/'.$nombre;
     }
 

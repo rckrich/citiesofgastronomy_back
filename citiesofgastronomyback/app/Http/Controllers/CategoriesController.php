@@ -26,26 +26,43 @@ class CategoriesController extends Controller
 
 
     public function store(Request $request){
-        $objItem = [];$messaje='';
+        $objItem = [];$message='';$coincidencia = '';$status = 200;
+        $name = $request->input("name");
 
-        if(  !$request->input("id")  ){
-            $messaje = 'The filter was successfully created';
-            Log::info("::CREA Categories");
-            $objItem = new Categories;
-            $objItem->created_at = date("Y-m-d H:i:s");
-            //$objItem->active = '1';
-        }else{
-            $messaje = 'The filter was successfully edited';
-            Log::info("::MODIFICA Categories");
-            $objItem = Categories::findOrFail( $request->input("id")  );
+        $id = $request->input("id");
+        $obj = (New Categories())->findName($name, $id);
+        Log::info($name);
+        if( count($obj) > 0){
+            $cant1 = strlen($name);
+            $cant2 = strlen($obj[0]["name"]);
+            if($cant1 == $cant2){
+                $coincidencia = 'si';
+
+                $status = 400; $message = 'The name of this filter already exists in the database';
+            };
         };
-        $objItem->name = $request->input("name");
-        $objItem->updated_at = date("Y-m-d H:i:s");
-        $objItem -> save();
+
+        if($coincidencia != 'si'){
+            if(  !$request->input("id")  ){
+                $message = 'The filter was successfully created';
+                Log::info("::CREA Categories");
+                $objItem = new Categories;
+                $objItem->created_at = date("Y-m-d H:i:s");
+                //$objItem->active = '1';
+            }else{
+                $message = 'The filter was successfully edited';
+                Log::info("::MODIFICA Categories");
+                $objItem = Categories::findOrFail( $request->input("id")  );
+            };
+            $objItem->name = $request->input("name");
+            $objItem->updated_at = date("Y-m-d H:i:s");
+            $objItem -> save();
+        };
 
         return response()->json([
             'category' => $objItem,
-            'messaje' => $messaje
+            'message' => $message,
+            'status' => $status
         ]);
     }
 
