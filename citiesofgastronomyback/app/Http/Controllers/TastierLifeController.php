@@ -28,11 +28,14 @@ class TastierLifeController extends Controller
         $objRecipes = [];
         $total = 0;
 
+        $category = $request->recipeCategoryFilter;
+        $chef = $request->recipeChefFilter;
+        $city = $request->recipeCityFilter;
 
         /////////////////////////RECIPES
-        $objRecipes= ( New Recipes() )->list($search, $page, $cantItems);
+        $objRecipes= ( New Recipes() )->list($search, $page, $cantItems, $chef, $category, $city);
 
-        $totalRecipes= ( New Recipes() )->list($search, 1, 999999999999);
+        $totalRecipes= ( New Recipes() )->list($search, 1, 999999999999, $chef, $category, $city);
 
         $paginator = 1;
         $total = count($totalRecipes);
@@ -90,6 +93,8 @@ class TastierLifeController extends Controller
         ///////////////////////// FIN CATEGORIES
 
 
+        $objCities =(New Cities())->searchList('', 1, 999999999999999999);
+
         return response()->json([
             'recipes' => $objRecipes,
             'tot' => $total,
@@ -98,6 +103,7 @@ class TastierLifeController extends Controller
             'paginatorCHEF' => $paginatorCHEF,
             'chef' => $chef,
             'categories' => $categories,
+            'cities' => $objCities,
             'banner' => $objBanners,
             'SocialNetworkType' => $SocialNetworkType,
             'info' => $infoArray
@@ -190,6 +196,8 @@ class TastierLifeController extends Controller
         $objItem->updated_at = date("Y-m-d H:i:s");
         $objItem -> save();
 
+        $id = $objItem->id;
+
 
         /////////////////////////////   GALLERY
         $cant_gallery = $request->input("cant_gallery");
@@ -235,6 +243,31 @@ class TastierLifeController extends Controller
             'message' => $message
         ]);
 
+    }
+
+
+
+
+
+    public function delete($id){
+        //Log::info("Categories Delete ::");
+        $status = 200;$message = 'The Recipe was successfully deleted';
+
+        //Log::info($obj);
+
+        if( $id ){
+            $objRecipe = Recipes::find($id);
+            if($objRecipe != NULL){
+                $objRecipe->delete();
+                //DELETE IMAGES
+                $obsDEL = Images::where('idOwner', $id)->where('idSection', '8')->delete();
+            };
+        };
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ]);
     }
 
 

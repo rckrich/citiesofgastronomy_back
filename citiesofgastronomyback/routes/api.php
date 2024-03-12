@@ -105,6 +105,7 @@ Route::post('tastierLife', [TastierLifeController::class, 'index']);
 Route::get('recipe/create', [TastierLifeController::class, 'create']);
 Route::post('recipe/store', [TastierLifeController::class, 'storeRecipe']);
 Route::get('recipe/findRecipe/{id}', [TastierLifeController::class, 'findRecipe']);
+Route::post('recipe/delete/{id}', [TastierLifeController::class, 'delete']);
 Route::get('chef/findChef/{id}', [ChefController::class, 'findChef']);
 Route::get('chef/create', [ChefController::class, 'create']);
 Route::post('chef/store', [ChefController::class, 'store']);

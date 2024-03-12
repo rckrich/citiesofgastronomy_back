@@ -13,7 +13,7 @@ class Recipes extends Model
     use HasFactory;
     protected $table = "recipes";
 
-    public function list($search, $page, $cant)
+    public function list($search, $page, $cant, $chef, $category, $city)
     {
         $offset = ($page-1) * $cant;
 
@@ -22,7 +22,18 @@ class Recipes extends Model
                       -> join( "chef", "chef.id", '=', "recipes.idChef" )
                       -> join( "categories", "categories.id", '=', "recipes.idCategory" )
                       -> join( "cities", "cities.id", '=', "recipes.idCity" )
-                      -> where( "recipes.name", 'LIKE', "%{$search}%")
+
+
+                      ->where(function($query) use ($search){
+                        $query  -> where( "recipes.name", 'LIKE', "%{$search}%")
+                                -> orWhere( "chef.name", 'LIKE', "%{$search}%")
+                                -> orWhere( "categories.name", 'LIKE', "%{$search}%")
+                                -> orWhere( "cities.name", 'LIKE', "%{$search}%");
+                        })
+
+                      -> where( "recipes.idChef", 'LIKE', "%{$chef}%")
+                      -> where( "recipes.idCity", 'LIKE', "%{$city}%")
+                      -> where( "recipes.idCategory", 'LIKE', "%{$category}%")
                       -> orderBy("recipes.id", 'DESC')
                       -> limit($cant)
                       -> offset($offset)
