@@ -133,6 +133,27 @@ class TastierLifeController extends Controller
         ]);
     }
 
+
+    public function showRecipe($id){
+        $Chef = (New Chef())->list('', 1, 99999999);
+        $categories = (New Categories())->list('');
+        $objCities =(New Cities())->searchList('', 1, 999999999999999999);
+
+        $obj = [];$objgallery = [];
+        try{
+            $obj = (New Recipes() )->findResipe($id);
+
+                $objgallery = (New Images())->list(8, $id);
+        }catch(\Exception $e){};
+
+        return response()->json([
+            'Recipes' => $obj,
+            'Gallery' => $objgallery,
+            'Chef' => $Chef,
+            'Cities' => $objCities,
+            'categories' => $categories
+        ]);
+    }
     public function create(){
         //Categories;Chef
         $Chef = (New Chef())->list('', 1, 99999999);
@@ -269,6 +290,38 @@ class TastierLifeController extends Controller
             'message' => $message
         ]);
     }
+
+
+
+
+
+    public function vote($id){
+        //Log::info("Categories Delete ::");
+        $status = 200;$message = 'The Recipe was successfully voted';
+
+        //Log::info($obj);
+        $vote = 0;
+        if( $id ){
+            $objRecipe = Recipes::find($id);
+            if($objRecipe != NULL){
+                $vote = $objRecipe->vote + 1;
+                $objRecipe->vote = $vote;
+                $objRecipe->save();
+            }else{
+                $status = 400;$message = 'Recipe not found';
+            };
+        }else{
+
+            $status = 400;$message = 'ERROR';
+        };
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'votes' => $vote
+        ]);
+    }
+
 
 
 }

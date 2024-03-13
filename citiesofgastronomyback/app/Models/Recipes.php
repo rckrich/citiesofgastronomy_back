@@ -18,7 +18,8 @@ class Recipes extends Model
         $offset = ($page-1) * $cant;
 
         $obj = $this  -> select("recipes.id", "recipes.name", "recipes.photo", "recipes.idChef", "recipes.idCategory", "recipes.idCity",
-                                "chef.name AS chefName", "categories.name AS categoryName", "cities.name AS cityName")
+                                "chef.name AS chefName", "categories.name AS categoryName", "cities.name AS cityName",
+                                "recipes.vote AS votes")
                       -> join( "chef", "chef.id", '=', "recipes.idChef" )
                       -> join( "categories", "categories.id", '=', "recipes.idCategory" )
                       -> join( "cities", "cities.id", '=', "recipes.idCity" )
@@ -43,5 +44,20 @@ class Recipes extends Model
         return $obj;
     }
 
+    public function findResipe($id)
+    {
 
+        $obj = $this -> select("recipes.id", "recipes.name", "recipes.photo",
+                "recipes.description", "recipes.difficulty", "recipes.prepTime", "recipes.totalTime",
+                "recipes.servings", "recipes.ingredients", "recipes.preparations", "recipes.vote AS votes",
+                "chef.name AS chefName", "categories.name AS categoryName", "cities.name AS cityName"
+                )
+            -> join( "chef", "chef.id", '=', "recipes.idChef" )
+            -> join( "categories", "categories.id", '=', "recipes.idCategory" )
+            -> join( "cities", "cities.id", '=', "recipes.idCity" )
+            -> where('recipes.id', $id)
+            -> first();
+
+        return $obj;
+    }
 }
