@@ -9,4 +9,6 @@ class Tours extends Model
 {
     use HasFactory;
     protected $table = "tours";
+
+
 }

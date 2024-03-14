@@ -42,7 +42,7 @@ class SocialNetwork extends Model
             -> where( "idSection", '=', $idSection )
             -> where( "idSocialNetworkType", '=', $idSocial )
             -> orderBy('id', 'desc')-> first();
-            //Log::info("##id : ".$objLink->id);
+            Log::info("##id : ".$objLink->id);
             if($socialValue!=''){
                     if(!$objLink){
                         $objLink = new SocialNetwork;

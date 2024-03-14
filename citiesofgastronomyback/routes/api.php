@@ -47,7 +47,6 @@ Route::post('newsletter/DownloadVerify', [HomeController::class, 'newsletterDown
 Route::get('newsletter/Download', [HomeController::class, 'newsletterDownload']);
 
 Route::get('about', [AboutController::class, 'list']);
-Route::get('tours', [ToursController::class, 'index']);
 Route::get('calendar', [CalendarController::class, 'index']);
 //Route::get('calendar', [InitiativesController::class, 'calendar']);
 
@@ -115,6 +114,15 @@ Route::post('chef/delete/{id}', [ChefController::class, 'delete']);
 Route::post('categories/store', [CategoriesController::class, 'store']);
 Route::post('categories/delete/{id}', [CategoriesController::class, 'delete']);
 Route::get('categories/find/{id}', [CategoriesController::class, 'findCategory']);
+
+
+Route::get('tours', [ToursController::class, 'index']);
+Route::get('toursAdmin', [ToursController::class, 'list']);
+Route::post('toursAdmin', [ToursController::class, 'list']);
+Route::get('tours/create', [ToursController::class, 'create']);
+Route::post('tours/store', [ToursController::class, 'store']);
+Route::get('tours/find', [ToursController::class, 'find']);
+Route::get('tours/show', [ToursController::class, 'show']);
 
 Route::post('generalSearch', [Controller::class, 'generalSearch']);
 /*
