@@ -170,7 +170,7 @@ class TastierLifeController extends Controller
 
     public function storeRecipe(Request $request){
 
-        $message = 'The Recipe was successfully created';
+        $message = 'The Recipe was successfully created';$status = 200;
 
         $photo = '';
             if($request->file("photo")){
@@ -261,7 +261,8 @@ class TastierLifeController extends Controller
 
         return response()->json([
             'recipe' => $objItem,
-            'message' => $message
+            'message' => $message,
+            'status' => $status
         ]);
 
     }
