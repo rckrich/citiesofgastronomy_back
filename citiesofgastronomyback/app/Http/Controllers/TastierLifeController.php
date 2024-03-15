@@ -146,12 +146,25 @@ class TastierLifeController extends Controller
                 $objgallery = (New Images())->list(8, $id);
         }catch(\Exception $e){};
 
+        $SocialNetworkType = (New SocialNetwork())->list(5, 0);
+
+        $infoArray = (New Info())->type();
+        for($i=0; $i < count($infoArray); $i++){
+            $infoValue='';
+            $objInfoCoordinator = (New Info())->list($infoArray[$i]["key"]);
+            if($objInfoCoordinator){ $infoValue = $objInfoCoordinator["description"]; };
+            $infoArray[$i]["value"] = $infoValue;
+        }
+
+
         return response()->json([
             'Recipes' => $obj,
             'Gallery' => $objgallery,
             'Chef' => $Chef,
             'Cities' => $objCities,
-            'categories' => $categories
+            'categories' => $categories,
+            'SocialNetworkType' => $SocialNetworkType,
+            'info' => $infoArray
         ]);
     }
     public function create(){

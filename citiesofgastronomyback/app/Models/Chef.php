@@ -25,6 +25,7 @@ class Chef extends Model
                       ->select("id", "name")
                       -> orderBy("name", 'ASC')
                       -> where( "name", 'LIKE', "%{$search}%")
+                      -> with("socialNetwork")
                       -> limit($cant)
                       -> offset($offset)
                       -> get()
