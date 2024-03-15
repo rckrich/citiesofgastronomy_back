@@ -17,7 +17,7 @@ class ToursController extends Controller
 
 
 
-    public function index(Request $request)
+    public function index(Request $request, $type = 'user')
     {
         $cantItems = 20;
         $paginator = 1;
@@ -25,7 +25,17 @@ class ToursController extends Controller
         $objTours = [];
         $total = 0;
 
-        //$objTours =(New Timeline())->searchList($request->search, $page,$cantItems);
+        $objTours =(New Tours())->list($request->search, $page, $cantItems, $type);
+        $totalTours =(New Tours())->list($request->search, 1, 99999999999, $type);
+        $paginator = 1;
+        $total = count($totalTours);
+        if($total > $cantItems){
+            $division = $total / $cantItems;
+            $paginator = intval($division);
+            if($paginator < $division){
+                $paginator = $paginator + 1;
+            };
+        };
 
         $objBanners = (New Banners())->list(9, 0);
 
@@ -39,20 +49,29 @@ class ToursController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
-        return response()->json([
-            'tours' => $objTours,
-            'tot' => $total,
-            'paginator' => $paginator,
-            'banner' => $objBanners,
-            'SocialNetworkType' => $SocialNetworkType,
-            'info' => $infoArray
-        ]);
+        if($type == 'admin'){
+            return response()->json([
+                'tours' => $objTours,
+                'tot' => $total,
+                'paginator' => $paginator
+            ]);
+        }else{
+            return response()->json([
+                'tours' => $objTours,
+                'tot' => $total,
+                'paginator' => $paginator,
+                'banner' => $objBanners,
+                'SocialNetworkType' => $SocialNetworkType,
+                'info' => $infoArray
+            ]);
+        };
     }
 
 
     public function list(Request $request)
     {
 
+        return $this->index($request, 'admin');
 
     }
 
@@ -63,7 +82,7 @@ class ToursController extends Controller
 
         return response()->json([
             'cities' => $objCities,
-            'social' => $objsocial
+            'socialType' => $objsocial
         ]);
     }
 
@@ -161,9 +180,31 @@ class ToursController extends Controller
         ]);
     }
 
-    public function find(Request $request)
+    public function find($id)
     {
+        $status = 200;$mess = '';
+        if($id){
+            $obj = Tours::findOrFail($id);
+            $objsocialTours = (New SocialNetwork())->list(9, $id);
+            $objgallery = (New Images())->list(9, $id);
+        }else{
+                $obj = [];
+                $objsocialTours = [];
+                $status = 200;$mess = 'The tour was not found';
+        };
 
+        $objsocial = (New SocialNetworkType())->list();
+        $objCities =(New Cities())->searchList('', 1, 999999999999999999);
+
+        return response()->json([
+            'tour' => $obj,
+            'toursSocialNetwork' => $objsocialTours,
+            'gallery' => $objgallery,
+            'cities' => $objCities,
+            'socialType' => $objsocial,
+            'status' => $status,
+            'message' => $mess
+        ]);
 
     }
 

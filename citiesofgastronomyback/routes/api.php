@@ -121,7 +121,7 @@ Route::get('toursAdmin', [ToursController::class, 'list']);
 Route::post('toursAdmin', [ToursController::class, 'list']);
 Route::get('tours/create', [ToursController::class, 'create']);
 Route::post('tours/store', [ToursController::class, 'store']);
-Route::get('tours/find', [ToursController::class, 'find']);
+Route::get('tours/find/{id}', [ToursController::class, 'find']);
 Route::get('tours/show', [ToursController::class, 'show']);
 
 Route::post('generalSearch', [Controller::class, 'generalSearch']);
