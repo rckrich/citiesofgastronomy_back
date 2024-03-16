@@ -47,7 +47,7 @@ class Recipes extends Model
     public function findResipe($id)
     {
 
-        $obj = $this -> select("recipes.id", "recipes.name", "recipes.photo",
+        $obj = $this -> select("recipes.id", "recipes.name", "recipes.photo", "recipes.idChef",
                 "recipes.description", "recipes.difficulty", "recipes.prepTime", "recipes.totalTime",
                 "recipes.servings", "recipes.ingredients", "recipes.preparations", "recipes.vote AS votes",
                 "chef.name AS chefName", "categories.name AS categoryName", "cities.name AS cityName"
@@ -57,7 +57,16 @@ class Recipes extends Model
             -> join( "cities", "cities.id", '=', "recipes.idCity" )
             -> where('recipes.id', $id)
             -> first();
-
+        if($obj){
+            $objChef = Chef::select("social_network_type.id", "social_network_type.name", "social_network_type.icon",
+                    "social_network.social_network AS value")
+                -> join( "social_network", "social_network.idOwner", '=', "chef.id" )
+                -> join( "social_network_type", "social_network_type.id", '=', "social_network.idSocialNetworkType" )
+                ->where("chef.id", $obj["idChef"])
+                ->where("social_network.idSection", "12")
+                ->get();
+            $obj["socialMedia"] = $objChef;
+        };
         return $obj;
     }
 }

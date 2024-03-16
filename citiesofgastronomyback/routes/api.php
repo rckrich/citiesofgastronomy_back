@@ -117,11 +117,13 @@ Route::get('categories/find/{id}', [CategoriesController::class, 'findCategory']
 
 
 Route::get('tours', [ToursController::class, 'index']);
+Route::get('tours', [ToursController::class, 'index']);
 Route::get('toursAdmin', [ToursController::class, 'list']);
 Route::post('toursAdmin', [ToursController::class, 'list']);
 Route::get('tours/create', [ToursController::class, 'create']);
 Route::post('tours/store', [ToursController::class, 'store']);
 Route::get('tours/find/{id}', [ToursController::class, 'find']);
+Route::post('tours/delete/{id}', [ToursController::class, 'delete']);
 Route::get('tours/show', [ToursController::class, 'show']);
 
 Route::post('generalSearch', [Controller::class, 'generalSearch']);

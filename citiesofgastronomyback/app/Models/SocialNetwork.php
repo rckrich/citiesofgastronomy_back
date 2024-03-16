@@ -24,7 +24,7 @@ class SocialNetwork extends Model
         return $this->hasMany(SocialNetworkType::class, 'id', 'idSocialNetworkType')->where('active', '1');
     }
 
-    public function storeLink(Request $request, $idOwner, $type = 1){
+    public function storeLink(Request $request, $idOwner, $type = 1, ){
         $idSection = $request->input("idSection");
 
         Log::info(":: LLEGO A STORE SOCIAL MEDIA");
@@ -42,7 +42,7 @@ class SocialNetwork extends Model
             -> where( "idSection", '=', $idSection )
             -> where( "idSocialNetworkType", '=', $idSocial )
             -> orderBy('id', 'desc')-> first();
-            Log::info("##id : ".$objLink->id);
+            //Log::info("##id : ".$objLink->id);
             if($socialValue!=''){
                     if(!$objLink){
                         $objLink = new SocialNetwork;

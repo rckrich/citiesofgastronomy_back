@@ -19,6 +19,7 @@ class ToursController extends Controller
 
     public function index(Request $request, $type = 'user')
     {
+        $message = '';$status='200';
         $cantItems = 20;
         $paginator = 1;
         $page = $request->page;
@@ -36,6 +37,7 @@ class ToursController extends Controller
                 $paginator = $paginator + 1;
             };
         };
+        if($total == 0){$message = "No results found";}
 
         $objBanners = (New Banners())->list(9, 0);
 
@@ -53,7 +55,9 @@ class ToursController extends Controller
             return response()->json([
                 'tours' => $objTours,
                 'tot' => $total,
-                'paginator' => $paginator
+                'paginator' => $paginator,
+                'message' => $message,
+                'status' => $status
             ]);
         }else{
             return response()->json([
@@ -62,7 +66,9 @@ class ToursController extends Controller
                 'paginator' => $paginator,
                 'banner' => $objBanners,
                 'SocialNetworkType' => $SocialNetworkType,
-                'info' => $infoArray
+                'info' => $infoArray,
+                'message' => $message,
+                'status' => $status
             ]);
         };
     }
@@ -88,95 +94,110 @@ class ToursController extends Controller
 
     public function store(Request $request)
     {
-        $message = 'The tour was successfully created';
+        $message = 'The tour was successfully created';$status = 200;
 
         $photo = '';
-        Log::info($request->file("photo") );
-            if($request->file("photo")){
-                try{
-                    $request->validate ([
-                        'photo' => 'image|max:50000'
-                    ]);
-                    //$photo =  $request->file("photo")->store('public/images/Initiatives');
-                    //$photo = str_replace('public/', 'storage/', $photo);
+        try{
+            Log::info($request->file("photo") );
+                if($request->file("photo")){
+                    try{
+                        $request->validate ([
+                            'photo' => 'image|max:50000'
+                        ]);
+                        //$photo =  $request->file("photo")->store('public/images/Initiatives');
+                        //$photo = str_replace('public/', 'storage/', $photo);
 
-                    $photo = (New Images())->storeResize($request->file("photo"), '1158', '845', 'tours');
-                } catch ( \Exception $e ) {
-                    Log::info($e);
-                }
+                        $photo = (New Images())->storeResize($request->file("photo"), '1158', '845', 'tours');
+                    } catch ( \Exception $e ) {
+                        Log::info($e);
+                        $message = 'The tour was successfully created but there was a problem saving the image';
+                    }
+                };
+                //Log::info($photo );
+
+            if(  !$request->input("id")  ){
+                Log::info("::CREA ");
+                $objItem = new Tours;
+                $objItem->created_at = date("Y-m-d H:i:s");
+                //$objItem->active = '1';
+            }else{
+                Log::info("::MODIFICA");
+                $objItem = Tours::findOrFail( $request->input("id")  );
+                $message = 'The tour was successfully edited';
             };
-            //Log::info($photo );
+            $objItem->idCity = $request->input("idCity");
+            $objItem->name = $request->input("name");
+            if($photo != ''){
+                Log::info("#si existe la foto");
+                $objItem->photo = $photo;
+            };
+            $objItem->description = $request->input("description");
+            $objItem->travelAgency = $request->input("travelAgency");
 
-        if(  !$request->input("id")  ){
-            Log::info("::CREA ");
-            $objItem = new Tours;
-            $objItem->created_at = date("Y-m-d H:i:s");
-            //$objItem->active = '1';
-        }else{
-            Log::info("::MODIFICA");
-            $objItem = Tours::findOrFail( $request->input("id")  );
-            $message = 'The tour was successfully edited';
-        };
-        $objItem->idCity = $request->input("idCity");
-        $objItem->name = $request->input("name");
-        if($photo != ''){
-            Log::info("#si existe la foto");
-            $objItem->photo = $photo;
-        };
-        $objItem->description = $request->input("description");
-        $objItem->travelAgency = $request->input("travelAgency");
+            $objItem->updated_at = date("Y-m-d H:i:s");
+            $objItem -> save();
 
-        $objItem->updated_at = date("Y-m-d H:i:s");
-        $objItem -> save();
-
-        $id = $objItem->id;
+            $id = $objItem->id;
+            Log::info("El Id es:");
+            Log::info($objItem->id);
 
 
-        /////////////////////////////   GALLERY
-        $cant_gallery = $request->input("cant_gallery");
-        Log::info("------------ GALLERY ->");
-        Log::info($cant_gallery);
+            /////////////////////////////   GALLERY
+            $cant_gallery = $request->input("cant_gallery");
+            Log::info("------------ GALLERY ->");
+            Log::info($cant_gallery);
 
-        for($i = 1; $i < $cant_gallery+1; $i++){
-            $idg = 'image'.$i;
-            $image = $request->file($idg);
-            Log::info($image);
-            $idg = 'idImage'.$i;
-            $idImage = $request->input($idg);
-            $idg = 'deleteImage'.$i;
-            $deleteImage = $request->input($idg);
+            for($i = 1; $i < $cant_gallery+1; $i++){
+                $idg = 'image'.$i;
+                $image = $request->file($idg);
+                Log::info($image);
+                $idg = 'idImage'.$i;
+                $idImage = $request->input($idg);
+                $idg = 'deleteImage'.$i;
+                $deleteImage = $request->input($idg);
 
-            if(!$idImage){
-                if(!$deleteImage){
-                    if($image){
+                if(!$idImage){
+                    if(!$deleteImage){
+                        if($image){
 
-                        try{
-                            $objGallery =(New Images())->storeIMG($image, $id, 9);
-                        } catch ( \Exception $e ) {
-                            Log::info($e);
-                        }
+                            try{
+                                $objGallery =(New Images())->storeIMG($image, $id, 9);
+                            } catch ( \Exception $e ) {
+                                Log::info($e);
+                            }
+                        };
+                    };
+                }else{
+                    if($deleteImage){
+                        $obsDEL = Images::find($idImage);
+                        $obsDEL->active = 2;
+                        $obsDEL->updated_at = date("Y-m-d H:i:s");
+                        $obsDEL -> save();
+                        //Log::info("IMAGEN Borrada");
+                        //Log::info($obsDEL);
                     };
                 };
+
+            }
+            ////////////////////////////////////////////////////
+
+
+            $objLink = (New SocialNetwork()) -> storeLink( $request , $id  );
+        } catch ( \Exception $e ) {
+            if(!$request->file("photo") && !$request->input("id")){
+                $message = 'Tour photo is required';
             }else{
-                if($deleteImage){
-                    $obsDEL = Images::find($idImage);
-                    $obsDEL->active = 2;
-                    $obsDEL->updated_at = date("Y-m-d H:i:s");
-                    $obsDEL -> save();
-                    //Log::info("IMAGEN Borrada");
-                    //Log::info($obsDEL);
-                };
-            };
-
-        }
-        ////////////////////////////////////////////////////
-
-
-        $objLink = (New SocialNetwork()) -> storeLink( $request , $id  );
+                $message = 'There was a problem saving, try again later.';
+            }
+            Log::info($e);
+            $objItem = [];
+            $status=400;
+        }//*/
 
         return response()->json([
             'tour' => $objItem,
-            'message' => $message
+            'message' => $message,
+            'status' => $status
         ]);
     }
 
@@ -184,7 +205,11 @@ class ToursController extends Controller
     {
         $status = 200;$mess = '';
         if($id){
-            $obj = Tours::findOrFail($id);
+            $obj = Tours::select("tours.name", "tours.idCity", "tours.photo", "tours.travelAgency", "tours.description", "tours.name")
+                        ->join('cities', "cities.id", "tours.idCity")
+                        ->where("tours.id", $id)
+                        ->first();
+            //$obj = Tours::findOrFail($id);
             $objsocialTours = (New SocialNetwork())->list(9, $id);
             $objgallery = (New Images())->list(9, $id);
         }else{
@@ -206,6 +231,31 @@ class ToursController extends Controller
             'message' => $mess
         ]);
 
+    }
+
+    public function delete($id){
+        //Log::info(" Delete ::");
+        $status = 200;$message = 'The Recipe was successfully deleted';
+
+        //Log::info($obj);
+
+        if( $id ){
+            $objRecipe = Tours::find($id);
+            if($objRecipe != NULL){
+                $objRecipe->delete();
+                //DELETE gallery
+                $obsDEL = Images::where('idOwner', $id)->where('idSection', '9')->delete();
+                //SocialNetwork
+                $obsDEL = SocialNetwork::where('idOwner', $id)->where('idSection', '9')->delete();
+            };
+        }else{
+            $status = 400;$message = 'The Tour was not found';
+        };
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ]);
     }
 
     public function show(Request $request)

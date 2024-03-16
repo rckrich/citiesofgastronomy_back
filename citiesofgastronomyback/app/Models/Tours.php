@@ -10,6 +10,12 @@ class Tours extends Model
     use HasFactory;
     protected $table = "tours";
 
+
+    function socialNetwork()
+    {
+        return $this->hasMany(SocialNetwork::class, 'idOwner', 'id')->where('idSection', '9' );
+    }
+
     public function list($search, $page, $cant, $type = 'admin')
     {
         $result = [];

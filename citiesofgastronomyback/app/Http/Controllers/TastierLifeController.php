@@ -119,8 +119,7 @@ class TastierLifeController extends Controller
 
         $obj = [];$objgallery = [];
         try{
-                $obj = Recipes::where('id', $id)->first();
-
+                $obj = (New Recipes())->findResipe($id);
                 $objgallery = (New Images())->list(8, $id);
         }catch(\Exception $e){};
 
