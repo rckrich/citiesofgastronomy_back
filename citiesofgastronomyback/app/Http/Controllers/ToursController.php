@@ -201,14 +201,25 @@ class ToursController extends Controller
         ]);
     }
 
-    public function find($id)
+    public function find($id, $type="Admin")
     {
         $status = 200;$mess = '';
         if($id){
-            $obj = Tours::select("tours.name", "tours.idCity", "tours.photo", "tours.travelAgency", "tours.description", "tours.name")
+            if($type=="Admin"){
+                $obj = Tours::select("tours.id", "tours.name", "tours.photo", "tours.travelAgency", "tours.description",
+                            "tours.idCity")
                         ->join('cities', "cities.id", "tours.idCity")
                         ->where("tours.id", $id)
                         ->first();
+            }else{
+
+                $obj = Tours::select("tours.id", "tours.name", "tours.photo", "tours.travelAgency", "tours.description",
+                            "cities.name AS cityName")
+                        ->join('cities', "cities.id", "tours.idCity")
+                        ->where("tours.id", $id)
+                        ->with("socialNetwork")
+                        ->get();
+            };
             //$obj = Tours::findOrFail($id);
             $objsocialTours = (New SocialNetwork())->list(9, $id);
             $objgallery = (New Images())->list(9, $id);
@@ -221,16 +232,41 @@ class ToursController extends Controller
         $objsocial = (New SocialNetworkType())->list();
         $objCities =(New Cities())->searchList('', 1, 999999999999999999);
 
-        return response()->json([
-            'tour' => $obj,
-            'toursSocialNetwork' => $objsocialTours,
-            'gallery' => $objgallery,
-            'cities' => $objCities,
-            'socialType' => $objsocial,
-            'status' => $status,
-            'message' => $mess
-        ]);
+        $objBanners = (New Banners())->list(9, 0);
 
+        $infoArray = (New Info())->type();
+        for($i=0; $i < count($infoArray); $i++){
+            $infoValue='';
+            $objInfoCoordinator = (New Info())->list($infoArray[$i]["key"]);
+            if($objInfoCoordinator){ $infoValue = $objInfoCoordinator["description"]; };
+            $infoArray[$i]["value"] = $infoValue;
+        }
+
+        if($type=="Admin"){
+            return response()->json([
+                'tour' => $obj,
+                'toursSocialNetwork' => $objsocialTours,
+                'socialType' => $objsocial,
+                'gallery' => $objgallery,
+                'cities' => $objCities,
+                'status' => $status,
+                'message' => $mess
+            ]);
+        }else{
+            return response()->json([
+                'tour' => $obj,
+                'gallery' => $objgallery,
+                'info' => $infoArray,
+                'status' => $status,
+                'message' => $mess
+            ]);
+        }
+
+    }
+
+    public function show($id)
+    {
+        return $this->find($id, "user");
     }
 
     public function delete($id){
@@ -256,10 +292,6 @@ class ToursController extends Controller
             'status' => $status,
             'message' => $message
         ]);
-    }
-
-    public function show(Request $request)
-    {
     }
 
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SocialNetwork;
 
 class Tours extends Model
 {
@@ -13,7 +14,7 @@ class Tours extends Model
 
     function socialNetwork()
     {
-        return $this->hasMany(SocialNetwork::class, 'idOwner', 'id')->where('idSection', '9' );
+        return $this->hasMany(SocialNetwork::class, "idOwner", "id")->where("idSection", '9' );
     }
 
     public function list($search, $page, $cant, $type = 'admin')
@@ -31,12 +32,28 @@ class Tours extends Model
                             -> limit($cant)
                             -> offset($offset)
                             -> get()-> toArray();
-                };
+                }else{
+                    $result =  $this    -> select("tours.id", "tours.name", "tours.travelAgency", "tours.photo",
+                                                    "tours.description","cities.name AS cityName" )
+                                //-> where( "active", '=', '1' )
+                                -> where( "tours.name",  "LIKE", "%$search%" )
+                                -> join('cities', "cities.id", "tours.idCity")
+                                -> orderBy("tours.id", 'DESC' )
+                                -> limit($cant)
+                                -> offset($offset)
+                                -> get()-> toArray();
+                    };
         } catch ( \Exception $e ) {
             Log::info($e);
             $result = [];
         };
         return $result;
     }
+
+
+
+
+
+
 
 }
