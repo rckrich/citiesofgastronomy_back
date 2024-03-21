@@ -42,4 +42,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function list($search, $page, $cant){
+
+        $result = [];
+        $offset = ($page-1) * $cant;
+
+        $result =  $this    -> select("id", "name", "email" )
+                                -> where( "name",  "LIKE", "%$search%" )
+                                -> orderBy("name", 'ASC' )
+                                -> limit($cant)
+                                -> offset($offset)
+                                -> get()-> toArray();
+
+
+        return $result;
+
+    }
 }

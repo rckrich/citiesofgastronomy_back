@@ -7,6 +7,7 @@ use App\Models\Cities;
 use App\Models\Images;
 use App\Models\Links;
 use App\Models\Files;
+use App\Models\Tours;
 use App\Models\Banners;
 use App\Models\continent;
 use Illuminate\Support\Facades\Log;
@@ -189,15 +190,16 @@ class CitiesContoller extends Controller
         try{
 
             $obj = (New Initiatives())->findInitiative($id, 'Cities');
+            $obj2 = Tours::select("tours.id", "tours.idCity")->where("tours.idCity", $id)->get();
 
             $objCity = Cities::find($id);
             $objCity->active = 0;
             $objCity->updated_at = date("Y-m-d H:i:s");
-            if($obj == NULL){
+            if($obj == NULL && $obj2 == NULL){
                 $objCity -> save();
             }else{
                 $status = 400;
-                $mess="This city cannot be deleted because it is being used by another element (such as an initiative, tour, chef, etc.). Please reassign the city and try again";
+                $mess="This city cannot be deleted because it is being used by another element (such as an initiative, tour or recipe). Please reassign the city and try again.";
             };
         } catch ( \Exception $e ) {
             Log::info($e);

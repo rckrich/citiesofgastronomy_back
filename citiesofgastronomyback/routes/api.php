@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ChefController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -127,6 +128,9 @@ Route::post('tours/delete/{id}', [ToursController::class, 'delete']);
 Route::get('tours/show/{id}', [ToursController::class, 'show']);
 
 Route::post('generalSearch', [Controller::class, 'generalSearch']);
+
+
+Route::post('user', [UserController::class, 'list']);
 /*
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
