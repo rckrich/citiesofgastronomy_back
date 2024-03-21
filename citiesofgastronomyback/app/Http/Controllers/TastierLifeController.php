@@ -119,7 +119,7 @@ class TastierLifeController extends Controller
 
         $obj = [];$objgallery = [];
         try{
-                $obj = (New Recipes())->findResipe($id);
+                $obj = (New Recipes())->findResipe($id, 'admin');
                 $objgallery = (New Images())->list(8, $id);
         }catch(\Exception $e){};
 
@@ -140,7 +140,7 @@ class TastierLifeController extends Controller
 
         $obj = [];$objgallery = [];
         try{
-            $obj = (New Recipes() )->findResipe($id);
+            $obj = (New Recipes() )->findResipe($id, 'user');
 
                 $objgallery = (New Images())->list(8, $id);
         }catch(\Exception $e){};
