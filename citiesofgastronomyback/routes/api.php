@@ -131,6 +131,8 @@ Route::post('generalSearch', [Controller::class, 'generalSearch']);
 
 
 Route::post('user', [UserController::class, 'list']);
+Route::post('user/create', [UserController::class, 'store']);
+Route::post('resetPassword', [UserController::class, 'resetPassword']);
 /*
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

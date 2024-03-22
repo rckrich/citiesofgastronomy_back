@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -50,6 +52,7 @@ class User extends Authenticatable
 
         $result =  $this    -> select("id", "name", "email" )
                                 -> where( "name",  "LIKE", "%$search%" )
+                                -> orWhere( "email",  "LIKE", "%$search%" )
                                 -> orderBy("name", 'ASC' )
                                 -> limit($cant)
                                 -> offset($offset)
@@ -59,4 +62,47 @@ class User extends Authenticatable
         return $result;
 
     }
+
+
+    public function userSave(Request $request){
+        $status = 200;$mensaje="The administrator was successfully created";
+
+            $objItem=[];
+
+            try{
+                if(  !$request->input("id")  ){
+
+                    Log::info("::CREA User");
+                    $objItem = new User;
+                    $objItem->created_at = date("Y-m-d H:i:s");
+                    $objItem->password = '111';
+                    //$objItem->active = '1';
+                }else{
+                    Log::info("::MODIFICA User");
+                    $objItem = User::findOrFail( $request->input("id")  );
+                };
+                $objItem->name = $request->input("name");
+                $objItem->email = $request->input("email");
+                $objItem->updated_at = date("Y-m-d H:i:s");
+                $objItem -> save();
+
+            } catch ( \Exception $e ) {
+                Log::info($e);
+                $status = 400;$mensaje="Error";
+            };
+
+
+            return $objItem;
+      }
+
+
+      public function mailFind($mail){
+            return $this
+                ->select("id", "name", "email")
+                -> orderBy("name", 'ASC')
+                //-> where("active", '1')
+                -> where( "email", 'LIKE', "%{$mail}%")
+                -> get()
+                -> toArray();
+      }
 }
