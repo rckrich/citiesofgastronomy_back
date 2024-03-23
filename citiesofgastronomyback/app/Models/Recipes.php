@@ -18,6 +18,25 @@ class Recipes extends Model
     {
         $offset = ($page-1) * $cant;
 
+        $w = array(
+			array( "recipes.active", '=', '1' )
+		);
+
+        if($chef){
+            $arrchef = array("recipes.idChef", '=', $chef);
+            array_push($w , $arrchef);
+        };
+
+        if($city){
+            $arrcity = array("recipes.idCity", '=', $city);
+            array_push($w , $arrcity);
+        };
+
+        if($category){
+            $arrcategory = array("recipes.idCategory", '=', $category);
+            array_push($w , $arrcategory);
+        };
+
         $obj = $this  -> select("recipes.id", "recipes.name", "recipes.photo", "recipes.idChef", "recipes.idCategory", "recipes.idCity",
                                 "chef.name AS chefName", "categories.name AS categoryName", "cities.name AS cityName",
                                 "recipes.vote AS votes")
@@ -32,10 +51,10 @@ class Recipes extends Model
                                 -> orWhere( "categories.name", 'LIKE', "%{$search}%")
                                 -> orWhere( "cities.name", 'LIKE', "%{$search}%");
                         })
-
-                      -> where( "recipes.idChef", 'LIKE', "%{$chef}%")
-                      -> where( "recipes.idCity", 'LIKE', "%{$city}%")
-                      -> where( "recipes.idCategory", 'LIKE', "%{$category}%")
+                      ->where( $w )
+                      //-> where( "recipes.idChef", $chef)
+                      //-> where( "recipes.idCity", $city)
+                      //-> where( "recipes.idCategory", $category)
 
                       -> orderBy("recipes.id", 'DESC')
                       -> limit($cant)
