@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\mailUserCreate;
 use App\Models\User;
+use App\Models\UserResetPassword;
+use App\Models\PasswordResetTokens;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -48,9 +53,18 @@ class UserController extends Controller
 
             $status = 400; $obj = []; $message = 'This email is already registered';
         }else{
+            //UserResetPassword PasswordResetTokens
+            $obj = (New User())->userSave($request);
+            //$obj = User::where( 'id', 11 );
 
-        $obj = (New User())->userSave($request);
+            $token = Hash::make($request->password);
+            $objToken = (New UserResetPassword())->tokenized($obj, $token);
+
+
+            $expirationMail = 'Expiration date';
+            Mail::to( $obj->email )->send( (new mailUserCreate($obj->name, $obj->email, $token, $expirationMail)) );
         };
+
 
         return response()->json([
             'User' => $obj,
@@ -58,13 +72,79 @@ class UserController extends Controller
             'status' => $status
         ]);
     }
+
     public function resetPassword(Request $request){
         //$obj = new Cities;
+        $message = 'The password was successfully established';  $status = 200;
 
-        $obj = User::where( 'remember_token', $request->token  );
-        $obj->password = Hash::make($request->password);
-        $obj->updated_at = date("Y-m-d H:i:s");
-        $obj -> save();
+        $token = $request->token;
+        $password = $request->password;
+        $passwordConfirmation = $request->passwordConfirmation;
+
+        $req = 0;$reqmss ='';$art = ' is ';
+        if(!$token){ $req = $req + 1;      $reqmss = 'Token';      $status = 400;        };
+        if(!$password){ $req = $req + 1;            $status = 400;
+            if($req>0){$reqmss = $reqmss.', ';};
+            $reqmss = $reqmss.'Password';
+        };
+        if(!$passwordConfirmation){ $req = $req + 1;            $status = 400;
+            if($req>0){$reqmss = $reqmss.', ';};
+            $reqmss = $reqmss.'Password Confirmation';
+         };
+         if($req>1){$art  = ' are ';};
+         if($req>0){
+            $message = $reqmss.$art.' required. ';
+            $status = 400;
+         };
+         if($req < 3 && $password){
+            //contar la cantidad de digitos en pass
+            if(strlen($password) < 8){
+                $message = $message.'Password must have 8 or more digits. ';
+                $status = 400;
+            };
+            if($password != $passwordConfirmation){
+                $message = $message.'Password doesn’t match';
+                $status = 400;
+            };
+         };
+
+
+        $objToken = (New UserResetPassword())->findUser($token);
+        if($objToken && $status == 200){
+            $obj = (New User())->saveUserPassword($objToken->idUser, $password);
+            /*$obj = User::where( 'id', $objToken->idUser );
+            $obj->password = Hash::make($request->password);
+            $obj->updated_at = date("Y-m-d H:i:s");
+            $obj -> save();//*/
+        };
+
+        //*/
+
+        return response()->json([
+            'message' => $message,
+            'status' => $status
+        ]);
     }
+
+    public function delete($id){
+
+        $status = 200;  $message = 'The administrator was successfully deleted';
+
+        $totalUsers =(New User())->list('', 1, 99999999999999);
+        $total = count($totalUsers);
+        if($total > 1){
+            $obj = User::findOrFail($id);
+            $obj -> delete();
+        }else{
+            $status = 400;  $message = 'The user cannot be deleted because is the only user on the system';
+        };
+
+        return response()->json([
+            'message' => $message,
+            'status' => $status
+        ]);
+    }
+
+
 
 }

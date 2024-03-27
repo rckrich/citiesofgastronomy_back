@@ -16,3 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/userCreate', function () {
+    $inputs=[];
+    $inputs["name"]='name';
+    $inputs["email"]='email';
+    $inputs["token"]='token';
+    $inputs["expirationMail"]='expirationMail';
+    return view('userCreate', $inputs);
+});

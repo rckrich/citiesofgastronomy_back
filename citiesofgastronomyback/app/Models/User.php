@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
@@ -104,5 +106,17 @@ class User extends Authenticatable
                 -> where( "email", 'LIKE', "%{$mail}%")
                 -> get()
                 -> toArray();
+      }
+
+
+      public function saveUserPassword($idUser, $password){
+            $objItem = User::findOrFail( $idUser  );
+            $objItem->password = Hash::make($password);
+            $objItem->updated_at = date("Y-m-d H:i:s");
+            $objItem -> save();
+            Log::info("---->".$idUser);
+            Log::info("----#".$password);
+
+            return $objItem;
       }
 }

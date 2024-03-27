@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CitiesContoller;
 use App\Http\Controllers\HomeController;
@@ -131,8 +133,30 @@ Route::post('generalSearch', [Controller::class, 'generalSearch']);
 
 
 Route::post('user', [UserController::class, 'list']);
+Route::post('user/delete/{id}', [UserController::class, 'delete']);
 Route::post('user/create', [UserController::class, 'store']);
-Route::post('resetPassword', [UserController::class, 'resetPassword']);
+Route::post('user/resetPassword', [UserController::class, 'resetPassword']);
+
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    Log::info("#---->1");
+    Log::info($status);
+    Log::info(Password::RESET_LINK_SENT
+    ? back()->with(['status' => __($status)])
+    : back()->withErrors(['email' => __($status)]));
+    /*
+    return $status === Password::RESET_LINK_SENT
+                ? back()->with(['status' => __($status)])
+                : back()->withErrors(['email' => __($status)]);
+                //*/
+})->middleware('guest');
+
+
 /*
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

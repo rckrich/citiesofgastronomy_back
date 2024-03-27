@@ -18,6 +18,10 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+
+
+    'mailFrom' => env('MAIL_FROM_ADDRESS', 'Laravel'),
+    'frontUrl' => env('FRONT_URL', 'Laravel'),
     /*
     |--------------------------------------------------------------------------
     | Application Environment
