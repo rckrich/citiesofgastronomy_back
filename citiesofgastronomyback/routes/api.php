@@ -135,6 +135,7 @@ Route::post('generalSearch', [Controller::class, 'generalSearch']);
 Route::post('user', [UserController::class, 'list']);
 Route::post('user/delete/{id}', [UserController::class, 'delete']);
 Route::post('user/create', [UserController::class, 'store']);
+Route::get('user/find/{id}', [UserController::class, 'find']);
 Route::post('user/resetPassword', [UserController::class, 'resetPassword']);
 
 Route::post('/forgot-password', function (Request $request) {

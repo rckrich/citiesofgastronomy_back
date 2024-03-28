@@ -146,5 +146,20 @@ class UserController extends Controller
     }
 
 
+    public function find($id){
+
+        $status = 200;  $message = '';
+            $obj = User::select("id", "name", "email")->where('id', $id)->first();
+        if($obj){
+        }else{
+            $status = 400;  $message = 'The user cannot be find';
+        };
+
+        return response()->json([
+            'message' => $message,
+            'status' => $status,
+            'user' => $obj
+        ]);
+    }
 
 }
