@@ -16,6 +16,7 @@ use App\Models\SocialNetworkType;
 class ContactsController extends Controller
 {
 
+
     public function index(Request $request)
     {
         $cantItems = 20;
@@ -39,6 +40,7 @@ class ContactsController extends Controller
 
 
         //SOLO LAS CIUDADES QUE AL MENOS TENGAN UN CONTACTO
+        $socialType = (New Contacts())->socialType();
             $objContacts = Cities::withWhereHas('contacts', function ($query) {
                 $query->where('active', '1');
             })
@@ -142,7 +144,10 @@ class ContactsController extends Controller
                 $objsocialContact = [];
         };
         $objContinent = (New continent())->list();
-        $objsocial = (New SocialNetworkType())->list();
+
+        $socialType = (New Contacts())->socialType();
+        $objsocial = SocialNetworkType::whereIn('id', $socialType)->get();
+        //$objsocial = (New SocialNetworkType())->list();
         $objCities =(New Cities())->searchList('', 1, 999999999999999999);
 
         return response()->json([
@@ -180,7 +185,10 @@ class ContactsController extends Controller
 
 
         $objContinent = (New continent())->list();
-        $objsocial = (New SocialNetworkType())->list();
+
+        $socialType = (New Contacts())->socialType();
+        $objsocial = SocialNetworkType::whereIn('id', $socialType)->get();
+        //$objsocial = (New SocialNetworkType())->list();
         $objCities =(New Cities())->searchList('', 1, 999999999999999999);
 
         return response()->json([
