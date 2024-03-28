@@ -11,10 +11,18 @@ class Tours extends Model
     use HasFactory;
     protected $table = "tours";
 
+    public $socialTypeArr = [1,3,4,5,6];
+
+    function socialType(){
+        return $this->socialTypeArr;
+    }
 
     function socialNetwork()
     {
-        return $this->hasMany(SocialNetwork::class, "idOwner", "id")->where("idSection", '9' );
+        return $this->hasMany(SocialNetwork::class, "idOwner", "id")
+        ->where("idSection", '9' )
+        ->whereIn('idSocialNetworkType', $this->socialTypeArr);
+        ;
     }
 
     public function list($search, $page, $cant, $type = 'admin')

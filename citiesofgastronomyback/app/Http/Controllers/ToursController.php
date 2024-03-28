@@ -83,7 +83,9 @@ class ToursController extends Controller
 
     public function create(Request $request)
     {
-        $objsocial = (New SocialNetworkType())->list();
+        $socialType = (New Tours())->socialType();
+        $objsocial = SocialNetworkType::whereIn('id', $socialType)->get();
+        //$objsocial = (New SocialNetworkType())->list();
         $objCities =(New Cities())->searchList('', 1, 999999999999999999);
 
         return response()->json([
@@ -182,7 +184,7 @@ class ToursController extends Controller
             ////////////////////////////////////////////////////
 
 
-            $objLink = (New SocialNetwork()) -> storeLink( $request , $id  );
+            $objLink = (New SocialNetwork()) -> storeLink( $request , $id, 2  );
         } catch ( \Exception $e ) {
             if(!$request->file("photo") && !$request->input("id")){
                 $message = 'Tour photo is required';
@@ -229,7 +231,9 @@ class ToursController extends Controller
                 $status = 200;$mess = 'The tour was not found';
         };
 
-        $objsocial = (New SocialNetworkType())->list();
+        $socialType = (New Tours())->socialType();
+        $objsocial = SocialNetworkType::whereIn('id', $socialType)->get();
+        //$objsocial = (New SocialNetworkType())->list();
         $objCities =(New Cities())->searchList('', 1, 999999999999999999);
 
         $objBanners = (New Banners())->list(9, 0);
