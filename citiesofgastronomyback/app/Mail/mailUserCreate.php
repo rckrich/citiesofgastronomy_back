@@ -15,23 +15,16 @@ class mailUserCreate extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $userName;
-    public $email;
-    public $token;
-    public $token2;
-    public $expirationMail;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($name, $email, $token, $expirationMail)
+    public function __construct(
+        public $name,
+        public $email,
+        public $token,
+        public $expirationMail)
     {
-        $this->userName = $name;
-        $this->$email = $email;
-        $this->$token = $token;
-        $token2 = $token;
-        $this->$token2 = $token;
-        $this->$expirationMail = $expirationMail;
         Log::info($token);
         Log::info($this->token);
     }

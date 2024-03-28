@@ -47,8 +47,6 @@
                 <div>
                     <a href="<?php echo config('app.frontUrl')?>/create_password?token=<?php echo  $token?>">
                             <?php echo config('app.frontUrl')?>/create_password?token=<?php echo  $token?>
-                            <p>
-                                <?= $token2?>
                     </a>
                 </div>
         </div>
