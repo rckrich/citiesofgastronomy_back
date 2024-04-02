@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\mailUserCreate;
+use App\Mail\mailResetUserPassword;
 use App\Models\User;
 use App\Models\UserResetPassword;
 use App\Models\PasswordResetTokens;
@@ -57,7 +58,7 @@ class UserController extends Controller
             $obj = (New User())->userSave($request);
             //$obj = User::where( 'id', 11 );
 
-            $token = Hash::make($request->password);
+            $token = Hash::make($request->email);
             $objToken = (New UserResetPassword())->tokenized($obj, $token);
 
 
@@ -111,11 +112,15 @@ class UserController extends Controller
 
         $objToken = (New UserResetPassword())->findUser($token);
         if($objToken && $status == 200){
+            //$obj = User::where( 'id', $objToken->idUser );
+            $objToken->active = 0;
+            $objToken->updated_at = date("Y-m-d H:i:s");
+            $objToken -> save();
+
             $obj = (New User())->saveUserPassword($objToken->idUser, $password);
-            /*$obj = User::where( 'id', $objToken->idUser );
-            $obj->password = Hash::make($request->password);
-            $obj->updated_at = date("Y-m-d H:i:s");
-            $obj -> save();//*/
+        }else{
+            $message = 'This token has already been used';
+            $status = 400;
         };
 
         //*/
@@ -159,6 +164,28 @@ class UserController extends Controller
             'message' => $message,
             'status' => $status,
             'user' => $obj
+        ]);
+    }
+
+
+    public function forgotPassword(Request $request){
+        $status = 200;$message = 'An email has been sent to reset your password';
+        //$obj = (New User())->mailFind($request->email);
+
+        $obj = User::select("id", "name", "email")->where('email', $request->email)->first();
+
+        if( $obj ){
+            $token = Hash::make($request->email);
+            $objToken = (New UserResetPassword())->tokenized($obj, $token);
+
+            $expirationMail = 'Expiration date';
+            Mail::to( $obj->email )->send( (new mailResetUserPassword($obj->name, $obj->email, $token, $expirationMail)) );
+        }else{
+            $status = 200;$message = 'The user was not found, check the email entered';
+        };
+        return response()->json([
+            'message' => $message,
+            'status' => $status
         ]);
     }
 

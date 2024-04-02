@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Mail\Mailables\Address;
 
-class mailUserCreate extends Mailable
+class mailResetUserPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -24,7 +24,7 @@ class mailUserCreate extends Mailable
         public $email,
         public $token,
         public $expirationMail,
-        public $modeType = 1)
+        public $modeType = 2)
     {
         Log::info($token);
         Log::info($this->token);
@@ -37,14 +37,12 @@ class mailUserCreate extends Mailable
     {
         return new Envelope(
             from: new Address(config('app.mailFrom'), 'Cities of Gastronomy'),
-            subject: 'Administrator Create',
+            subject: 'Mail Reset User Password',
         );
     }
 
     /**
      * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
      */
     public function content(): Content
     {

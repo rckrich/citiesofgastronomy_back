@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class UserResetPassword extends Model
 {
@@ -18,6 +19,7 @@ class UserResetPassword extends Model
 
         if(!$objItem){
         };//*/
+        Log::info($user);
         $fecha_actual = date("Y-m-d H:i:s");
 
         $objItem = new UserResetPassword;
@@ -35,7 +37,7 @@ class UserResetPassword extends Model
     }
 
     public function findUser($token){
-        $user = $this   -> where( "token", '=', $token ) -> first();
+        $user = $this   -> where( "token", '=', $token ) ->where('active', '1') -> first();
 
         return $user;
     }

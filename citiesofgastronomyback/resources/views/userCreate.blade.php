@@ -12,7 +12,18 @@
 </head>
 <?php
 //$name $email $token $expirationMail
-
+if($modeType == 2){
+    $txt1 = ' You have received this message because you requested a password reset for your account<br>
+                If you have not requested the reset, please skip this message.';
+    $txt2 = 'Reset Password';
+    $txt3= 'If you are having problems clicking the “Reset Password” button copy and paste the URL below into your web browser.';
+    $url = 'reset_password';
+}else{
+    $txt1 = 'You have received this message to generate a password for your account.';
+    $txt2 = 'Generate a password';
+    $txt3= 'If you are having problems clicking the “Reset Password” button copy and paste the URL below into your web browser.';
+    $url = 'create_password';
+};
 ?>
 <body style="color:#222;
                 font-family:arial, 'helvetica neue', helvetica, sans-serif;">
@@ -28,7 +39,7 @@
                 border-radius: 2px;
                 box-shadow: 0 0 18px #DDD;
                 font-size: 1.5vw;" >
-            <div>You have received this message to generate a password for your account.</div>
+            <div><?php echo $txt1?></div>
             <div style="text-align: center;">
                 <a style="border: 0;
                 color: #FFF;
@@ -37,16 +48,18 @@
                 border-radius: 3px;
                 margin: 17px 0 40px 0px;
                 display: inline-block;
-                font-size: 1.55vw;" href="<?php echo config('app.frontUrl')?>/create_password?token=<?php echo  $token?>">Generate a password</a>
+                font-size: 1.55vw;" href="<?php echo config('app.frontUrl')?>/create_password?token=<?php echo  $token?>">
+                <?php echo $txt2?></a>
             </div>
             <div style="border-top: solid 1px #DDD;
                 padding-top: 40px;
                 color: #999;
                 font-size: 1.45vw;">
-                If you are having problems clicking the “Reset Password” button copy and paste the URL below into your web browser.</div>
+                <?php echo $txt3?>
+                </div>
                 <div>
-                    <a href="<?php echo config('app.frontUrl')?>/create_password?token=<?php echo  $token?>">
-                            <?php echo config('app.frontUrl')?>/create_password?token=<?php echo  $token?>
+                    <a href="<?php echo config('app.frontUrl').'/'.$url?>?token=<?php echo  $token?>">
+                            <?php echo config('app.frontUrl').'/'.$url?>?token=<?php echo  $token?>
                     </a>
                 </div>
         </div>

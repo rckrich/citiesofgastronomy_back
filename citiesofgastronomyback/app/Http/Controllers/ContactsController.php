@@ -139,6 +139,8 @@ class ContactsController extends Controller
         if($id){
                 $obj = Contacts::findOrFail($id);
                 $objsocialContact = (New SocialNetwork())->list(11, $id);;
+                Log::info("-->redes");
+                Log::info($objsocialContact);
         }else{
                 $obj = [];
                 $objsocialContact = [];

@@ -134,9 +134,21 @@ Route::post('generalSearch', [Controller::class, 'generalSearch']);
 
 Route::post('user', [UserController::class, 'list']);
 Route::post('user/delete/{id}', [UserController::class, 'delete']);
-Route::post('user/create', [UserController::class, 'store']);
+Route::post('user/store', [UserController::class, 'store']);
 Route::get('user/find/{id}', [UserController::class, 'find']);
+Route::post('user/forgotPassword', [UserController::class, 'forgotPassword']);
 Route::post('user/resetPassword', [UserController::class, 'resetPassword']);
+
+/*
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->middleware('guest')->name('password.request');
+
+Route::post('/tokens/create', function (Request $request) {
+    $token = $request->user()->createToken($request->token_name);
+
+    return ['token' => $token->plainTextToken];
+});
 
 Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
@@ -145,20 +157,16 @@ Route::post('/forgot-password', function (Request $request) {
         $request->only('email')
     );
 
-    Log::info("#---->1");
-    Log::info($status);
-    Log::info(Password::RESET_LINK_SENT
-    ? back()->with(['status' => __($status)])
-    : back()->withErrors(['email' => __($status)]));
-    /*
     return $status === Password::RESET_LINK_SENT
                 ? back()->with(['status' => __($status)])
                 : back()->withErrors(['email' => __($status)]);
-                //*/
-})->middleware('guest');
+})->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}', function (string $token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
 
 
-/*
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
