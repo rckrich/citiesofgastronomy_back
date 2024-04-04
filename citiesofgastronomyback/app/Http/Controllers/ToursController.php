@@ -51,24 +51,29 @@ class ToursController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
+
+        $objCities =(New Cities())->searchList('', 1, 999999999999999999);
+
         if($type == 'admin'){
             return response()->json([
+                'message' => $message,
+                'status' => $status,
                 'tours' => $objTours,
                 'tot' => $total,
                 'paginator' => $paginator,
-                'message' => $message,
-                'status' => $status
+                'cities' => $objCities
             ]);
         }else{
             return response()->json([
+                'message' => $message,
+                'status' => $status,
                 'tours' => $objTours,
                 'tot' => $total,
                 'paginator' => $paginator,
                 'banner' => $objBanners,
                 'SocialNetworkType' => $SocialNetworkType,
                 'info' => $infoArray,
-                'message' => $message,
-                'status' => $status
+                'cities' => $objCities
             ]);
         };
     }
