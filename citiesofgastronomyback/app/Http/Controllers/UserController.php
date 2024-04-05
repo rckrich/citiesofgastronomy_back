@@ -189,4 +189,34 @@ class UserController extends Controller
         ]);
     }
 
+
+    public function login(Request $request){
+        $message="Welcome to the UNESCO Cities of Gastronomy";$status = 200;
+        $email = $request->email;
+        $pass = $request->password;
+
+        $validator = $this->validateLogin($request);
+
+        if ($validator->fails()) {
+            //login fails: do anything
+
+        } else {
+            // login success: do something
+
+        }
+
+        $obj = User::select("id", "name", "email")->where('id', $id)->first();
+        if($obj){
+        }else{
+            $status = 400;  $message = 'The user cannot be find';
+        };
+        $token = Hash::make($request->email);
+
+        return response()->json([
+            'message' => $message,
+            'status' => $status,
+            'token' => $token
+        ]);
+    }
+
 }

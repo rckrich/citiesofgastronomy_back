@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,3 +24,5 @@ Route::get('/userCreate', function () {
     $inputs["expirationMail"]='expirationMail';
     return view('userCreate', $inputs);
 });
+
+Route::get('login', [LoginController::class, 'notLogin'])->name('login');

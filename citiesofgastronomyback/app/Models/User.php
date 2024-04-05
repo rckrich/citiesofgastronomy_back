@@ -114,8 +114,6 @@ class User extends Authenticatable
             $objItem->password = Hash::make($password);
             $objItem->updated_at = date("Y-m-d H:i:s");
             $objItem -> save();
-            Log::info("---->".$idUser);
-            Log::info("----#".$password);
 
             return $objItem;
       }
