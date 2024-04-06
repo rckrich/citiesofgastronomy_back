@@ -23,11 +23,12 @@ class ToursController extends Controller
         $cantItems = 20;
         $paginator = 1;
         $page = $request->page;
+        $city = $request->city;
         $objTours = [];
         $total = 0;
 
-        $objTours =(New Tours())->list($request->search, $page, $cantItems, $type);
-        $totalTours =(New Tours())->list($request->search, 1, 99999999999, $type);
+        $objTours =(New Tours())->list($request->search, $city, $page, $cantItems, $type);
+        $totalTours =(New Tours())->list($request->search, $city, 1, 99999999999, $type);
         $paginator = 1;
         $total = count($totalTours);
         if($total > $cantItems){

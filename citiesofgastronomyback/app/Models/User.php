@@ -98,14 +98,13 @@ class User extends Authenticatable
       }
 
 
-      public function mailFind($mail){
-            return $this
-                ->select("id", "name", "email")
-                -> orderBy("name", 'ASC')
-                //-> where("active", '1')
-                -> where( "email", 'LIKE', "%{$mail}%")
-                -> get()
-                -> toArray();
+      public function mailFind($mail, $id){
+        if($id == ''){
+                return $this ->select("id", "name", "email")-> orderBy("name", 'ASC')-> where( "email", 'LIKE', "%{$mail}%")-> get()-> toArray();
+        }else{
+            return $this ->select("id", "name", "email")-> orderBy("name", 'ASC')
+            -> where( "email", 'LIKE', "%{$mail}%")->where("id", "!=", $id)-> get()-> toArray();
+        };
       }
 
 
