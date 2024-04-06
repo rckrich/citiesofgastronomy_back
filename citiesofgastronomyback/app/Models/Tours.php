@@ -42,18 +42,30 @@ class Tours extends Model
                             -> offset($offset)
                             -> get()-> toArray();
                 }else{
-                    $result =  $this    -> select("tours.id", "tours.name", "tours.travelAgency", "tours.photo",
-                                                    "tours.description","cities.name AS cityName" )
+                        if($city != ''){
+                                $result =  $this    -> select("tours.id", "tours.name", "tours.travelAgency", "tours.photo",
+                                                        "tours.description","cities.name AS cityName" )
+                                    //-> where( "active", '=', '1' )
+                                    -> where( "tours.idCity", $city )
+                                    -> join('cities', "cities.id", "tours.idCity")
+                                    -> orderBy("tours.id", 'DESC' )
+                                    -> limit($cant)
+                                    -> offset($offset)
+                                    -> get()-> toArray();
+                        }else{
+
+                            $result =  $this    -> select("tours.id", "tours.name", "tours.travelAgency", "tours.photo",
+                            "tours.description","cities.name AS cityName" )
                                 //-> where( "active", '=', '1' )
-                                -> where( "tours.idCity", $city )
                                 -> join('cities', "cities.id", "tours.idCity")
                                 -> orderBy("tours.id", 'DESC' )
                                 -> limit($cant)
                                 -> offset($offset)
                                 -> get()-> toArray();
+                         };
+                            Log::info("###CITY");
+                            Log::info($city);
                     };
-                    Log::info("###CITY");
-                    Log::info($city);
         } catch ( \Exception $e ) {
             Log::info($e);
             $result = [];
