@@ -20,6 +20,9 @@ use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ChefController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoginController;
+
+use App\Http\Middleware\TokenConfirmation;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -138,6 +141,11 @@ Route::post('user/store', [UserController::class, 'store']);
 Route::get('user/find/{id}', [UserController::class, 'find']);
 Route::post('user/forgotPassword', [UserController::class, 'forgotPassword']);
 Route::post('user/resetPassword', [UserController::class, 'resetPassword']);
+Route::post('user/perfilPassword', [UserController::class, 'resetPerfilPassword'])->middleware('auth:sanctum');
+
+Route::post('routeValidate', [LoginController::class, 'routeValidate'])->middleware('auth:sanctum');
+
+Route::post('login', [LoginController::class, 'login']);
 
 /*
 Route::get('/forgot-password', function () {
