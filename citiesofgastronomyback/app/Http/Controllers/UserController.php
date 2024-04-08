@@ -11,6 +11,8 @@ use App\Models\UserResetPassword;
 use App\Models\PasswordResetTokens;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Models\LoginController;
 
 class UserController extends Controller
 {
@@ -35,7 +37,8 @@ class UserController extends Controller
                 $paginator = $paginator + 1;
             };
         };
-        if($total == 0){$message = "No results found";}
+        if($total == 0){$message = "No results found";};
+
 
         return response()->json([
                 'Users' => $obj,
@@ -143,12 +146,29 @@ class UserController extends Controller
         //$obj = new Cities;
         $message = 'The password was successfully established';  $status = 200;
 
-        $token = $request->token;
+
+        Log::info("### SESSION DATTA ##");
+        $email = $request->user()->email;
+        $userId = $request->user()->id;
+
+        Log::info($email);
+        $originalPassword = $request->originalPassword;
         $password = $request->password;
         $passwordConfirmation = $request->passwordConfirmation;
 
+        //$obj = (New LoginController())->check($email, $originalPassword);
+        $user = Auth::user();
+        if (!\Hash::check($originalPassword, $user->password)) {
+            return response()->json([
+                'message' => 'Incorrect password',
+                'status' => 400
+            ]);
+        }else{
+            Log::info("-->todo correcto");
+        };
+
         $req = 0;$reqmss ='';$art = ' is ';
-        if(!$token){ $req = $req + 1;      $reqmss = 'Token';      $status = 400;        };
+
         if(!$password){ $req = $req + 1;            $status = 400;
             if($req>0){$reqmss = $reqmss.', ';};
             $reqmss = $reqmss.'Password';
@@ -165,27 +185,18 @@ class UserController extends Controller
          if($req < 3 && $password){
             //contar la cantidad de digitos en pass
             if(strlen($password) < 8){
-                $message = $message.'Password must have 8 or more digits. ';
+                $message = 'Password must have 8 or more digits. ';
                 $status = 400;
             };
             if($password != $passwordConfirmation){
-                $message = $message.'Password doesn’t match';
+                $message = 'Password doesn’t match';
                 $status = 400;
             };
          };
 
 
-        $objToken = (New UserResetPassword())->findUser($token);
-        if($objToken && $status == 200){
-            //$obj = User::where( 'id', $objToken->idUser );
-            $objToken->active = 0;
-            $objToken->updated_at = date("Y-m-d H:i:s");
-            $objToken -> save();
-
-            $obj = (New User())->saveUserPassword($objToken->idUser, $password);
-        }else{
-            $message = 'This token has already been used';
-            $status = 400;
+         if($status == 200){
+            $obj = (New User())->saveUserPassword($userId, $password);
         };
 
         //*/
