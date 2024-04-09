@@ -48,7 +48,7 @@ if($modeType == 2){
                 border-radius: 3px;
                 margin: 17px 0 40px 0px;
                 display: inline-block;
-                font-size: 1.55vw;" href="<?php echo config('app.frontUrl')?>/create_password?token=<?php echo  $token?>">
+                font-size: 1.55vw;" href="<?php echo config('app.frontUrl').$url?>?token=<?php echo  $token?>">
                 <?php echo $txt2?></a>
             </div>
             <div style="border-top: solid 1px #DDD;
@@ -58,8 +58,8 @@ if($modeType == 2){
                 <?php echo $txt3?>
                 </div>
                 <div>
-                    <a href="<?php echo config('app.frontUrl').'/'.$url?>?token=<?php echo  $token?>">
-                            <?php echo config('app.frontUrl').'/'.$url?>?token=<?php echo  $token?>
+                    <a href="<?php echo config('app.frontUrl').$url?>?token=<?php echo  $token?>">
+                            <?php echo config('app.frontUrl').$url?>?token=<?php echo  $token?>
                     </a>
                 </div>
         </div>
