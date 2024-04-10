@@ -13,7 +13,7 @@
 <?php
 //$name $email $token $expirationMail
 
-$url = "/set_password";
+$url = "account/set_password";
 
 if($modeType == 2){
     $txt1 = ' You have received this message because you requested a password reset for your account<br>
