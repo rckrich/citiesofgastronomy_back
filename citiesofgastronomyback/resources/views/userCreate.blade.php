@@ -12,17 +12,20 @@
 </head>
 <?php
 //$name $email $token $expirationMail
+
+$url = "/set_password";
+
 if($modeType == 2){
     $txt1 = ' You have received this message because you requested a password reset for your account<br>
                 If you have not requested the reset, please skip this message.';
     $txt2 = 'Reset Password';
     $txt3= 'If you are having problems clicking the “Reset Password” button copy and paste the URL below into your web browser.';
-    $url = 'reset_password';
+    //$url = 'reset_password';
 }else{
     $txt1 = 'You have received this message to generate a password for your account.';
     $txt2 = 'Generate a password';
     $txt3= 'If you are having problems clicking the “Reset Password” button copy and paste the URL below into your web browser.';
-    $url = 'create_password';
+    //$url = 'create_password';
 };
 ?>
 <body style="color:#222;
