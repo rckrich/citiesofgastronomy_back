@@ -76,7 +76,7 @@ class SocialNetwork extends Model
             -> where( "idOwner", '=', $idOwner )
             -> where( "idSection", '=', $idSection )
             -> where( "idSocialNetworkType", '=', $SocialNetworkType[$i]["id"] )
-            -> orderBy('id', 'desc')-> first();
+            -> orderBy('id', 'asc')-> first();
 
             if($objLink){
                 $SocialNetworkType[$i]["value"] = $objLink["social_network"];
