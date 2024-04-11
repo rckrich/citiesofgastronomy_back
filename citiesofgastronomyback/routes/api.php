@@ -39,13 +39,16 @@ Route::get('home', [HomeController::class, 'home']);
 
 Route::get('cities', [CitiesContoller::class, 'list']);
 Route::post('cities', [CitiesContoller::class, 'list']);
-Route::post('citiesStore', [CitiesContoller::class, 'citiesStore']);
-Route::post('citiesUpdate', [CitiesContoller::class, 'citiesUpdate']);
+Route::get('citiesAdmin', [CitiesContoller::class, 'list'])->middleware('auth:sanctum');
+Route::post('citiesAdmin', [CitiesContoller::class, 'list'])->middleware('auth:sanctum');
+Route::post('citiesStore', [CitiesContoller::class, 'citiesStore'])->middleware('auth:sanctum');
+Route::post('citiesUpdate', [CitiesContoller::class, 'citiesUpdate'])->middleware('auth:sanctum');
 Route::get('cities/find/{id}', [CitiesContoller::class, 'find']);
-Route::post('cities/store', [CitiesContoller::class, 'store']);
-Route::post('cities/update/{id}', [CitiesContoller::class, 'update']);
-Route::post('cities/updateCompleteInfo/{id}', [CitiesContoller::class, 'updateComplete']);
-Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete']);
+Route::get('citiesAdmin/find/{id}', [CitiesContoller::class, 'find'])->middleware('auth:sanctum');
+Route::post('cities/store', [CitiesContoller::class, 'store'])->middleware('auth:sanctum');
+Route::post('cities/update/{id}', [CitiesContoller::class, 'update'])->middleware('auth:sanctum');
+Route::post('cities/updateCompleteInfo/{id}', [CitiesContoller::class, 'updateComplete'])->middleware('auth:sanctum');
+Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete'])->middleware('auth:sanctum');
 
 Route::post('newsletter', [HomeController::class, 'newsletter']);
 Route::get('newsletterAdmin', [HomeController::class, 'newsletterList']);
@@ -146,36 +149,3 @@ Route::post('user/perfilPassword', [UserController::class, 'resetPerfilPassword'
 Route::post('routeValidate', [LoginController::class, 'routeValidate'])->middleware('auth:sanctum');
 
 Route::post('login', [LoginController::class, 'login']);
-
-/*
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->middleware('guest')->name('password.request');
-
-Route::post('/tokens/create', function (Request $request) {
-    $token = $request->user()->createToken($request->token_name);
-
-    return ['token' => $token->plainTextToken];
-});
-
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
-
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
-
-    return $status === Password::RESET_LINK_SENT
-                ? back()->with(['status' => __($status)])
-                : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.email');
-
-Route::get('/reset-password/{token}', function (string $token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
-
-
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});//*/

@@ -9,6 +9,15 @@ use App\Models\User;
 
 class LoginController extends Controller
 {
+    public function check($email, $originalPassword){
+
+        if (Auth::attempt($originalPassword)) {
+            Log::info("-->CONTRASEÑA CORRECTA");
+        }else{
+            Log::info("-->CONTRASEÑA CORRECTA xxxx");
+        };
+    }
+
 
     public function login(Request $request)
     {
@@ -21,23 +30,25 @@ class LoginController extends Controller
             if (Auth::attempt($request->only('email', 'password'))) {
                 return response()->json([
                   'token' => $request->user()->createToken($txt)->plainTextToken,
-                  'message' => 'Welcome to the UNESCO Cities of Gastronomy'
+                  'message' => 'Welcome to the UNESCO Cities of Gastronomy',
+                  'status' => 200
                 ]);
               }else{
                 return response()->json([
-                    'message' => 'User or password incorrect, please try again'
-                  ], 401);
+                    'message' => 'User or password incorrect, please try again',
+                    'status' => 401
+                  ], 200);
               };
         } catch ( \Exception $e ) {
                 Log::info($e);
-                $status = 400;$mensaje="Error";
+                $status = 401;$mensaje="Error";
         };
           //*/
 
           return response()->json([
-            'message' => 'Unauthorized',
+            'message' => 'User or password incorrect, please try again',
             'status' => 401
-          ], 401);
+          ], 200);
     }
 
     public function validateLogin(Request $request)
