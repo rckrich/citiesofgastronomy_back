@@ -149,3 +149,4 @@ Route::post('user/perfilPassword', [UserController::class, 'resetPerfilPassword'
 Route::post('routeValidate', [LoginController::class, 'routeValidate'])->middleware('auth:sanctum');
 
 Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
