@@ -44,9 +44,10 @@ Route::post('citiesAdmin', [CitiesContoller::class, 'list'])->middleware('auth:s
 Route::post('citiesStore', [CitiesContoller::class, 'citiesStore'])->middleware('auth:sanctum');
 Route::post('citiesUpdate', [CitiesContoller::class, 'citiesUpdate'])->middleware('auth:sanctum');
 Route::get('cities/find/{id}', [CitiesContoller::class, 'find']);
+Route::get('cities/edit/{id}', [CitiesContoller::class, 'find'])->middleware('auth:sanctum');
 Route::get('citiesAdmin/find/{id}', [CitiesContoller::class, 'find'])->middleware('auth:sanctum');
 Route::post('cities/store', [CitiesContoller::class, 'store'])->middleware('auth:sanctum');
-Route::post('cities/update/{id}', [CitiesContoller::class, 'update'])->middleware('auth:sanctum');
+Route::post('cities/update/{id}', [CitiesContoller::class, 'update']);
 Route::post('cities/updateCompleteInfo/{id}', [CitiesContoller::class, 'updateComplete'])->middleware('auth:sanctum');
 Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete'])->middleware('auth:sanctum');
 

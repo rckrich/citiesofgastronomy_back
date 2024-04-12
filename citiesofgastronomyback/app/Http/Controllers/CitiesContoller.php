@@ -257,7 +257,7 @@ class CitiesContoller extends Controller
                 $objCity -> save();
             } catch ( \Exception $e ) {
                 Log::info($e);
-                $status = 400;$mensaje="Incorrect name format";
+                $status = 400;$mensaje="Incorrect format fields";
             };
 
         return response()->json([
