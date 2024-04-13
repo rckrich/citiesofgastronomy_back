@@ -23,7 +23,8 @@ class Contacts extends Model
     {
         return $this->hasMany(SocialNetwork::class, 'idOwner', 'id')
             ->where('idSection', '11' )
-            ->whereIn('idSocialNetworkType', $this->socialTypeArr);
+            ->whereIn('idSocialNetworkType', $this->socialTypeArr)
+            ->orderBy('idSocialNetworkType', 'ASC');
     }
 
 

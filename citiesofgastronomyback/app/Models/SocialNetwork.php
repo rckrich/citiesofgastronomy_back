@@ -36,7 +36,9 @@ class SocialNetwork extends Model
             $idReq = $type["codde"].'_link';
             $socialValue = $request->input($idReq);
 
-            Log::info($idSocial);
+            Log::info("------------");
+            Log::info($type["codde"]);
+            Log::info($socialValue);
 
             $objLink = $this  -> select("social_network", "id" )
             -> where( "idOwner", '=', $idOwner )
@@ -56,6 +58,8 @@ class SocialNetwork extends Model
                         $objLink->social_network = $socialValue;
                         $objLink->updated_at = date("Y-m-d H:i:s");
                         $objLink -> save();
+            }elseif($objLink){
+                $objLink -> delete();
             };
             //};
 

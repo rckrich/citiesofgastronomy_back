@@ -41,6 +41,7 @@ class ContactsController extends Controller
 
         //SOLO LAS CIUDADES QUE AL MENOS TENGAN UN CONTACTO
         $socialType = (New Contacts())->socialType();
+
             $objContacts = Cities::withWhereHas('contacts', function ($query) {
                 $query->where('active', '1');
             })
@@ -118,10 +119,10 @@ class ContactsController extends Controller
 
         Log::info("::llego a contacto");
         $obj = (New Contacts())->contactSave($request);
-        Log::info($obj);
+        //Log::info($obj);
 
         $idOwner = $obj->id;
-        Log::info($idOwner);
+        //Log::info($idOwner);
 
         $objLink = (New SocialNetwork()) -> storeLink( $request , $idOwner  );
 
