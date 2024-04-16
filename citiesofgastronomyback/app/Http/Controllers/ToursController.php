@@ -203,7 +203,6 @@ class ToursController extends Controller
         }//*/
 
         return response()->json([
-            'tour' => $objItem,
             'message' => $message,
             'status' => $status
         ]);

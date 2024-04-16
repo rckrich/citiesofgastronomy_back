@@ -128,12 +128,12 @@ Route::get('categories/find/{id}', [CategoriesController::class, 'findCategory']
 
 Route::get('tours', [ToursController::class, 'index']);
 Route::post('tours', [ToursController::class, 'index']);
-Route::get('toursAdmin', [ToursController::class, 'list']);
-Route::post('toursAdmin', [ToursController::class, 'list']);
-Route::get('tours/create', [ToursController::class, 'create']);
+Route::get('toursAdmin', [ToursController::class, 'list'])->middleware('auth:sanctum');
+Route::post('toursAdmin', [ToursController::class, 'list'])->middleware('auth:sanctum');
+Route::get('tours/create', [ToursController::class, 'create'])->middleware('auth:sanctum');
 Route::post('tours/store', [ToursController::class, 'store']);
-Route::get('tours/find/{id}', [ToursController::class, 'find']);
-Route::post('tours/delete/{id}', [ToursController::class, 'delete']);
+Route::get('tours/find/{id}', [ToursController::class, 'find'])->middleware('auth:sanctum');
+Route::post('tours/delete/{id}', [ToursController::class, 'delete'])->middleware('auth:sanctum');
 Route::get('tours/show/{id}', [ToursController::class, 'show']);
 
 Route::post('generalSearch', [Controller::class, 'generalSearch']);
