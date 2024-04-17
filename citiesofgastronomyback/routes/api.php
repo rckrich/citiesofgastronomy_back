@@ -94,18 +94,19 @@ Route::get('initiatives', [InitiativesController::class, 'index']);
 Route::post('initiatives', [InitiativesController::class, 'index']);
 Route::get('initiativesAdmin', [InitiativesController::class, 'indexAdmin']);
 Route::post('initiativesAdmin', [InitiativesController::class, 'indexAdmin']);
-Route::get('initiatives/create', [InitiativesController::class, 'create']);
+Route::get('initiatives/create', [InitiativesController::class, 'create'])->middleware('auth:sanctum');
 Route::post('initiatives/store', [InitiativesController::class, 'store']);
+Route::get('initiatives/edit/{id}', [InitiativesController::class, 'edit'])->middleware('auth:sanctum');
 Route::get('initiatives/find/{id}', [InitiativesController::class, 'edit']);
-Route::post('initiatives/delete/{id}', [InitiativesController::class, 'destroy']);
+Route::post('initiatives/delete/{id}', [InitiativesController::class, 'destroy'])->middleware('auth:sanctum');
 Route::post('typeOfActivity/store', [InitiativesController::class, 'typeOfActivity_store']);
-Route::post('typeOfActivity/delete/{id}', [InitiativesController::class, 'typeOfActivity_delete']);
+Route::post('typeOfActivity/delete/{id}', [InitiativesController::class, 'typeOfActivity_delete'])->middleware('auth:sanctum');
 Route::post('topic/store', [InitiativesController::class, 'topic_store']);
-Route::post('topic/delete/{id}', [InitiativesController::class, 'topic_delete']);
+Route::post('topic/delete/{id}', [InitiativesController::class, 'topic_delete'])->middleware('auth:sanctum');
 Route::post('sdg/store', [InitiativesController::class, 'sdg_store']);
-Route::post('sdg/delete/{id}', [InitiativesController::class, 'sdg_delete']);
+Route::post('sdg/delete/{id}', [InitiativesController::class, 'sdg_delete'])->middleware('auth:sanctum');
 Route::post('connectionsToOther/store', [InitiativesController::class, 'connectionsToOther_store']);
-Route::post('connectionsToOther/delete/{id}', [InitiativesController::class, 'connectionsToOther_delete']);
+Route::post('connectionsToOther/delete/{id}', [InitiativesController::class, 'connectionsToOther_delete'])->middleware('auth:sanctum');
 
 
 
@@ -140,7 +141,7 @@ Route::post('generalSearch', [Controller::class, 'generalSearch']);
 
 
 Route::post('user', [UserController::class, 'list']);
-Route::post('user/delete/{id}', [UserController::class, 'delete']);
+Route::post('user/delete/{id}', [UserController::class, 'delete'])->middleware('auth:sanctum');
 Route::post('user/store', [UserController::class, 'store']);
 Route::get('user/find/{id}', [UserController::class, 'find']);
 Route::post('user/forgotPassword', [UserController::class, 'forgotPassword']);
