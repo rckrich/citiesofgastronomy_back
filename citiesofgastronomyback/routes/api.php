@@ -60,17 +60,17 @@ Route::get('about', [AboutController::class, 'list']);
 Route::get('calendar', [CalendarController::class, 'index']);
 //Route::get('calendar', [InitiativesController::class, 'calendar']);
 
-Route::get('generalDatta', [ContactsController::class, 'generalDatta']);
-
+Route::get('generalDatta', [ContactsController::class, 'generalDatta'])->middleware('auth:sanctum');
 Route::get('contacts', [ContactsController::class, 'index']);
 Route::post('adminContacts', [ContactsController::class, 'list']);
 Route::post('contact/save', [ContactsController::class, 'contactSave']);
+Route::post('contact/findAdmin', [ContactsController::class, 'contactFind'])->middleware('auth:sanctum');
 Route::post('contact/find', [ContactsController::class, 'contactFind']);
-Route::post('contact/delete/{id}', [ContactsController::class, 'delete']);
+Route::post('contact/delete/{id}', [ContactsController::class, 'delete'])->middleware('auth:sanctum');
 //testier life -->falta
 
 Route::post('banners/store', [BannersController::class, 'store']);
-Route::post('banners/delete', [BannersController::class, 'delete']);
+Route::post('banners/delete', [BannersController::class, 'delete'])->middleware('auth:sanctum');
 Route::post('banners/update', [BannersController::class, 'update']);
 
 Route::post('addPDF', [FileController::class, 'store']);
@@ -112,18 +112,21 @@ Route::post('connectionsToOther/delete/{id}', [InitiativesController::class, 'co
 
 Route::get('tastierLife', [TastierLifeController::class, 'index']);
 Route::post('tastierLife', [TastierLifeController::class, 'index']);
-Route::get('recipe/create', [TastierLifeController::class, 'create']);
+Route::get('tastierLifeAdmin', [TastierLifeController::class, 'index']);
+Route::post('tastierLifeAdmin', [TastierLifeController::class, 'index']);
+Route::get('recipe/create', [TastierLifeController::class, 'create'])->middleware('auth:sanctum');
 Route::post('recipe/store', [TastierLifeController::class, 'storeRecipe']);
 Route::get('recipe/findRecipe/{id}', [TastierLifeController::class, 'findRecipe']);
+Route::get('recipe/findRecipeAdmin/{id}', [TastierLifeController::class, 'findRecipe'])->middleware('auth:sanctum');
 Route::get('recipe/show/{id}', [TastierLifeController::class, 'showRecipe']);
-Route::post('recipe/delete/{id}', [TastierLifeController::class, 'delete']);
+Route::post('recipe/delete/{id}', [TastierLifeController::class, 'delete'])->middleware('auth:sanctum');
 Route::get('recipe/vote/{id}', [TastierLifeController::class, 'vote']);
 Route::get('chef/findChef/{id}', [ChefController::class, 'findChef']);
 Route::get('chef/create', [ChefController::class, 'create']);
 Route::post('chef/store', [ChefController::class, 'store']);
-Route::post('chef/delete/{id}', [ChefController::class, 'delete']);
+Route::post('chef/delete/{id}', [ChefController::class, 'delete'])->middleware('auth:sanctum');
 Route::post('categories/store', [CategoriesController::class, 'store']);
-Route::post('categories/delete/{id}', [CategoriesController::class, 'delete']);
+Route::post('categories/delete/{id}', [CategoriesController::class, 'delete'])->middleware('auth:sanctum');
 Route::get('categories/find/{id}', [CategoriesController::class, 'findCategory']);
 
 

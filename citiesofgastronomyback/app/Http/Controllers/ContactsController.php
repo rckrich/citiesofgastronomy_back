@@ -169,10 +169,12 @@ class ContactsController extends Controller
         Log::info("CONTACT Delete ::");
         $status = 400;$mess = 'ok';
         try{
-            $objCity = Contacts::find($id);
-            $objCity->active = 0;
-            $objCity->updated_at = date("Y-m-d H:i:s");
-            $objCity -> save();
+            $obj = Contacts::find($id);
+            //$obj->active = 0;
+            //$obj->updated_at = date("Y-m-d H:i:s");
+            //$obj -> save();
+
+            if($obj != NULL){$obj->delete(); };
         } catch ( \Exception $e ) {
             Log::info($e);
             $status = 400;$mess="Error";
