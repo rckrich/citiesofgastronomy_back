@@ -57,11 +57,11 @@ if($modeType == 2){
             <div style="border-top: solid 1px #DDD;
                 padding-top: 40px;
                 color: #999;
-                font-size: 14px">
+                font-size: 14px;">
                 <?php echo $txt3?>
                 </div>
                 <div>
-                    <a href="<?php echo config('app.frontUrl').$url?>/<?= $token?>">
+                    <a style="word-break: break-word; font-size:14px" href="<?php echo config('app.frontUrl').$url?>/<?= $token?>">
                             <?php echo config('app.frontUrl').$url?>/<?= $token?>
                     </a>
                 </div>
