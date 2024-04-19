@@ -52,9 +52,9 @@ Route::post('cities/updateCompleteInfo/{id}', [CitiesContoller::class, 'updateCo
 Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete'])->middleware('auth:sanctum');
 
 Route::post('newsletter', [HomeController::class, 'newsletter']);
-Route::get('newsletterAdmin', [HomeController::class, 'newsletterList']);
-Route::post('newsletter/DownloadVerify', [HomeController::class, 'newsletterDownloadVerify']);
-Route::get('newsletter/Download', [HomeController::class, 'newsletterDownload']);
+Route::get('newsletterAdmin', [HomeController::class, 'newsletterList'])->middleware('auth:sanctum');
+Route::post('newsletter/DownloadVerify', [HomeController::class, 'newsletterDownloadVerify'])->middleware('auth:sanctum');
+Route::get('newsletter/Download', [HomeController::class, 'newsletterDownload'])->middleware('auth:sanctum');
 
 Route::get('about', [AboutController::class, 'list']);
 Route::get('calendar', [CalendarController::class, 'index']);
@@ -62,7 +62,7 @@ Route::get('calendar', [CalendarController::class, 'index']);
 
 Route::get('generalDatta', [ContactsController::class, 'generalDatta'])->middleware('auth:sanctum');
 Route::get('contacts', [ContactsController::class, 'index']);
-Route::post('adminContacts', [ContactsController::class, 'list']);
+Route::post('adminContacts', [ContactsController::class, 'list'])->middleware('auth:sanctum');
 Route::post('contact/save', [ContactsController::class, 'contactSave']);
 Route::post('contact/findAdmin', [ContactsController::class, 'contactFind'])->middleware('auth:sanctum');
 Route::post('contact/find', [ContactsController::class, 'contactFind']);
@@ -81,19 +81,19 @@ Route::get('mainSiteContent/home', [MainSiteContentController::class, 'home']);
 Route::post('mainSiteContent/linkStore', [MainSiteContentController::class, 'linkStore']);
 Route::post('mainSiteContent/clustersave', [MainSiteContentController::class, 'clustersave']);
 
-Route::post('about/timeline/list', [AboutController::class, 'list']);
-Route::get('about/timeline/find/{id}', [AboutController::class, 'timelineFind']);
-Route::post('about/timeline/save', [AboutController::class, 'timelineSave']);
-Route::post('about/faq/list', [AboutController::class, 'listfaq']);
-Route::get('about/faq/find/{id}', [AboutController::class, 'faqFind']);
-Route::post('about/faq/save', [AboutController::class, 'faqSave']);
-Route::post('about/delete', [AboutController::class, 'aboutDel']);
+Route::post('about/timeline/list', [AboutController::class, 'list'])->middleware('auth:sanctum');
+Route::get('about/timeline/find/{id}', [AboutController::class, 'timelineFind'])->middleware('auth:sanctum');
+Route::post('about/timeline/save', [AboutController::class, 'timelineSave'])->middleware('auth:sanctum');
+Route::post('about/faq/list', [AboutController::class, 'listfaq'])->middleware('auth:sanctum');
+Route::get('about/faq/find/{id}', [AboutController::class, 'faqFind'])->middleware('auth:sanctum');
+Route::post('about/faq/save', [AboutController::class, 'faqSave'])->middleware('auth:sanctum');
+Route::post('about/delete', [AboutController::class, 'aboutDel'])->middleware('auth:sanctum');
 
 
 Route::get('initiatives', [InitiativesController::class, 'index']);
 Route::post('initiatives', [InitiativesController::class, 'index']);
-Route::get('initiativesAdmin', [InitiativesController::class, 'indexAdmin']);
-Route::post('initiativesAdmin', [InitiativesController::class, 'indexAdmin']);
+Route::get('initiativesAdmin', [InitiativesController::class, 'indexAdmin'])->middleware('auth:sanctum');
+Route::post('initiativesAdmin', [InitiativesController::class, 'indexAdmin'])->middleware('auth:sanctum');
 Route::get('initiatives/create', [InitiativesController::class, 'create'])->middleware('auth:sanctum');
 Route::post('initiatives/store', [InitiativesController::class, 'store']);
 Route::get('initiatives/edit/{id}', [InitiativesController::class, 'edit'])->middleware('auth:sanctum');
@@ -112,10 +112,10 @@ Route::post('connectionsToOther/delete/{id}', [InitiativesController::class, 'co
 
 Route::get('tastierLife', [TastierLifeController::class, 'index']);
 Route::post('tastierLife', [TastierLifeController::class, 'index']);
-Route::get('tastierLifeAdmin', [TastierLifeController::class, 'index']);
-Route::post('tastierLifeAdmin', [TastierLifeController::class, 'index']);
+Route::get('tastierLifeAdmin', [TastierLifeController::class, 'index'])->middleware('auth:sanctum');
+Route::post('tastierLifeAdmin', [TastierLifeController::class, 'index'])->middleware('auth:sanctum');
 Route::get('recipe/create', [TastierLifeController::class, 'create'])->middleware('auth:sanctum');
-Route::post('recipe/store', [TastierLifeController::class, 'storeRecipe']);
+Route::post('recipe/store', [TastierLifeController::class, 'storeRecipe'])->middleware('auth:sanctum');
 Route::get('recipe/findRecipe/{id}', [TastierLifeController::class, 'findRecipe']);
 Route::get('recipe/findRecipeAdmin/{id}', [TastierLifeController::class, 'findRecipe'])->middleware('auth:sanctum');
 Route::get('recipe/show/{id}', [TastierLifeController::class, 'showRecipe']);
@@ -123,9 +123,9 @@ Route::post('recipe/delete/{id}', [TastierLifeController::class, 'delete'])->mid
 Route::get('recipe/vote/{id}', [TastierLifeController::class, 'vote']);
 Route::get('chef/findChef/{id}', [ChefController::class, 'findChef']);
 Route::get('chef/create', [ChefController::class, 'create']);
-Route::post('chef/store', [ChefController::class, 'store']);
+Route::post('chef/store', [ChefController::class, 'store'])->middleware('auth:sanctum');
 Route::post('chef/delete/{id}', [ChefController::class, 'delete'])->middleware('auth:sanctum');
-Route::post('categories/store', [CategoriesController::class, 'store']);
+Route::post('categories/store', [CategoriesController::class, 'store'])->middleware('auth:sanctum');
 Route::post('categories/delete/{id}', [CategoriesController::class, 'delete'])->middleware('auth:sanctum');
 Route::get('categories/find/{id}', [CategoriesController::class, 'findCategory']);
 

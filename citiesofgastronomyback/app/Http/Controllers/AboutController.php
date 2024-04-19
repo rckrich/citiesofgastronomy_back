@@ -139,7 +139,8 @@ class AboutController extends Controller
        // Log::info($obj);
 
         return response()->json([
-            'timeline' => $obj
+            'timeline' => $obj,
+            'status' => '200'
         ]);
     }
 
@@ -193,7 +194,8 @@ class AboutController extends Controller
     // Log::info($obj);
 
         return response()->json([
-            'faq' => $obj
+            'faq' => $obj,
+            'status' => 200
         ]);
     }
 
