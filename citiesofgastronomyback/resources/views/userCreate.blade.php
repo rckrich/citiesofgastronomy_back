@@ -34,14 +34,14 @@ if($modeType == 2){
                 width: 90%;
                 margin: 100px auto;
                 text-align: center;
-                font-size: 15px;"   >
+                font-size: 17px;"   >
         <div style=" font-size: 30px;text-align: center;" >Cities of gastronomy</div>
         <div style="padding: 40px 35px;
                 background-color: #FFF;
                 margin-top: 26px;
                 border-radius: 2px;
                 box-shadow: 0 0 18px #DDD;
-                font-size: 15px;" >
+                font-size: 17px;" >
             <div><?php echo $txt1?></div>
             <div style="text-align: center;">
                 <a style="border: 0;
@@ -51,7 +51,7 @@ if($modeType == 2){
                 border-radius: 3px;
                 margin: 17px 0 40px 0px;
                 display: inline-block;
-                font-size: 16px" href="<?php echo config('app.frontUrl').$url?>/<?= $token?>">
+                font-size: 15px" href="<?php echo config('app.frontUrl').$url?>/<?= $token?>">
                 <?php echo $txt2?></a>
             </div>
             <div style="border-top: solid 1px #DDD;
