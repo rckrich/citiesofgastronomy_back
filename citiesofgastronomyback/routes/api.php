@@ -41,13 +41,13 @@ Route::get('cities', [CitiesContoller::class, 'list']);
 Route::post('cities', [CitiesContoller::class, 'list']);
 Route::get('citiesAdmin', [CitiesContoller::class, 'list'])->middleware('auth:sanctum');
 Route::post('citiesAdmin', [CitiesContoller::class, 'list'])->middleware('auth:sanctum');
-Route::post('citiesStore', [CitiesContoller::class, 'citiesStore']);
+Route::post('citiesStore', [CitiesContoller::class, 'citiesStore'])->middleware('auth:sanctum');
 Route::post('citiesUpdate', [CitiesContoller::class, 'citiesUpdate'])->middleware('auth:sanctum');
 Route::get('cities/find/{id}', [CitiesContoller::class, 'find']);
 Route::get('cities/edit/{id}', [CitiesContoller::class, 'find'])->middleware('auth:sanctum');
 Route::get('citiesAdmin/find/{id}', [CitiesContoller::class, 'find'])->middleware('auth:sanctum');
 Route::post('cities/store', [CitiesContoller::class, 'store'])->middleware('auth:sanctum');
-Route::post('cities/update/{id}', [CitiesContoller::class, 'update']);
+Route::post('cities/update/{id}', [CitiesContoller::class, 'update'])->middleware('auth:sanctum');
 Route::post('cities/updateCompleteInfo/{id}', [CitiesContoller::class, 'updateComplete'])->middleware('auth:sanctum');
 Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete'])->middleware('auth:sanctum');
 
@@ -63,23 +63,23 @@ Route::get('calendar', [CalendarController::class, 'index']);
 Route::get('generalDatta', [ContactsController::class, 'generalDatta'])->middleware('auth:sanctum');
 Route::get('contacts', [ContactsController::class, 'index']);
 Route::post('adminContacts', [ContactsController::class, 'list'])->middleware('auth:sanctum');
-Route::post('contact/save', [ContactsController::class, 'contactSave']);
+Route::post('contact/save', [ContactsController::class, 'contactSave'])->middleware('auth:sanctum');
 Route::post('contact/findAdmin', [ContactsController::class, 'contactFind'])->middleware('auth:sanctum');
 Route::post('contact/find', [ContactsController::class, 'contactFind']);
 Route::post('contact/delete/{id}', [ContactsController::class, 'delete'])->middleware('auth:sanctum');
 //testier life -->falta
 
-Route::post('banners/store', [BannersController::class, 'store']);
+Route::post('banners/store', [BannersController::class, 'store'])->middleware('auth:sanctum');
 Route::post('banners/delete', [BannersController::class, 'delete'])->middleware('auth:sanctum');
-Route::post('banners/update', [BannersController::class, 'update']);
+Route::post('banners/update', [BannersController::class, 'update'])->middleware('auth:sanctum');
 
 Route::post('addPDF', [FileController::class, 'store']);
 
 Route::post('resize', [CitiesContoller::class, 'resise']);
 
-Route::get('mainSiteContent/home', [MainSiteContentController::class, 'home']);
-Route::post('mainSiteContent/linkStore', [MainSiteContentController::class, 'linkStore']);
-Route::post('mainSiteContent/clustersave', [MainSiteContentController::class, 'clustersave']);
+Route::get('mainSiteContent/home', [MainSiteContentController::class, 'home'])->middleware('auth:sanctum');
+Route::post('mainSiteContent/linkStore', [MainSiteContentController::class, 'linkStore'])->middleware('auth:sanctum');
+Route::post('mainSiteContent/clustersave', [MainSiteContentController::class, 'clustersave'])->middleware('auth:sanctum');
 
 Route::post('about/timeline/list', [AboutController::class, 'list'])->middleware('auth:sanctum');
 Route::get('about/timeline/find/{id}', [AboutController::class, 'timelineFind'])->middleware('auth:sanctum');
@@ -95,11 +95,11 @@ Route::post('initiatives', [InitiativesController::class, 'index']);
 Route::get('initiativesAdmin', [InitiativesController::class, 'indexAdmin'])->middleware('auth:sanctum');
 Route::post('initiativesAdmin', [InitiativesController::class, 'indexAdmin'])->middleware('auth:sanctum');
 Route::get('initiatives/create', [InitiativesController::class, 'create'])->middleware('auth:sanctum');
-Route::post('initiatives/store', [InitiativesController::class, 'store']);
+Route::post('initiatives/store', [InitiativesController::class, 'store'])->middleware('auth:sanctum');
 Route::get('initiatives/edit/{id}', [InitiativesController::class, 'edit'])->middleware('auth:sanctum');
 Route::get('initiatives/find/{id}', [InitiativesController::class, 'edit']);
 Route::post('initiatives/delete/{id}', [InitiativesController::class, 'destroy'])->middleware('auth:sanctum');
-Route::post('typeOfActivity/store', [InitiativesController::class, 'typeOfActivity_store']);
+Route::post('typeOfActivity/store', [InitiativesController::class, 'typeOfActivity_store'])->middleware('auth:sanctum');
 Route::post('typeOfActivity/delete/{id}', [InitiativesController::class, 'typeOfActivity_delete'])->middleware('auth:sanctum');
 Route::post('topic/store', [InitiativesController::class, 'topic_store']);
 Route::post('topic/delete/{id}', [InitiativesController::class, 'topic_delete'])->middleware('auth:sanctum');
@@ -143,10 +143,10 @@ Route::get('tours/show/{id}', [ToursController::class, 'show']);
 Route::post('generalSearch', [Controller::class, 'generalSearch']);
 
 
-Route::post('user', [UserController::class, 'list']);
+Route::post('user', [UserController::class, 'list'])->middleware('auth:sanctum');
 Route::post('user/delete/{id}', [UserController::class, 'delete'])->middleware('auth:sanctum');
-Route::post('user/store', [UserController::class, 'store']);
-Route::get('user/find/{id}', [UserController::class, 'find']);
+Route::post('user/store', [UserController::class, 'store'])->middleware('auth:sanctum');
+Route::get('user/find/{id}', [UserController::class, 'find'])->middleware('auth:sanctum');
 Route::post('user/forgotPassword', [UserController::class, 'forgotPassword']);
 Route::post('user/resetPassword', [UserController::class, 'resetPassword']);
 Route::post('user/perfilPassword', [UserController::class, 'resetPerfilPassword'])->middleware('auth:sanctum');

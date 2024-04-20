@@ -127,7 +127,8 @@ class ContactsController extends Controller
         $objLink = (New SocialNetwork()) -> storeLink( $request , $idOwner  );
 
         return response()->json([
-            'contact' => $obj
+            'contact' => $obj,
+            'status' => 200
         ]);
     }
 

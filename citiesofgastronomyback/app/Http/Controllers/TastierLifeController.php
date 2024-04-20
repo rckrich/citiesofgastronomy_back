@@ -184,6 +184,8 @@ class TastierLifeController extends Controller
 
         $message = 'The Recipe was successfully created';$status = 200;
 
+        Log::info("##---->STORE RECIPE");
+        Log::info($request );
         $photo = '';
             if($request->file("photo")){
                 try{
