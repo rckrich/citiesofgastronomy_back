@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/userCreate', function () {
+    $inputs=[];
+    $inputs["name"]='name';
+    $inputs["email"]='email';
+    $inputs["token"]='token';
+    $inputs["expirationMail"]='expirationMail';
+    return view('userCreate', $inputs);
+});
+
+Route::get('login', [LoginController::class, 'notLogin'])->name('login');

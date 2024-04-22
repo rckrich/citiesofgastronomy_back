@@ -116,5 +116,9 @@ class MainSiteContentController extends Controller
                 Log::info($e);
             }
         }
+        return response()->json([
+            'status' => 200,
+            'message' =>  'CLUSTER COORDINATOR INFO'
+        ]);
     }
 }

@@ -594,6 +594,7 @@ class InitiativesController extends Controller
 
             $obj = Initiatives::find($id);
             if($obj != NULL){$obj->delete(); };
+            Log::info("-->LLEGO A DELETE");
         };
 
         return response()->json([

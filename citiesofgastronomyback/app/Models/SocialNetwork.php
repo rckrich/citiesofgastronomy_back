@@ -19,18 +19,26 @@ class SocialNetwork extends Model
         return $this->hasMany(SocialNetworkType::class, 'id', 'idSocialNetworkType');
     }
 
-    public function storeLink(Request $request, $idOwner, $type = 1){
+    function socialNetworkTypeContacts()
+    {
+        return $this->hasMany(SocialNetworkType::class, 'id', 'idSocialNetworkType')->where('active', '1');
+    }
+
+    public function storeLink(Request $request, $idOwner, $type = 1 ){
         $idSection = $request->input("idSection");
 
         Log::info(":: LLEGO A STORE SOCIAL MEDIA");
 
-        $SocialNetworkType = (New SocialNetworkType())->list($type);
+        //$SocialNetworkType = (New SocialNetworkType())->list($type);
+        $SocialNetworkType = SocialNetworkType::select("id", "codde")->get();
         foreach($SocialNetworkType as $type){
             $idSocial = $type["id"];
             $idReq = $type["codde"].'_link';
             $socialValue = $request->input($idReq);
 
-            Log::info($idSocial);
+            Log::info("------------");
+            Log::info($type["codde"]);
+            Log::info($socialValue);
 
             $objLink = $this  -> select("social_network", "id" )
             -> where( "idOwner", '=', $idOwner )
@@ -50,6 +58,8 @@ class SocialNetwork extends Model
                         $objLink->social_network = $socialValue;
                         $objLink->updated_at = date("Y-m-d H:i:s");
                         $objLink -> save();
+            }elseif($objLink){
+                $objLink -> delete();
             };
             //};
 
@@ -60,7 +70,7 @@ class SocialNetwork extends Model
     }
 
     public function list($idSection, $idOwner){
-        $SocialNetworkType = (New SocialNetworkType())->list();
+        $SocialNetworkType = (New SocialNetworkType())->list(2);
 
         //foreach($SocialNetworkType as $type){
         for($i = 0; $i < count($SocialNetworkType) ; $i++){
@@ -70,7 +80,7 @@ class SocialNetwork extends Model
             -> where( "idOwner", '=', $idOwner )
             -> where( "idSection", '=', $idSection )
             -> where( "idSocialNetworkType", '=', $SocialNetworkType[$i]["id"] )
-            -> orderBy('id', 'desc')-> first();
+            -> orderBy('id', 'asc')-> first();
 
             if($objLink){
                 $SocialNetworkType[$i]["value"] = $objLink["social_network"];

@@ -16,6 +16,7 @@ use App\Models\SocialNetworkType;
 class ContactsController extends Controller
 {
 
+
     public function index(Request $request)
     {
         $cantItems = 20;
@@ -37,19 +38,14 @@ class ContactsController extends Controller
 
         $SocialNetworkType = (New SocialNetwork())->list(5, 0);
 
-        //TODAS LAS CIUDADES
-        /*$objContacts = Cities::with(['contacts' => function ( $query) {
-                $query->where('active', '1');
-            }])->get();
-            //*/
 
         //SOLO LAS CIUDADES QUE AL MENOS TENGAN UN CONTACTO
+        $socialType = (New Contacts())->socialType();
+
             $objContacts = Cities::withWhereHas('contacts', function ($query) {
                 $query->where('active', '1');
             })
-            ->with(['contacts.socialNetwork' => function ( $query) {
-                $query->where('idSection', '11');
-            }])
+            ->with('contacts.socialNetwork')
             ->with('contacts.socialNetwork.socialNetworkType')
             ->get();
 
@@ -123,15 +119,16 @@ class ContactsController extends Controller
 
         Log::info("::llego a contacto");
         $obj = (New Contacts())->contactSave($request);
-        Log::info($obj);
+        //Log::info($obj);
 
         $idOwner = $obj->id;
-        Log::info($idOwner);
+        //Log::info($idOwner);
 
         $objLink = (New SocialNetwork()) -> storeLink( $request , $idOwner  );
 
         return response()->json([
-            'contact' => $obj
+            'contact' => $obj,
+            'status' => 200
         ]);
     }
 
@@ -144,12 +141,17 @@ class ContactsController extends Controller
         if($id){
                 $obj = Contacts::findOrFail($id);
                 $objsocialContact = (New SocialNetwork())->list(11, $id);;
+                Log::info("-->redes");
+                Log::info($objsocialContact);
         }else{
                 $obj = [];
                 $objsocialContact = [];
         };
         $objContinent = (New continent())->list();
-        $objsocial = (New SocialNetworkType())->list();
+
+        $socialType = (New Contacts())->socialType();
+        $objsocial = SocialNetworkType::whereIn('id', $socialType)->get();
+        //$objsocial = (New SocialNetworkType())->list();
         $objCities =(New Cities())->searchList('', 1, 999999999999999999);
 
         return response()->json([
@@ -168,10 +170,12 @@ class ContactsController extends Controller
         Log::info("CONTACT Delete ::");
         $status = 400;$mess = 'ok';
         try{
-            $objCity = Contacts::find($id);
-            $objCity->active = 0;
-            $objCity->updated_at = date("Y-m-d H:i:s");
-            $objCity -> save();
+            $obj = Contacts::find($id);
+            //$obj->active = 0;
+            //$obj->updated_at = date("Y-m-d H:i:s");
+            //$obj -> save();
+
+            if($obj != NULL){$obj->delete(); };
         } catch ( \Exception $e ) {
             Log::info($e);
             $status = 400;$mess="Error";
@@ -187,7 +191,10 @@ class ContactsController extends Controller
 
 
         $objContinent = (New continent())->list();
-        $objsocial = (New SocialNetworkType())->list();
+
+        $socialType = (New Contacts())->socialType();
+        $objsocial = SocialNetworkType::whereIn('id', $socialType)->get();
+        //$objsocial = (New SocialNetworkType())->list();
         $objCities =(New Cities())->searchList('', 1, 999999999999999999);
 
         return response()->json([

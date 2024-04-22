@@ -12,18 +12,28 @@ class Contacts extends Model
 {
     use HasFactory;
     protected $table = "contacts";
+    public $socialTypeArr = [1,2,4,5,6];
+
+    function socialType(){
+        return $this->socialTypeArr;
+    }
+
 
     function socialNetwork()
     {
-        return $this->hasMany(SocialNetwork::class, 'idOwner', 'id');
+        return $this->hasMany(SocialNetwork::class, 'idOwner', 'id')
+            ->where('idSection', '11' )
+            ->whereIn('idSocialNetworkType', $this->socialTypeArr)
+            ->orderBy('idSocialNetworkType', 'ASC');
     }
+
 
     public function list($search, $page, $cant)
     {
       $offset = ($page-1) * $cant;
 
         return $this
-                      ->select("id", "idCity", "name", "position")
+                      ->select("id", "idCity", "name", "email", "position")
                       -> orderBy("created_at", 'DESC')
                       -> where("active", '1')
                       -> where( "name", 'LIKE', "%{$search}%")
@@ -54,6 +64,7 @@ class Contacts extends Model
                     $objItem = Contacts::findOrFail( $request->input("id")  );
                 };
                 $objItem->name = $request->input("name");
+                $objItem->email = $request->input("email");
                 $objItem->idCity = $request->input("idCity");
                 $objItem->position = $request->input("position");
                 $objItem->updated_at = date("Y-m-d H:i:s");

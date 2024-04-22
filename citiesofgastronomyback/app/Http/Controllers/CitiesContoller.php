@@ -7,7 +7,9 @@ use App\Models\Cities;
 use App\Models\Images;
 use App\Models\Links;
 use App\Models\Files;
+use App\Models\Tours;
 use App\Models\Banners;
+use App\Models\Recipes;
 use App\Models\continent;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -189,15 +191,25 @@ class CitiesContoller extends Controller
         try{
 
             $obj = (New Initiatives())->findInitiative($id, 'Cities');
+            $obj2 = Tours::select("tours.id", "tours.idCity")->where("tours.idCity", $id)->get();
+            $obj3 = Recipes::select("recipes.id", "recipes.idCity")->where("recipes.idCity", $id)->get();
+
+            Log::info("-------->INITIATIVES");
+            Log::info(count($obj));
+            Log::info("-------->TOURS");
+            Log::info(count($obj2));
+            Log::info("-------->Recipes");
+            Log::info(count($obj3));
 
             $objCity = Cities::find($id);
-            $objCity->active = 0;
-            $objCity->updated_at = date("Y-m-d H:i:s");
-            if($obj == NULL){
-                $objCity -> save();
+            //$objCity->active = 0;
+            //$objCity->updated_at = date("Y-m-d H:i:s");
+            if(count($obj) == 0 && count($obj2) == 0 && count($obj3) == 0){
+                $objCity -> delete();
+                //$objCity -> save();
             }else{
                 $status = 400;
-                $mess="This city cannot be deleted because it is being used by another element (such as an initiative, tour, chef, etc.). Please reassign the city and try again";
+                $mess="This city cannot be deleted because it is being used by another element (such as an initiative, tour or recipe). Please reassign the city and try again.";
             };
         } catch ( \Exception $e ) {
             Log::info($e);
@@ -255,7 +267,7 @@ class CitiesContoller extends Controller
                 $objCity -> save();
             } catch ( \Exception $e ) {
                 Log::info($e);
-                $status = 400;$mensaje="Incorrect name format";
+                $status = 400;$mensaje="Incorrect format fields";
             };
 
         return response()->json([

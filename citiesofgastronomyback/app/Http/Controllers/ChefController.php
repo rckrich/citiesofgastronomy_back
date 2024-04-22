@@ -6,19 +6,32 @@ use Illuminate\Http\Request;
 use App\Models\Chef;
 use App\Models\SocialNetwork;
 use App\Models\SocialNetworkType;
+use App\Models\Recipes;
 use Illuminate\Support\Facades\Log;
 
 class ChefController extends Controller
 {
-    //
+
+
+    public function findChef($id){
+
+        $obj = [];
+        try{
+                $obj = Chef::where('id', $id)
+                ->with('socialNetwork')
+                ->with('socialNetwork.socialNetworkType')
+
+                ->first();
+        }catch(\Exception $e){};
+        $social = (New SocialNetworkType())->list(2);
+
+        return response()->json([
+            'chef' => $obj,
+            'SocialNetworkType' => $social
+        ]);
+    }
+
     public function create(){
-        /*
-        $social = (New SocialNetworkType()) -> select("name", "id", "codde", "icon", "active" )
-        -> whereIn( "active", ['1', '2'] )
-        -> orderBy('id', 'desc')
-        -> get()
-        -> toArray();
-        //*/
 
         $social = (New SocialNetworkType())->list(2);
 
@@ -28,7 +41,7 @@ class ChefController extends Controller
     }
 
     public function store(Request $request){
-        $messaje = 'The chef was successfully created';
+        $message = 'The chef was successfully created';
 
         if(  !$request->input("id")  ){
             Log::info("::CREA Chef");
@@ -47,7 +60,33 @@ class ChefController extends Controller
 
         return response()->json([
             'chef' => $objItem,
-            'messaje' => $messaje
+            'message' => $message
         ]);
     }
+
+    public function delete($id){
+        //Log::info("CHEF Delete ::");
+        $status = 200;$message = 'The chef was successfully deleted';
+
+        $obj = (New Recipes())->where('idChef', $id)->get();
+        //Log::info($obj);
+
+        if( count($obj) > 0){
+                $status = 400;
+                $message = 'This chef cannot be deleted because it is being used by a Recipe. Please reassign the Chef and try again';
+        }else{
+            $objFilter = Chef::find($id);
+            if($objFilter != NULL){
+                $objFilter->delete();
+            };
+        };
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ]);
+    }
+
+
+
 }

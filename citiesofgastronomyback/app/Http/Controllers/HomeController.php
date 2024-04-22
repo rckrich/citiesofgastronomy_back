@@ -105,7 +105,8 @@ class HomeController extends Controller
         //Log::info($obj);
 
         return response()->json([
-            'newsletter' => $obj
+            'newsletter' => $obj,
+            'status' => '200'
         ]);
     }
 
