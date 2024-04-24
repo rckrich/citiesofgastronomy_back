@@ -54,7 +54,7 @@ Route::post('cities/delete/{id}', [CitiesContoller::class, 'delete'])->middlewar
 Route::post('newsletter', [HomeController::class, 'newsletter']);
 Route::get('newsletterAdmin', [HomeController::class, 'newsletterList'])->middleware('auth:sanctum');
 Route::post('newsletter/DownloadVerify', [HomeController::class, 'newsletterDownloadVerify'])->middleware('auth:sanctum');
-Route::get('newsletter/Download', [HomeController::class, 'newsletterDownload'])->middleware('auth:sanctum');
+Route::get('newsletter/Download', [HomeController::class, 'newsletterDownload']);
 
 Route::get('about', [AboutController::class, 'list']);
 Route::get('calendar', [CalendarController::class, 'index']);
