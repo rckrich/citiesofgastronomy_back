@@ -29,6 +29,7 @@ class LoginController extends Controller
 
             if (Auth::attempt($request->only('email', 'password'))) {
                 return response()->json([
+                  'username' => $request->user()->name,
                   'token' => $request->user()->createToken($txt)->plainTextToken,
                   'message' => 'Welcome to the UNESCO Cities of Gastronomy',
                   'status' => 200
