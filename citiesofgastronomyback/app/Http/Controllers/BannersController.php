@@ -30,6 +30,7 @@ class BannersController extends Controller
 
             }
         };
+        Log::info($objBanner);
         return response()->json([
             'status' =>  $status,
             'message' =>  $mensaje,

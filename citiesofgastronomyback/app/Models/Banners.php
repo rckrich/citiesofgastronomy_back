@@ -47,6 +47,7 @@ class Banners extends Model
         $objCity->created_at = date("Y-m-d H:i:s");
         $objCity->updated_at = date("Y-m-d H:i:s");
         $objCity -> save();
+        return $objCity;
     }
 
 
