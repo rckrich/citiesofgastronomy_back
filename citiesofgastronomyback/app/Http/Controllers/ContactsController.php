@@ -137,30 +137,44 @@ class ContactsController extends Controller
 
 
     public function contactFind(Request $request){
-        $id = $request->input("id");
-        if($id){
-                $obj = Contacts::findOrFail($id);
-                $objsocialContact = (New SocialNetwork())->list(11, $id);;
-                Log::info("-->redes");
-                Log::info($objsocialContact);
-        }else{
-                $obj = [];
-                $objsocialContact = [];
-        };
-        $objContinent = (New continent())->list();
+        try{
+            $id = $request->input("id");
+            if($id){
+                    $obj = Contacts::findOrFail($id);
+                    $objsocialContact = (New SocialNetwork())->list(11, $id);;
+                    Log::info("-->redes");
+                    Log::info($objsocialContact);
+            }else{
+                    $obj = [];
+                    $objsocialContact = [];
+            };
+            $objContinent = (New continent())->list();
 
-        $socialType = (New Contacts())->socialType();
-        $objsocial = SocialNetworkType::whereIn('id', $socialType)->get();
-        //$objsocial = (New SocialNetworkType())->list();
-        $objCities =(New Cities())->searchList('', 1, 999999999999999999);
+            $socialType = (New Contacts())->socialType();
+            $objsocial = SocialNetworkType::whereIn('id', $socialType)->get();
+            //$objsocial = (New SocialNetworkType())->list();
+            $objCities =(New Cities())->searchList('', 1, 999999999999999999);
 
-        return response()->json([
-            'contact' => $obj,
-            'contactSocialNetwork' => $objsocialContact,
-            'continents' => $objContinent,
-            'cities' => $objCities,
-            'social' => $objsocial
-        ]);
+            return response()->json([
+                'contact' => $obj,
+                'contactSocialNetwork' => $objsocialContact,
+                'continents' => $objContinent,
+                'cities' => $objCities,
+                'social' => $objsocial
+            ]);
+
+        } catch ( \Exception $e ) {
+            Log::info($e);
+            return response()->json([
+                'status' => 400,
+                'messaje' => 'No contacts find',
+                'contact' => [],
+                'contactSocialNetwork' => [],
+                'continents' => [],
+                'cities' => [],
+                'social' => []
+            ]);
+        }
     }
 
 
