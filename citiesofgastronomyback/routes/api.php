@@ -112,8 +112,8 @@ Route::post('connectionsToOther/delete/{id}', [InitiativesController::class, 'co
 
 Route::get('tastierLife', [TastierLifeController::class, 'index']);
 Route::post('tastierLife', [TastierLifeController::class, 'index']);
-Route::get('tastierLifeAdmin', [TastierLifeController::class, 'index'])->middleware('auth:sanctum');
-Route::post('tastierLifeAdmin', [TastierLifeController::class, 'index'])->middleware('auth:sanctum');
+Route::get('tastierLifeAdmin', [TastierLifeController::class, 'indexAdmin'])->middleware('auth:sanctum');
+Route::post('tastierLifeAdmin', [TastierLifeController::class, 'indexAdmin'])->middleware('auth:sanctum');
 Route::get('recipe/create', [TastierLifeController::class, 'create'])->middleware('auth:sanctum');
 Route::post('recipe/store', [TastierLifeController::class, 'storeRecipe'])->middleware('auth:sanctum');
 Route::get('recipe/findRecipe/{id}', [TastierLifeController::class, 'findRecipe']);

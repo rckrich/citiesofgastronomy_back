@@ -70,7 +70,11 @@ class TastierLifeController extends Controller
         $searchChef = $request->searchChef;
         if(!$pageChef){ $pageChef=1; };
 
-        $chef = (New Chef())->list($searchChef, $pageChef, 20);
+        //$chef = (New Chef())->list($searchChef, $pageChef, 99999999);
+        $chef = (New Chef())->orderBy('name', 'ASC')->get()->toArray();
+        Log::info("LLEGO a Tastier Client");
+        Log::info( count($chef) );
+        Log::info( $chef );
 
         $totalChef = (New Chef())->list($searchChef, 1, 99999999);
 
@@ -110,6 +114,99 @@ class TastierLifeController extends Controller
         ]);
     }
 
+
+
+    public function indexAdmin(Request $request)
+    {
+        $cantItems = 20;
+        $paginator = 1;
+        $page = $request->page;
+        if($page == ''){$page = 1;};
+        $search = $request->search;
+        $objRecipes = [];
+        $total = 0;
+
+        $category = $request->recipeCategoryFilter;
+        $chef = $request->recipeChefFilter;
+        $city = $request->recipeCityFilter;
+
+        /////////////////////////RECIPES
+        $objRecipes= ( New Recipes() )->list($search, $page, $cantItems, $chef, $category, $city);
+
+        $totalRecipes= ( New Recipes() )->list($search, 1, 999999999999, $chef, $category, $city);
+
+        $paginator = 1;
+        $total = count($totalRecipes);
+        if($total > $cantItems){
+            $division = $total / $cantItems;
+            $paginator = intval($division);
+            if($paginator < $division){
+                $paginator = $paginator + 1;
+            };
+        };
+        /////////////////////////END RECIPES
+
+
+
+        $objBanners = (New Banners())->list(8, 0);
+
+        $infoArray = (New Info())->type();
+        for($i=0; $i < count($infoArray); $i++){
+            $infoValue='';
+            $objInfoCoordinator = (New Info())->list($infoArray[$i]["key"]);
+            if($objInfoCoordinator){ $infoValue = $objInfoCoordinator["description"]; };
+            $infoArray[$i]["value"] = $infoValue;
+        }
+
+        $SocialNetworkType = (New SocialNetwork())->list(5, 0);
+
+
+
+
+        /////////////////////////CHEF
+        $pageChef = $request->pageChef;
+        $searchChef = $request->searchChef;
+        if(!$pageChef){ $pageChef=1; };
+
+        $chef = (New Chef())->list($searchChef, $pageChef, 20);
+
+        $totalChef = (New Chef())->list($searchChef, 1, 99999999);
+
+        $paginatorCHEF = 1;
+        $totalCH = count($totalChef);
+        if($totalCH > $cantItems){
+            $division = $totalCH / $cantItems;
+            $paginatorCHEF = intval($division);
+            if($paginatorCHEF < $division){
+                $paginatorCHEF = $paginatorCHEF + 1;
+            };
+        };
+        ///////////////////////// FIN CHEF
+
+        /////////////////////////CATEGORIES
+        $searchCAT = $request->searchCAT;
+
+        $categories = (New Categories())->list($searchCAT);
+
+        ///////////////////////// FIN CATEGORIES
+
+
+        $objCities =(New Cities())->searchList('', 1, 999999999999999999);
+
+        return response()->json([
+            'recipes' => $objRecipes,
+            'tot' => $total,
+            'paginator' => $paginator,
+            'totCHEF' => $totalCH,
+            'paginatorCHEF' => $paginatorCHEF,
+            'chef' => $chef,
+            'categories' => $categories,
+            'cities' => $objCities,
+            'banner' => $objBanners,
+            'SocialNetworkType' => $SocialNetworkType,
+            'info' => $infoArray
+        ]);
+    }
 
 
     public function findRecipe($id){
